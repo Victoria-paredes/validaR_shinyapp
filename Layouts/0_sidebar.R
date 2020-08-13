@@ -1,0 +1,18 @@
+customSidebar <- dashboardSidebar(tags$style(".left-side, .main-sidebar {padding-top: 110px;}"), # font-size: larger
+                     width = 300,
+                     sidebarMenu(id = "tabs",
+                       menuItem("Introducción", tabName = "introd", icon = icon("question-circle")),
+                       menuItem("Definiciones", tabName = "defini", icon = icon("book")),tags$hr(),
+                       tags$b('Herramientas estadísticas:'),
+                       menuItem("Estadística descriptiva", tabName = "estDescri", icon = icon("")),
+                       menuItem("Pruebas de comparación", tabName = "estPruebas", icon = icon("")),
+                       menuItem("Regresiones", tabName = "estRegr", icon = icon("")), tags$hr(),
+                       tags$b('Parámetros de validación:'),
+                       menuItem("Selectividad", tabName = "select", icon = icon("")),
+                       menuItem("Exactitud (Precisión, veracidad)", tabName = "exacti", icon = icon("")),
+                       menuItem("Linealidad, intervalo dinámico", tabName = "lineali", icon = icon("")),
+                       menuItem("Límite de detección", tabName = "limDetec", icon = icon("")),
+                       menuItem("Robustez", tabName = "robust", icon = icon("")), tags$hr(),
+                       tags$b('Recursos adicionales:'),
+                       menuItem("Plan de validación", tabName = "planVali", icon = icon("")),
+                       menuItem("Informe de validación", tabName = "infVali", icon = icon(""))))
