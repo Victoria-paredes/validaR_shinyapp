@@ -15,4 +15,7 @@ customSidebar <- dashboardSidebar(tags$style(".left-side, .main-sidebar {padding
                        menuItem("Robustez", tabName = "robust", icon = icon("")), tags$hr(),
                        tags$b('Recursos adicionales:'),
                        menuItem("Plan de validación", tabName = "planVali", icon = icon("")),
-                       menuItem("Informe de validación", tabName = "infVali", icon = icon(""))))
+                       menuItem("Informe de validación", tabName = "infVali", icon = icon("")), tags$hr(), tags$hr(),
+                       menuItem("Reporte de errores, sugerencias:", icon = icon("bug"),
+                                href = "https://github.com/Crparedes/validaR/issues")),
+                       menuItem("Bibliografía", tabName = "bibliogr", icon = icon("book")))

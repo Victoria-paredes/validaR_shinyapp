@@ -13,6 +13,6 @@ customBody <- dashboardBody(
     tabItem(tabName = "robust", h2("Parámetros de validación: Robustez")),#, LytSpConc),
     tabItem(tabName = 'planVali', h2("Plan de validación")),#, examplesModuleUI('examples')),
     tabItem(tabName = 'infVali',  h2("Informe de validación")),#, examplesModuleUI('examples')),
-    tabItem(tabName = "bibliography", h2("Bibliography"))#, bibliographyModuleUI())
+    tabItem(tabName = "bibliogr", h2("Bibliografía"), bibliogrModuleUI())
   )
 )
