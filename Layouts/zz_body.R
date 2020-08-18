@@ -4,7 +4,7 @@ customBody <- dashboardBody(
     tabItem(tabName = "introd", h2('La necesidad de validar un método')),#, introductionModuleUI('introduction')),
     tabItem(tabName = "defini", h2('Definiciones')),#, introductionModuleUI('introduction')),
     tabItem(tabName = "estDescri", h2("Estadística descriptiva")),#, settingsDs),
-    tabItem(tabName = "estPruebas", h2("Pruebas de comparación")),#, LytCalibration),
+    tabItem(tabName = "estPruebas", h2("Pruebas de comparación"), lyPruebasComparacion),
     tabItem(tabName = "estRegr", h2("Regresiones")),#, LytDatInput),
     tabItem(tabName = "select", h2("Parámetros de validación: Selectividad")),#, LytProfiles),
     tabItem(tabName = "exacti", h2("Parámetros de validación: Exactitud")),#, LytPermCoef),
