@@ -15,7 +15,9 @@ layouts         <- paste0('Layouts/', list.files(path = "Layouts"))
 
 sapply(c(customFunctions, modules, layouts), source)
 
-ui <- dashboardPage(skin = "black", customHeader, customSidebar, customBody) #customStuff in ./Layouts
+ui <- function(request) {
+  dashboardPage(skin = "black", customHeader, customSidebar, customBody) #customStuff in ./Layouts
+}
 
 server <- function(input, output, session) {
   callModule(definicionModule, 'definiciones')
@@ -24,9 +26,14 @@ server <- function(input, output, session) {
   datSeries1 <- callModule(inputDataModule, 'serieMan1')
   callModule(importDataModule, 'serieImp1')
   
+  #observe({
+  #  reactiveValuesToList(input)
+  #  session$doBookmark()
+  #})
+  #onBookmarked(updateQueryString)
 }
 
-shinyApp(ui = ui, server = server)
+shinyApp(ui = ui, server = server, enableBookmarking = "server")
 
 #http://www.inm.gov.co/servicio-al-ciudadano/glosario/
 # Más bonito:

@@ -30,7 +30,7 @@ inputDataModule <- function(input, output, session) {
   observeEvent(input$resetData, {
     #updateHotable() Esto no parece existir... preguntar en stackOverflow
   })
-  TrnsDtMyChanges <- eventReactive(input$inputData, {
+  TrnsDtMyChanges <- reactive({
     #input$inputData
     TempDatFram1 <- data.frame(apply(as.data.frame(hot.to.df(input$TrnsDt)), 2, function(x) as.numeric(as.character(x))))
     ifelse(all(as.data.frame(hot.to.df(input$TrnsDt)) == 0),
@@ -39,7 +39,6 @@ inputDataModule <- function(input, output, session) {
     ) #hot.to.df function will convert your updated table into the dataframe
   })
   output$TrnsDt <- renderHotable({TrnsDtMyChanges()}, readOnly = FALSE)
-  
   output$TrnsfrmdDt <- renderHotable({TrnsDtMyChanges()}, readOnly = TRUE)
   #transDat <- reactive(TrnsDtMyChanges()
   #ModelReactive <- reactive(Model$Model())

@@ -1,5 +1,8 @@
 customSidebar <- dashboardSidebar(tags$style(".left-side, .main-sidebar {padding-top: 110px;}"), # font-size: larger
-                     width = 300,
+                     width = 300, 
+                     bookmarkButton(label = 'Guardar...', 
+                                    title = 'Genera una dirección URL que guarda la información 
+                                            ingresada en la applicación para posterior uso.'),
                      sidebarMenu(id = "tabs",
                        menuItem("Introducción", tabName = "introd", icon = icon("question-circle")),
                        menuItem("Definiciones", tabName = "defini", icon = icon("book")), tags$hr(),
