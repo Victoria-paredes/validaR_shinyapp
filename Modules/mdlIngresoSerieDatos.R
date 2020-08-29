@@ -33,7 +33,7 @@ inputDataModule <- function(input, output, session) {
   TrnsDtMyChanges <- reactive({
     #input$inputData
     TempDatFram1 <- data.frame(apply(as.data.frame(hot.to.df(input$TrnsDt)), 2, function(x) as.numeric(as.character(x))))
-    ifelse(all(as.data.frame(hot.to.df(input$TrnsDt)) == 0),
+    ifelse(isTruthy(all(as.data.frame(hot.to.df(input$TrnsDt)) == 0)),
            return(TrnsDt0()),
            return(TempDatFram1)
     ) #hot.to.df function will convert your updated table into the dataframe

@@ -1,15 +1,16 @@
 library(shiny)
 library(shinydashboard)
 library(shinyWidgets)
-library(ggplot2)
+library(ggplot2) #Grammar of graphics
 library(rhandsontable)
 library(shinysky)
+library(purrr) #map-like functional programing
 
 #library(ggvis) #ggvis: Interactive Grammar of Graphics - input_slider: Create an interactive slider.
 
-customFunctions <- paste0('CustomFunctions/', list.files(path = "CustomFunctions"))
+customFunctions <- paste0('CustomFunctions/', list.files(path = "CustomFunctions")) # functions in the server side
 modules         <- paste0('Modules/', list.files(path = "Modules"))
-layouts         <- paste0('Layouts/', list.files(path = "Layouts"))
+layouts         <- paste0('Layouts/', list.files(path = "Layouts")) # functions in the client side
 
 
 
