@@ -37,7 +37,8 @@ ingresarDatosServer <- function(input, output, session) {
     if(is.null(input$TrnsDt)){return(TrnsDt0())}
     else if(!identical(TrnsDt0(), input$TrnsDt)){
       # hot.to.df function will convert your updated table into the dataframe
-      as.data.frame(hot.to.df(input$TrnsDt))
+      #as.data.frame(hot.to.df(input$TrnsDt))
+      return(data.frame(apply(as.data.frame(hot.to.df(input$TrnsDt)), 2, function(x) as.numeric(as.character(x)))))
     }
   })
   output$TrnsDt <- renderHotable({MyChanges()}, readOnly = FALSE)
@@ -60,7 +61,7 @@ ingresarDatosServer <- function(input, output, session) {
   #transDat <- reactive(TrnsDtMyChanges()
   #ModelReactive <- reactive(Model$Model())
   #output$model(renderText(Model$catModel))
-  return(list(data = TrnsDtEx,#[, 1:input$seriesNatur], 
-              name = reactive(input$seriesName), descr = reactive(input$dataDescrip)))
+  return(list(data = TrnsDtEx, name = reactive(input$seriesName), descr = reactive(input$dataDescrip), 
+              natur = reactive(input$seriesNatur)))
   #Considerar poner este return dentro de un actionbutton...
 }
