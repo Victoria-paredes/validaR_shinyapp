@@ -1,4 +1,4 @@
-definicionModuleUI <- function(id) {
+definicionesUI <- function(id) {
   ns <- NS(id)
   fluidRow(column(2, searchInput(inputId = "id", label = "Buscar concepto :", placeholder = "Escribir búsqueda...",
                                  btnSearch = icon("search"), btnReset = icon("remove"), width = "100%"),
@@ -6,7 +6,7 @@ definicionModuleUI <- function(id) {
            column(10, trmIndicacion, trmIndicacionDeBlanco))
 }
 
-definicionModule <- function(input, output, session) {
+definicionesServer <- function(input, output, session) {
 
 }
 

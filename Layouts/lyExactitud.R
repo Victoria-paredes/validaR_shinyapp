@@ -7,7 +7,7 @@ lyExactitud <- box(width = 12,
                       tabPanel('Precisión',
                                tabBox(width = 12, height = 800,
                                       tabPanel('Coeficiente de variación de Horwitz'), 
-                                      mdlPrecisionHorRatUI(id = "HorRat1")
+                                      precisionHorRatUI(id = "HorRat1")
                                       )),
                       tabPanel('Sesgo')))
 

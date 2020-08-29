@@ -1,4 +1,4 @@
-mdlImporteDatosUI <- function(id, IntID = 2, value0 = 10) {
+importarDatosUI <- function(id, IntID = 2, value0 = 10) {
   ns <- NS(id)
 
   box(title = paste0("Módulo de importación de datos. Serie #", IntID), width = 12, #solidHeader = TRUE, status = 'primary',
@@ -9,7 +9,7 @@ mdlImporteDatosUI <- function(id, IntID = 2, value0 = 10) {
       )
 }
 
-importDataModule <- function(input, output, session) {
+importarDatosServer <- function(input, output, session) {
 
 }
 #Mirar https://mastering-shiny.org/action-transfer.html Sección 9.3

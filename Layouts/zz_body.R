@@ -3,7 +3,7 @@ customBody <- dashboardBody(
   tabItems(
     tabItem(tabName = "introd", h2('La necesidad de validar un método')),#, introductionModuleUI('introduction')),
     tabItem(tabName = "defini", h2('Terminos relevantes en la validación de métodos cuantitativos'),
-            definicionModuleUI(id = 'definiciones')),#, introductionModuleUI('introduction')),
+            definicionesUI(id = 'definiciones')),#, introductionModuleUI('introduction')),
     tabItem(tabName = "ingrManDat", h2('Ingreso de datos a la aplicación'), lyIngresoDat),
     tabItem(tabName = "estDescri", h2("Estadística descriptiva")),#, settingsDs),
     tabItem(tabName = "estPruebas", h2("Pruebas de comparación"), lyPruebasComparacion),

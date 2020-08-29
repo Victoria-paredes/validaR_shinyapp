@@ -8,6 +8,8 @@ library(purrr) #map-like functional programing
 
 #library(ggvis) #ggvis: Interactive Grammar of Graphics - input_slider: Create an interactive slider.
 
+
+# Por lo general, los módulos son llamadas desde las funciones de layouts
 customFunctions <- paste0('CustomFunctions/', list.files(path = "CustomFunctions")) # functions in the server side
 modules         <- paste0('Modules/', list.files(path = "Modules"))
 layouts         <- paste0('Layouts/', list.files(path = "Layouts")) # functions in the client side
@@ -21,11 +23,15 @@ ui <- function(request) {
 }
 
 server <- function(input, output, session) {
-  callModule(definicionModule, 'definiciones')
-  callModule(mdlPrecisionHorRat, 'HorRat1')
+  callModule(definicionesServer, 'definiciones')
   
-  datSeries1 <- callModule(inputDataModule, 'serieMan1')
-  callModule(importDataModule, 'serieImp1')
+  datSeries1 <- callModule(ingresarDatosServer, 'serieMan1')
+  datSeries2 <- callModule(ingresarDatosServer, 'serieMan2')
+  
+  
+  callModule(importarDatosServer, 'serieImp1')
+  
+  callModule(precisionHorRatServer, 'HorRat1')
   
   #observe({
   #  reactiveValuesToList(input)

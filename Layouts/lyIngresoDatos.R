@@ -10,11 +10,13 @@ lyIngresoDat <- box(width = 12,
                       box(width = 6, title = 'Ingreso manual de series de datos', solidHeader = TRUE, status = 'primary',
                           sliderInput('numDatSeriesManual', label = 'Número de series de datos a ingresar manualmente:', 
                                       min = 0, max = 20, value = 1, round = TRUE, width = '50%'),
-                          mdlIngresoDatosUI(id = 'serieMan1')),
-                      box(width = 6, height = 800, title = 'Importación de series de datos (PENDIENTE)', solidHeader = TRUE, status = 'primary',
+                          ingresarDatosUI(id = 'serieMan1'),
+                          conditionalPanel(condition = 'input.numDatSeriesManual >= 2', ingresarDatosUI(id = 'serieMan2'))),
+                      box(width = 6, height = 800, title = 'Importación de series de datos (PENDIENTE)', solidHeader = TRUE, 
+                          status = 'primary',
                           sliderInput('numDatSeriesImport', label = 'Número de series de datos a importar:', 
                                       min = 0, max = 50, value = 1, round = TRUE, width = '50%'),
-                          mdlImporteDatosUI(id = 'serieImp1')
+                          importarDatosUI(id = 'serieImp1')
                           )
                       ))
 

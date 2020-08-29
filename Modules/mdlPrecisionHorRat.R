@@ -1,4 +1,4 @@
-mdlPrecisionHorRatUI <- function(id) {
+precisionHorRatUI <- function(id) {
   ns <- NS(id)
   fluidRow(column(4, fluidRow(column(4, numericInput(ns('Conc.HorRatEval'), label = 'Concentración:', value = 0.001)),
                               column(8, selectInput(ns('Unts.HorRatEval'), label = 'Unidades: (pendiente)', 
@@ -17,7 +17,7 @@ mdlPrecisionHorRatUI <- function(id) {
                   ))
 }
 
-mdlPrecisionHorRat <- function(input, output, session) {
+precisionHorRatServer <- function(input, output, session) {
   HorRatFun <- function (x) 2 ^(1 - 0.5 * log10(x))
   HorRatVal <- reactive(HorRatFun(input$Conc.HorRatEval))
   HorRatLims <- reactive(10 ^ input$Range.HorRat)
