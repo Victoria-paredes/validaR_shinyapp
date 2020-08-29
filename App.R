@@ -29,8 +29,8 @@ server <- function(input, output, session) {
   datSeries2 <- callModule(ingresarDatosServer, 'serieMan2')
   callModule(importarDatosServer, 'serieImp1')
   
-  callModule(estadisticaDescriptivaServer, 'Series1EstDesc', series = datSeries1())
-  callModule(estadisticaDescriptivaServer, 'Series2EstDesc', series = datSeries2())
+  callModule(estadisticaDescriptivaServer, 'Series1EstDesc', series = datSeries1)
+  callModule(estadisticaDescriptivaServer, 'Series2EstDesc', series = datSeries2)
   callModule(precisionHorRatServer, 'HorRat1')
   
   #observe({

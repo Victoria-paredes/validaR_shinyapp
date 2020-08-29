@@ -1,23 +1,28 @@
 ingresarDatosUI <- function(id, IntID = 1, value0 = 10) {
   ns <- NS(id)
-
+  
   box(title = paste0("Módulo de ingreso serie # ", IntID), width = 12, #height = 150, #solidHeader = TRUE, status = 'primary',
       fluidRow(#column(4, selectInput(ns('natur'), label = "Tipo de datos",
-               #                     choices = list('Univariados' = 1, 'Relación de variables: y = f(x)' = 2), selected = 2)),
-               column(4, textAreaInput(ns('seriesName'), label = 'Identificador de la serie', height = '80px',
-                                   placeholder = 'Valores alfanuméricos sin espacios ni caracteres especiales...')),
-               column(8, textAreaInput(ns('dataDescrip'), label = 'Descripción de los datos', height = '80px',
-                                       placeholder = 'Por ejemplo: Muestra XXX002, estudio de precisión bajas 
+        #                     choices = list('Univariados' = 1, 'Relación de variables: y = f(x)' = 2), selected = 2)),
+        column(4, textAreaInput(ns('seriesName'), label = 'Identificador de la serie', height = '80px',
+                                placeholder = 'Valores alfanuméricos sin espacios ni caracteres especiales...')),
+        column(8, textAreaInput(ns('dataDescrip'), label = 'Descripción de los datos', height = '80px',
+                                placeholder = 'Por ejemplo: Muestra XXX002, estudio de precisión bajas 
 concentraciones, analista 2; Curva de calibración en blanco de matriz...'))),
       fluidRow(column(1), 
-               column(7, box(title = 'Tabla de llenado de datos desplegable', width = 12, collapsible = TRUE, collapsed = TRUE, 
+               column(7, box(title = 'Tabla de llenado de datos', width = 12, collapsible = TRUE, collapsed = FALSE, 
                              hotable(ns("TrnsDt")))),
-               column(4, actionButton(ns('inputDat'), "Ingresar datos a la aplicación", styleclass = 'primary', block = TRUE),
+               #actionButton(ns("Add20Rows"), "Añadir 20 filas más")),
+               column(4, selectInput(ns('seriesNatur'), label = 'Tipo de datos:',
+                                     choices = list('Univariados' = 1, 'Bivariados (y = f(x))' = 2)), 
+                      actionButton(ns('inputDat'), "Ingresar datos a la aplicación", styleclass = 'primary', block = TRUE),
+                      tags$br(),
                       hotable(ns("TrnsDtEx"))
-                      )
                )
       )
+  )
 }
+
 
 ingresarDatosServer <- function(input, output, session) {
   
@@ -55,6 +60,7 @@ ingresarDatosServer <- function(input, output, session) {
   #transDat <- reactive(TrnsDtMyChanges()
   #ModelReactive <- reactive(Model$Model())
   #output$model(renderText(Model$catModel))
-  return(reactive(list(data = na.omit(MyChanges()), name = input$seriesName(), descr = input$dataDescrip)))
+  return(list(data = TrnsDtEx,#[, 1:input$seriesNatur], 
+              name = reactive(input$seriesName), descr = reactive(input$dataDescrip)))
   #Considerar poner este return dentro de un actionbutton...
 }
