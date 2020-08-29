@@ -1,56 +1,60 @@
 ingresarDatosUI <- function(id, IntID = 1, value0 = 10) {
   ns <- NS(id)
 
-  box(title = paste0("Módulo de ingreso de datos manuales."), width = 12, #solidHeader = TRUE, status = 'primary',
-      fluidRow(column(4, selectInput(ns('natur'), label = "Tipo de datos",
-                                     choices = list('Univariados' = 1, 'Relación de variables: y = f(x)' = 2), selected = 2)),
-               column(8, textInput(ns('seriesName'), label = 'Identificador de la serie',
-                                   placeholder = 'Valores alfanuméricos sin espacios ni caracteres especiales...'))),
-      textInput(ns('dataDescrip'), label = 'Descripción de los datos', width = '100%',
-                placeholder = 'Por ejemplo: Muestra XXX002, estudio de precisión bajas concentraciones, analista 2'),
-      sliderInput(ns("nData"), label = "Numero de filas (Reinicie la tabla a ceros para modificar)", width = '100%',
-                  min = 2, max = 100, round = TRUE, value = value0),
-      fluidRow(column(3, hotable(ns("TrnsDt"))),
-               column(3, actionButton(ns("inputData"), label = 'Cargar datos', styleclass = 'primary', block = TRUE),
-                      actionButton(ns("resetData"), label = 'Reiniciar tabla a ceros (pendiente)', 
-                                   styleclass = 'danger', block = TRUE)),
-               column(5, hotable(ns("TrnsfrmdDt"))))
+  box(title = paste0("Módulo de ingreso serie # ", IntID), width = 12, #height = 150, #solidHeader = TRUE, status = 'primary',
+      fluidRow(#column(4, selectInput(ns('natur'), label = "Tipo de datos",
+               #                     choices = list('Univariados' = 1, 'Relación de variables: y = f(x)' = 2), selected = 2)),
+               column(4, textAreaInput(ns('seriesName'), label = 'Identificador de la serie', height = '80px',
+                                   placeholder = 'Valores alfanuméricos sin espacios ni caracteres especiales...')),
+               column(8, textAreaInput(ns('dataDescrip'), label = 'Descripción de los datos', height = '80px',
+                                       placeholder = 'Por ejemplo: Muestra XXX002, estudio de precisión bajas 
+concentraciones, analista 2; Curva de calibración en blanco de matriz...'))),
+      fluidRow(column(1), 
+               column(7, box(title = 'Tabla de llenado de datos desplegable', width = 12, collapsible = TRUE, collapsed = TRUE, 
+                             hotable(ns("TrnsDt")))),
+               column(4, actionButton(ns('inputDat'), "Ingresar datos a la aplicación", styleclass = 'primary', block = TRUE),
+                      hotable(ns("TrnsDtEx"))
+                      )
+               )
       )
 }
 
 ingresarDatosServer <- function(input, output, session) {
   
-  TrnsDt0 <- reactive({
-    if (input$natur == 1) {
-      data.frame(Var.X1  = rep(NA, as.numeric(input$nData)),
-                 Var.X2  = rep(NA, as.numeric(input$nData)))
-    } else {
-      if (input$natur == 2) {
-        data.frame(Var.X1  = rep(NA, as.numeric(input$nData)),
-                   Var.X2  = rep(NA, as.numeric(input$nData)),
-                   Var.X3  = rep(NA, as.numeric(input$nData)))
-      }
+  TrnsDt0 <- reactive(
+    data.frame(var.X1  = rep(NA, 15),
+               var.X2  = rep(0, 15),
+               var.X3  = rep(0, 15),
+               var.X4  = rep(0, 15)))
+  #Intentar un boton de agregar más filas -> Podrían ser más hotables... se pueden imprimir sin encabezados? Se pueden unir al final?
+  
+  MyChanges <- reactive({
+    if(is.null(input$TrnsDt)){return(TrnsDt0())}
+    else if(!identical(TrnsDt0(), input$TrnsDt)){
+      # hot.to.df function will convert your updated table into the dataframe
+      as.data.frame(hot.to.df(input$TrnsDt))
     }
   })
+  output$TrnsDt <- renderHotable({MyChanges()}, readOnly = FALSE)
   
-  erase <- reactiveVal(FALSE)
-  observeEvent(input$resetData, {
-    erase(TRUE) # tampoco funcionó prros :'c
-    #updateHotable() Esto no parece existir... preguntar en stackOverflow
-  })
+  TrnsDtEx <- eventReactive(input$inputDat, na.omit(MyChanges()))
+  output$TrnsDtEx <- renderHotable({TrnsDtEx()}, readOnly = TRUE)
   
-  TrnsDtMyChanges <- reactive({
+  
+  #TrnsDtMyChanges <- reactive({
     #input$inputData
-    TempDatFram1 <- data.frame(apply(as.data.frame(hot.to.df(input$TrnsDt)), 2, function(x) as.numeric(as.character(x))))
-    ifelse(isTruthy(all(is.na(hot.to.df(input$TrnsDt)))),
-           return(TrnsDt0()),
-           return(TempDatFram1)
-    ) #hot.to.df function will convert your updated table into the dataframe
-  })
-  output$TrnsDt <- renderHotable({TrnsDtMyChanges()}, readOnly = FALSE)
-  output$TrnsfrmdDt <- renderHotable({TrnsDtMyChanges()}, readOnly = TRUE)
+  #  TempDatFram1 <- data.frame(apply(as.data.frame(hot.to.df(input$TrnsDt)), 2, function(x) as.numeric(as.character(x))))
+  #  ifelse(isTruthy(all(is.na(hot.to.df(input$TrnsDt)[, 1]))),
+  #         return(TrnsDt0()),
+  #         return(TempDatFram1)
+  #  ) #hot.to.df function will convert your updated table into the dataframe
+  #})
+  
+  #output$TrnsDt <- renderHotable({TrnsDtMyChanges()}, readOnly = FALSE)
+  #output$TrnsfrmdDt <- renderHotable({MyChanges()}, readOnly = TRUE)
   #transDat <- reactive(TrnsDtMyChanges()
   #ModelReactive <- reactive(Model$Model())
   #output$model(renderText(Model$catModel))
-  return(reactive(list(TrnsDtMyChanges(), input$seriesName())))
+  return(reactive(list(data = na.omit(MyChanges()), name = input$seriesName(), descr = input$dataDescrip)))
+  #Considerar poner este return dentro de un actionbutton...
 }

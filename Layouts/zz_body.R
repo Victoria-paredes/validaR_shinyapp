@@ -5,7 +5,7 @@ customBody <- dashboardBody(
     tabItem(tabName = "defini", h2('Terminos relevantes en la validación de métodos cuantitativos'),
             definicionesUI(id = 'definiciones')),#, introductionModuleUI('introduction')),
     tabItem(tabName = "ingrManDat", h2('Ingreso de datos a la aplicación'), lyIngresoDat),
-    tabItem(tabName = "estDescri", h2("Estadística descriptiva")),#, settingsDs),
+    tabItem(tabName = "estDescri", h2("Estadística descriptiva"), lyEstadisticaDescriptiva),#, settingsDs),
     tabItem(tabName = "estPruebas", h2("Pruebas de comparación"), lyPruebasComparacion),
     tabItem(tabName = "estRegr", h2("Regresiones")),#, LytDatInput),
     tabItem(tabName = "select", h2("Parámetros de validación: Selectividad")),#, LytProfiles),

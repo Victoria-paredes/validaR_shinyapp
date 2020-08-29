@@ -1,10 +1,5 @@
-lyPruebasComparacion <- tabBox(width = 12, height = 800,
-                               tabPanel('Normalidad'),
-                               tabPanel('Autocorrelación del error'),
-                               tabPanel('Homocedasticidad'),
-                               tabPanel('Comparación de medias',
-                                        tabBox(width = 12, height = 800,
-                                               tabPanel('Pruebas t'),
-                                               tabPanel('Pruebas chi2'),
-                                               tabPanel('ANOVA'),
-                                               tabPanel('Contra un control'))))
+tiposVar <- c('Datos univariados (var.X1)', 'Curva de calibración (var.X2) = f(var.X1)', 
+              'Curva de calibración (var.X1) = f(var.X2)')
+
+lyEstadisticaDescriptiva <- box(width = 12, #height = 800,
+                                estadisticaDescriptivaUI("Series1EstDesc"))
