@@ -5,8 +5,8 @@ account: crparedes
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2655189
-bundleId: 3568638
+bundleId: 3578337
 url: https://crparedes.shinyapps.io/validaR/
-when: 1598652964.90595
+when: 1598932694.59185
 asMultiple: FALSE
 asStatic: FALSE

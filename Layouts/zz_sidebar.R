@@ -1,3 +1,9 @@
+convertMenuItem <- function(mi, tabName) {
+  mi$children[[1]]$attribs['data-toggle'] = "tab"
+  mi$children[[1]]$attribs['data-value']  = tabName
+  mi
+}
+
 customSidebar <- dashboardSidebar(tags$style(".left-side, .main-sidebar {padding-top: 110px;}"), # font-size: larger
                      width = 300, 
                      bookmarkButton(label = 'Guardar...', 
@@ -11,12 +17,12 @@ customSidebar <- dashboardSidebar(tags$style(".left-side, .main-sidebar {padding
                        menuItem("Banco de datos de ejemplos", tabName = "ejemData", icon = icon("folder-open")),tags$hr(),
                        tags$b('Herramientas estadísticas:'),
                        menuItem("Estadística descriptiva", tabName = "estDescri", icon = icon("")),
-                       menuItem("Pruebas de comparación", tabName = "estPruebas", icon = icon(""),
-                                menuSubItem("Homogeneidad de varianzas", tabName = "PrCmp_Var"),
-                                menuSubItem("Comparación de medias", tabName = "PrCmp_Med"),
-                                menuSubItem("Comparación de medias contra una referencia", tabName = "PrCmp_Med_Ref"),
-                                menuSubItem("Analisis de varianza", tabName = "PrCmp_anova"),
-                                menuSubItem("Analisis de covarianza", tabName = "PrCmp_anova")),
+                       convertMenuItem(menuItem("Pruebas de comparación", tabName = "estPruebas", icon = icon(""),
+                                                menuSubItem("Comparación de medias", tabName = "PrCmp_Med"),
+                                                menuSubItem("Comparación de varianzas", tabName = "PrCmp_Var"),
+                                                menuSubItem("Analisis de varianza (ANOVA)", tabName = "PrCmp_anova"),
+                                                menuSubItem("Analisis de covarianza (ANCOVA)", tabName = "PrCmp_anova")), 
+                                       tabName = "estPruebas"),
                        menuItem("Regresiones", tabName = "estRegr", icon = icon("")), tags$hr(),
                        tags$b('Parámetros de validación:'),
                        menuItem("Selectividad", tabName = "select", icon = icon("")),

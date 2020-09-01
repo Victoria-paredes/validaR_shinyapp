@@ -19,7 +19,8 @@ layouts         <- paste0('Layouts/', list.files(path = "Layouts")) # functions 
 sapply(c(customFunctions, modules, layouts), source)
 
 ui <- function(request) {
-  dashboardPage(skin = "black", customHeader, customSidebar, customBody) #customStuff in ./Layouts
+  dashboardPage(skin = "black", header = customHeader, sidebar = customSidebar, body = customBody, 
+                title = "Validación de métodos analíticos Instituto Nacional de Metrología") #customStuff in ./Layouts
 }
 
 server <- function(input, output, session) {
@@ -31,6 +32,13 @@ server <- function(input, output, session) {
   
   callModule(estadisticaDescriptivaServer, 'Series1EstDesc', series = datSeries1)
   callModule(estadisticaDescriptivaServer, 'Series2EstDesc', series = datSeries2)
+  
+  callModule(comparacionMediasServer_1, 'mediaVsReferencia')
+  callModule(comparacionMediasServer_2i, 'dosMedias')
+  callModule(comparacionMediasServer_2p, 'dosMerdiasPareadas')
+  
+  
+  
   callModule(precisionHorRatServer, 'HorRat1')
   
   #observe({
