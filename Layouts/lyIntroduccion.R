@@ -7,11 +7,12 @@ lyIntroduccionDscrp <- infoBox(width = 12, title = NULL, color = 'light-blue', i
                                   regresentaciones gráficas R [R Core Team, 2020]. La implementación en este tablero interactivo
                                   ha sido posible principalmente al paquete de R Shiny [Chang y otros., 2020]."))
 
-lyIntroduccion <- fluidRow(column(width = 3, box(width = 12, title = 'Estadística descriptiva e inferencial', status = 'primary', 
-                                                 h4('(poner gráficos de histogramas con curvas de densidad o algo así
-                                                    plus una descripción suave)'))),
-                           column(width = 3, box(width = 12, title = 'Modelos de regresión', status = 'primary', 
-                                                 h4('(poner gráficos de regresiones plus una descripción suave)'))),
-                           column(width = 6, box(width = 12, title = 'Parámetros de validación', status = 'primary', 
-                                                 h4('(pensar que poner acá)')))                      
+lyIntroduccion <- fluidRow(column(3, box(width = 12, height = 350, title = tags$b('Estadística descriptiva e inferencial'),
+                                         status = 'primary', 
+                                         h4('(poner gráficos de histogramas con curvas de densidad o algo así
+                                            plus una descripción suave)'))),
+                           column(3, box(width = 12, height = 350, title = tags$b('Modelos de regresión'), status = 'primary', 
+                                         h4('(poner gráficos de regresiones plus una descripción suave)'))),
+                           column(6, box(width = 12, height = 350, title = tags$b('Parámetros de validación'), status = 'primary', 
+                                         h4('(pensar que poner acá)')))                      
                       ) 

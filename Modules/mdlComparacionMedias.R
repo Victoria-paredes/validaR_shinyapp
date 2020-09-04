@@ -1,20 +1,30 @@
 comparacionMediasUI_1 <- function(id) {
   ns <- NS(id)
-  fluidRow(column(2, uiOutput(ns('selectSeries'))), 
-           column(2, numericInput(ns('valRef'), label = 'Ingrese valor de referencia', width = '100%', value = 0),
-                  radioButtons(ns('hypAlter'), label = 'Hipótesis alternativa',
-                               choices = list('bar{x} neq mu_0' = 1, 'bar{x} < mu_0' = 2, 'bar{x} > mu_0' = 3)), 
+  fluidRow(column(2, uiOutput(ns('selectSeries')),
+                  numericInput(ns('valRef'), label = 'Ingrese valor de referencia', width = '100%', value = 0),
+                  radioButtons(ns('hypAlter'), label = 'Seleccione hipótesis alternativa',
+                               choices = list('H1: bar{x} neq \\(\\mu_0\\)' = 'two.sided', 
+                                              'H1: bar{x} < mu_0' = 'less', 
+                                              'H1: bar{x} > mu_0' = 'greater')), 
                   sliderInput(ns('signif'), label = 'Seleccione la significancia de la prueba', 
-                              min = 0.9, max = 0.999, value = 0.95, step = 0.001)))
+                              min = 0.9, max = 0.999, value = 0.95, step = 0.001),
+                  actionButton(ns('doCompare'), label = "Hacer inferencia", styleclass = 'primary', block = TRUE)),
+           column(4, verbatimTextOutput(ns('t_test1sample'))))
 }
 
 comparacionMediasServer_1 <- function(input, output, session, nSeries, compl) {
-  values <- as.list(1:20)
-  names(values) <- paste('Serie', 1:20)
+  values <- paste0('Serie', 1:20)
+  names(values) <- paste('Serie #', 1:20)
   
-  output$selectSeries <- renderUI(selectInput(session$ns("selectedSeries"), label = 'Seleccione la serie de datos a comparar',
+  output$selectSeries <- renderUI(selectInput(session$ns("selectedSeries"), label = 'Serie de datos a comparar',
                                               #choices = list('Series 1' = 1, 'Series 2' = 2)))
                                               choices = values[1:nSeries()]))
+  observeEvent(input$doCompare, {
+    output$t_test1sample <- renderPrint(t.test(x = compl[[input$selectedSeries]]$data()[, 1],
+                                               alternative = input$hypAlter, 
+                                               mu = input$valRef,
+                                               conf.level = input$signif))
+  })
 }
 
 comparacionMediasUI_2i <- function(id) {
