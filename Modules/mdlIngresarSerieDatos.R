@@ -4,7 +4,8 @@ ingresarDatosUI <- function(id, IntID = 1, value0 = 10) {
   box(title = paste0("Módulo de ingreso serie # ", IntID), width = 12, #height = 150, #solidHeader = TRUE, status = 'primary',
       fluidRow(#column(4, selectInput(ns('natur'), label = "Tipo de datos",
         #                     choices = list('Univariados' = 1, 'Relación de variables: y = f(x)' = 2), selected = 2)),
-        column(4, textAreaInput(ns('seriesName'), label = 'Identificador de la serie', height = '80px',
+        column(4, textAreaInput(ns('seriesName'), label = 'Identificador de la serie', height = '80px', 
+                                value = paste0("Serie_", IntID),
                                 placeholder = 'Valores alfanuméricos sin espacios ni caracteres especiales...')),
         column(8, textAreaInput(ns('dataDescrip'), label = 'Descripción de los datos', height = '80px',
                                 placeholder = 'Por ejemplo: Muestra XXX002, estudio de precisión bajas 

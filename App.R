@@ -26,14 +26,26 @@ ui <- function(request) {
 server <- function(input, output, session) {
   callModule(definicionesServer, 'definiciones')
   
-  datSeries1 <- callModule(ingresarDatosServer, 'serieMan1')
-  datSeries2 <- callModule(ingresarDatosServer, 'serieMan2')
+  #datSeries1 <- callModule(ingresarDatosServer, 'serieMan1')
+  #datSeries2 <- callModule(ingresarDatosServer, 'serieMan2')
+  
+  # Modulos de ingreso de datos
+  datSeriesNames <- reactiveValues()
+  datSeriesCompleteDat <- reactiveValues()
+  for (i in 1:20) {
+    eval(parse(text = paste0('datSeries', i, ' <- callModule(ingresarDatosServer, "serieMan', i, '")')))
+    eval(parse(text = paste0('observe(datSeriesNames$Ser', i, ' <- datSeries', i, '$name)')))
+    eval(parse(text = paste0('observe(datSeriesCompleteDat$Ser', i, ' <- datSeries', i, ')')))
+  }
+  #datSeriesComp$Ser1 <- datSeries1
+  # Modulos de importación de datos -> Esto podrá estar por fuera de las capacidades de la App?
   callModule(importarDatosServer, 'serieImp1')
   
   callModule(estadisticaDescriptivaServer, 'Series1EstDesc', series = datSeries1)
   callModule(estadisticaDescriptivaServer, 'Series2EstDesc', series = datSeries2)
   
-  callModule(comparacionMediasServer_1, 'mediaVsReferencia')
+  callModule(comparacionMediasServer_1, 'mediaVsReferencia', 
+             nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
   callModule(comparacionMediasServer_2i, 'dosMedias')
   callModule(comparacionMediasServer_2p, 'dosMerdiasPareadas')
   
