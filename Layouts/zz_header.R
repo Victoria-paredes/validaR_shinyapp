@@ -8,6 +8,6 @@ customHeader <- dashboardHeader(tags$li(class = "dropdown",
     <img
     src="http://www.inm.gov.co/nueva/wp-content/uploads/2019/03/Logo_Instituto_INM_y_Gobierno2019_4.png"
     </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-    <th><h1 style="LINE-HEIGHT:5px">Validación de métodos químicos cuantitativos</h1></th></tr>
+    <th><h1 style="LINE-HEIGHT:5px">validaR: Validación de métodos químicos cuantitativos</h1></th></tr>
     <tr><th><h3 style="LINE-HEIGHT:5px">Subdirección de metrología química y biomedicina</h3></th></tr>
     </table>')))

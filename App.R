@@ -20,7 +20,7 @@ sapply(c(customFunctions, modules, layouts), source)
 
 ui <- function(request) {
   dashboardPage(skin = "black", header = customHeader, sidebar = customSidebar, body = customBody, 
-                title = "Validación de métodos analíticos Instituto Nacional de Metrología") #customStuff in ./Layouts
+                title = "validaR - Instituto Nacional de Metrología") #customStuff in ./Layouts
 }
 
 server <- function(input, output, session) {

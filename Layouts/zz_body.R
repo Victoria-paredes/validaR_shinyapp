@@ -1,7 +1,7 @@
 customBody <- dashboardBody(
   withMathJax(),
   tabItems(
-    tabItem(tabName = "introd", h2('Herramientas para la validación de métodos')),#, introductionModuleUI('introduction')),
+    tabItem(tabName = "introd", h2('Herramientas para la validación de métodos'), lyIntroduccionDscrp, lyIntroduccion),#, introductionModuleUI('introduction')),
     tabItem(tabName = "defini", h2('Terminos relevantes en la validación de métodos cuantitativos'),
             definicionesUI(id = 'definiciones')),#, introductionModuleUI('introduction')),
     tabItem(tabName = "ingrManDat", h2('Ingreso de datos a la aplicación'), lyIngresoDat),
