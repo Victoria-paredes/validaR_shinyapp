@@ -21,7 +21,7 @@ customSidebar <- dashboardSidebar(tags$style(".left-side, .main-sidebar {padding
                                 menuSubItem("Comparación de medias", tabName = "PrCmp_Med"),
                                 menuSubItem("Comparación de varianzas", tabName = "PrCmp_Var"),
                                 menuSubItem("Analisis de varianza (ANOVA)", tabName = "PrCmp_anova"),
-                                menuSubItem("Analisis de covarianza (ANCOVA)", tabName = "PrCmp_anova")),
+                                menuSubItem("Analisis de covarianza (ANCOVA)", tabName = "PrCmp_ancova")),
                        menuItem("Regresiones", tabName = "estRegr", icon = icon("")), tags$hr(),
                        tags$b('Parámetros de validación:'),
                        menuItem("Selectividad", tabName = "select", icon = icon("")),

@@ -1,4 +1,4 @@
-comparacionMediasUI_1 <- function(id) {
+comparacionANOVAUI <- function(id) {
   ns <- NS(id)
   fluidRow(column(4, uiOutput(ns('selectSeries')),
                   numericInput(ns('valRef'), label = 'Ingrese valor de referencia', width = '100%', value = 0),
@@ -12,13 +12,15 @@ comparacionMediasUI_1 <- function(id) {
            column(8, verbatimTextOutput(ns('t_test1sample'))))
 }
 
-comparacionMediasServer_1 <- function(input, output, session, nSeries, compl) {
+comparacionANOVAServer <- function(input, output, session, nSeries, compl) {
   values <- paste0('Serie', 1:20)
   names(values) <- paste('Serie #', 1:20)
   
-  output$selectSeries <- renderUI(selectInput(session$ns("selectedSeries"), label = 'Seleccione un conjunto de datos',
-                                              #choices = list('Series 1' = 1, 'Series 2' = 2)))
-                                              choices = values[1:nSeries()]))
+  output$selectSeries <- renderUI(selectizeInput(session$ns("selectedSeries"), label = 'Seleccione 2 conjuntos de datos', 
+                                                 options = list(maxItems = 2), 
+                                                 #choices = list('Series 1' = 1, 'Series 2' = 2)))
+                                                 choices = values[1:nSeries()]))
+
   observeEvent(input$doCompare, {
     output$t_test1sample <- renderPrint(t.test(x = compl[[input$selectedSeries]]$data()[, 1],
                                                alternative = input$hypAlter, 
@@ -27,7 +29,7 @@ comparacionMediasServer_1 <- function(input, output, session, nSeries, compl) {
   })
 }
 
-comparacionMediasUI_2 <- function(id) {
+comparacionRanMulUI <- function(id) {
   ns <- NS(id)
   fluidRow(column(4, uiOutput(ns('selectSeries')),
                   #numericInput(ns('valRef'), label = 'Ingrese valor de referencia', width = '100%', value = 0),
@@ -42,7 +44,7 @@ comparacionMediasUI_2 <- function(id) {
            column(8, verbatimTextOutput(ns('t_test1sample'))))
 }
 
-comparacionMediasServer_2 <- function(input, output, session, nSeries, compl) {
+comparacionRanMulServer <- function(input, output, session, nSeries, compl) {
   values <- paste0('Serie', 1:20)
   names(values) <- paste('Serie #', 1:20)
   

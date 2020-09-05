@@ -9,6 +9,12 @@ customBody <- dashboardBody(
     tabItem(tabName = "estDescri", h2("Estadística descriptiva"), lyEstadisticaDescriptiva),#, settingsDs),
     #tabItem(tabName = "estPruebas", h2("Generalidades de las pruebas de comparación"), lyPruebasComparacion),
             tabItem(tabName = 'PrCmp_Med', h2("Pruebas de comparación de medias"), lyCompMediasDscrp, lyCompMedias),
+            tabItem(tabName = 'PrCmp_Var', h2("Pruebas de comparación de varianzas"), lyCompVarianDscrp, lyCompVarian), 
+    #Pensar en las de varias varianzas: Levene? Cochran? Barlett? todas?
+            tabItem(tabName = 'PrCmp_anova', h2("ANOVA: Análisis de varianza para comparar varias medias muestrales"), 
+                    lyCompANOVADscrp, lyCompANOVA), 
+            tabItem(tabName = 'PrCmp_ancova', h2("ANCOVA: Análisis de covarianza"), 
+                    lyCompANCOVADscrp, lyCompANCOVA),
     tabItem(tabName = "estRegr", h2("Regresiones")),#, LytDatInput),
     tabItem(tabName = "select", h2("Parámetros de validación: Selectividad")),#, LytProfiles),
     tabItem(tabName = "exacti", h2("Parámetros de validación: Exactitud"), lyExactitud),#, LytPermCoef),

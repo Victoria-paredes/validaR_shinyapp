@@ -1,5 +1,5 @@
 trmIndicacion <- box(width = 12, solidHeader = TRUE, status = 'primary',
-                     title = "Indicación:",
+                     title = tags$b("Indicación:"),
                              h4("Valor proporcionado por un instrumento o sistema de medida"), tags$hr(),
                              h4("NOTA 1 La indicación puede presentarse en forma visual o acústica, o puede transferirse a otro
                                  dispositivo. Frecuentemente viene dada por la posición de una aguja en un cuadrante para salidas
@@ -9,7 +9,7 @@ trmIndicacion <- box(width = 12, solidHeader = TRUE, status = 'primary',
                                  valores de magnitudes de la misma naturaleza."),
                              p(style = "text-align: rigth;", "Vocabulario Internacional de Metrología, [JCMG, 2012]"))
 trmIndicacionDeBlanco <- box(width = 12, solidHeader = TRUE, status = 'primary',
-                            title = "Indicación de blanco:",
+                            title = tags$b("Indicación de blanco:"),
                             h4("Indicación obtenida a partir de un fenómeno, cuerpo
                                 o sustancia similar al que está en estudio, cuya magnitud de interés se supone no está
                                 presente o no contribuye a la indicación."),

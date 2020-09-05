@@ -46,8 +46,24 @@ server <- function(input, output, session) {
   
   callModule(comparacionMediasServer_1, 'mediaVsReferencia', 
              nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
-  callModule(comparacionMediasServer_2i, 'dosMedias')
-  callModule(comparacionMediasServer_2p, 'dosMerdiasPareadas')
+  callModule(comparacionMediasServer_2, 'dosMedias', 
+             nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat) 
+  
+  callModule(comparacionVarianServer_1, 'varianVsReferencia', 
+             nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
+  callModule(comparacionVarianServer_2, 'dosVarian', 
+             nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat) 
+  
+  callModule(comparacionANOVAServer, 'anovaMdl', 
+             nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
+  callModule(comparacionRanMulServer, 'ranMulAov', 
+             nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
+  
+  callModule(comparacionANCOVAServer, 'ancovaMdl', 
+             nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
+  
+  ### HAY PRUEBA ESTADÏSTICA PARA PROPORCIÖN DE MUESTRAS?
+  
   
   
   

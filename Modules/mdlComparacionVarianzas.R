@@ -1,4 +1,4 @@
-comparacionMediasUI_1 <- function(id) {
+comparacionVarianUI_1 <- function(id) {
   ns <- NS(id)
   fluidRow(column(4, uiOutput(ns('selectSeries')),
                   numericInput(ns('valRef'), label = 'Ingrese valor de referencia', width = '100%', value = 0),
@@ -12,7 +12,7 @@ comparacionMediasUI_1 <- function(id) {
            column(8, verbatimTextOutput(ns('t_test1sample'))))
 }
 
-comparacionMediasServer_1 <- function(input, output, session, nSeries, compl) {
+comparacionVarianServer_1 <- function(input, output, session, nSeries, compl) {
   values <- paste0('Serie', 1:20)
   names(values) <- paste('Serie #', 1:20)
   
@@ -27,7 +27,7 @@ comparacionMediasServer_1 <- function(input, output, session, nSeries, compl) {
   })
 }
 
-comparacionMediasUI_2 <- function(id) {
+comparacionVarianUI_2 <- function(id) {
   ns <- NS(id)
   fluidRow(column(4, uiOutput(ns('selectSeries')),
                   #numericInput(ns('valRef'), label = 'Ingrese valor de referencia', width = '100%', value = 0),
@@ -42,7 +42,7 @@ comparacionMediasUI_2 <- function(id) {
            column(8, verbatimTextOutput(ns('t_test1sample'))))
 }
 
-comparacionMediasServer_2 <- function(input, output, session, nSeries, compl) {
+comparacionVarianServer_2 <- function(input, output, session, nSeries, compl) {
   values <- paste0('Serie', 1:20)
   names(values) <- paste('Serie #', 1:20)
   
