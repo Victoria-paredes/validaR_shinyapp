@@ -2,19 +2,18 @@ library(shiny)
 library(shinydashboard)
 library(shinyWidgets)
 library(ggplot2) #Grammar of graphics
-library(rhandsontable)
 library(shinysky)
+library(rhandsontable)
 library(purrr) #map-like functional programing
+#library(EnvStats) # varTest(): One-Sample Chi-Squared Test On Variance
 
 #library(ggvis) #ggvis: Interactive Grammar of Graphics - input_slider: Create an interactive slider.
 
 
-# Por lo general, los módulos son llamadas desde las funciones de layouts
+# Por lo general, los módulos_UI son llamados desde las funciones de layouts
 customFunctions <- paste0('CustomFunctions/', list.files(path = "CustomFunctions")) # functions in the server side
 modules         <- paste0('Modules/', list.files(path = "Modules"))
 layouts         <- paste0('Layouts/', list.files(path = "Layouts")) # functions in the client side
-
-
 
 sapply(c(customFunctions, modules, layouts), source)
 
@@ -30,7 +29,7 @@ server <- function(input, output, session) {
   #datSeries2 <- callModule(ingresarDatosServer, 'serieMan2')
   
   # Modulos de ingreso de datos
-  datSeriesNames <- reactiveValues()
+  #datSeriesNames <- reactiveValues()
   datSeriesCompleteDat <- reactiveValues()
   for (i in 1:20) {
     eval(parse(text = paste0('datSeries', i, ' <- callModule(ingresarDatosServer, "serieMan', i, '")')))
@@ -38,7 +37,7 @@ server <- function(input, output, session) {
     eval(parse(text = paste0('datSeriesCompleteDat$Serie', i, ' <- datSeries', i)))
   }
   
-  # Modulos de importación de datos -> Esto podrá estar por fuera de las capacidades de la App?
+  # Modulos de importación de datos -> Esto podrá estar por fuera de las capacidades de la App? Es siquiera necesario?
   # callModule(importarDatosServer, 'serieImp1')
   
   callModule(estadisticaDescriptivaServer, 'Series1EstDesc', series = datSeries1)
@@ -53,6 +52,8 @@ server <- function(input, output, session) {
              nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
   callModule(comparacionVarianServer_2, 'dosVarian', 
              nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat) 
+  callModule(comparacionVarianServer_m, 'mulVarian', 
+             nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
   
   callModule(comparacionANOVAServer, 'anovaMdl', 
              nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)

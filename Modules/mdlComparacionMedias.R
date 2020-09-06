@@ -8,7 +8,7 @@ comparacionMediasUI_1 <- function(id) {
                                               'H1: bar{x} > mu_0' = 'greater')), 
                   sliderInput(ns('signif'), label = 'Seleccione la significancia de la prueba', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
-                  actionButton(ns('doCompare'), label = "Hacer inferencia", styleclass = 'primary', block = TRUE)),
+                  actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
            column(8, verbatimTextOutput(ns('t_test1sample'))))
 }
 
@@ -38,7 +38,7 @@ comparacionMediasUI_2 <- function(id) {
                   sliderInput(ns('signif'), label = 'Seleccione la significancia de la prueba', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   checkboxInput(ns('paired'), label = 'Muestras emparejadas', value = FALSE),
-                  actionButton(ns('doCompare'), label = "Hacer inferencia", styleclass = 'primary', block = TRUE)),
+                  actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
            column(8, verbatimTextOutput(ns('t_test1sample'))))
 }
 

@@ -17,11 +17,12 @@ lyCompVarianDscrp <- infoBox(width = 12, "Pruebas de comparación de varianza", 
                              h4("hablar de los tres tipos más importantes"))
 lyCompVarian <- fluidRow(column(6, box(title = tags$b('Varianza muestral contra un valor de referencia (\\(\\chi^2\\))'), 
                                        solidHeader = TRUE, width = 12, status = 'primary',
-                                       height = 500, comparacionVarianUI_1('varianVsReferencia'))),
+                                       height = 540, comparacionVarianUI_1('varianVsReferencia'))),
                          column(6, box(title = tags$b('Una varianza muestral contra otra varianza muestral'), width = 12, status = 'primary',
-                                       solidHeader = TRUE, height = 500, comparacionVarianUI_2('dosVarian'))),
+                                       solidHeader = TRUE, height = 540, comparacionVarianUI_2('dosVarian'))),
                          column(12, box(title = tags$b('Comparación de varianzas muestrales de más de dos conjuntos de datos'), 
-                                        width = 12, status = 'primary', height = 500)))
+                                        width = 12, status = 'primary', height = 500, 
+                                        comparacionVarianUI_m('mulVarian'))))
 
 lyCompANOVADscrp <- infoBox(width = 12, "Comparación de medias de varios grupos muestrales", color = 'light-blue',
                          h4("La comparación de varioa medias muestrales evalua ..."))

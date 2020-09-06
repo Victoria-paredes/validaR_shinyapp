@@ -1,7 +1,11 @@
 comparacionVarianUI_1 <- function(id) {
   ns <- NS(id)
   fluidRow(column(4, uiOutput(ns('selectSeries')),
-                  numericInput(ns('valRef'), label = 'Ingrese valor de referencia', width = '100%', value = 0),
+                  numericInput(ns('valRef'), label = 'Ingrese valor de referencia', width = '100%', value = 1),
+                  radioButtons(ns('refUnits'), label = NULL, width = '100%', selected = 3,
+                              choices = list("Unidades de varianza" = 1, 
+                                             "Desviación estandar" = 2,
+                                             "Desviación estándar relativa (%)" = 3)),
                   radioButtons(ns('hypAlter'), label = 'Seleccione hipótesis alternativa',
                                choices = list('H1: bar{x} neq \\(\\mu_0\\)' = 'two.sided', 
                                               'H1: bar{x} < mu_0' = 'less', 
@@ -15,15 +19,19 @@ comparacionVarianUI_1 <- function(id) {
 comparacionVarianServer_1 <- function(input, output, session, nSeries, compl) {
   values <- paste0('Serie', 1:20)
   names(values) <- paste('Serie #', 1:20)
-  
   output$selectSeries <- renderUI(selectInput(session$ns("selectedSeries"), label = 'Seleccione un conjunto de datos',
                                               #choices = list('Series 1' = 1, 'Series 2' = 2)))
                                               choices = values[1:nSeries()]))
+  sigma.squared <- reactive(
+    if(input$refUnits == 1) {return(input$valRef)} else {
+      if(input$refUnits == 2) {return(input$valRef^2)} else {
+        if(input$refUnits == 3) {return((input$valRef / 100 * mean(compl[[input$selectedSeries]]$data()[, 1]))^2)}}}
+  )
   observeEvent(input$doCompare, {
-    output$t_test1sample <- renderPrint(t.test(x = compl[[input$selectedSeries]]$data()[, 1],
-                                               alternative = input$hypAlter, 
-                                               mu = input$valRef,
-                                               conf.level = input$signif))
+    output$t_test1sample <- renderPrint(EnvStats::varTest(x = compl[[input$selectedSeries]]$data()[, 1],
+                                                          alternative = input$hypAlter, 
+                                                          sigma.squared = sigma.squared(),
+                                                          conf.level = input$signif))
   })
 }
 
@@ -57,5 +65,38 @@ comparacionVarianServer_2 <- function(input, output, session, nSeries, compl) {
                                                conf.level = input$signif,
                                                paired = input$paired)
                                         )
+  })
+}
+
+comparacionVarianUI_m <- function(id) {
+  ns <- NS(id)
+  fluidRow(column(4, uiOutput(ns('selectSeries')),
+                  #numericInput(ns('valRef'), label = 'Ingrese valor de referencia', width = '100%', value = 0),
+                  radioButtons(ns('hypAlter'), label = 'Seleccione hipótesis alternativa',
+                               choices = list('H1: bar{x} neq \\(\\mu_0\\)' = 'two.sided', 
+                                              'H1: bar{x} < mu_0' = 'less', 
+                                              'H1: bar{x} > mu_0' = 'greater')), 
+                  sliderInput(ns('signif'), label = 'Seleccione la significancia de la prueba', 
+                              min = 0.9, max = 0.999, value = 0.95, step = 0.001),
+                  checkboxInput(ns('paired'), label = 'Muestras emparejadas', value = FALSE),
+                  actionButton(ns('doCompare'), label = "Hacer inferencia", styleclass = 'primary', block = TRUE)),
+           column(8, verbatimTextOutput(ns('t_test1sample'))))
+}
+
+comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
+  values <- paste0('Serie', 1:20)
+  names(values) <- paste('Serie #', 1:20)
+  
+  output$selectSeries <- renderUI(selectizeInput(session$ns("selectedSeries"), label = 'Seleccione 2 conjuntos de datos', 
+                                                 options = list(maxItems = 2), 
+                                                 #choices = list('Series 1' = 1, 'Series 2' = 2)))
+                                                 choices = values[1:nSeries()]))
+  observeEvent(input$doCompare, {
+    output$t_test1sample <- renderPrint(t.test(x = compl[[input$selectedSeries[1]]]$data()[, 1],
+                                               y = compl[[input$selectedSeries[2]]]$data()[, 1],
+                                               alternative = input$hypAlter, 
+                                               conf.level = input$signif,
+                                               paired = input$paired)
+    )
   })
 }
