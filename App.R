@@ -5,7 +5,6 @@ library(ggplot2) #Grammar of graphics
 library(shinysky)
 library(rhandsontable)
 library(purrr) #map-like functional programing
-#library(EnvStats) # varTest(): One-Sample Chi-Squared Test On Variance
 
 #library(ggvis) #ggvis: Interactive Grammar of Graphics - input_slider: Create an interactive slider.
 
@@ -56,10 +55,9 @@ server <- function(input, output, session) {
   callModule(comparacionVarianServer_m, 'mulVarian', 
              nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
   
-  callModule(comparacionANOVAServer, 'anovaMdl', 
-             nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
-  callModule(comparacionRanMulServer, 'ranMulAov', 
-             nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
+  aovModel <- callModule(comparacionANOVAServer, 'anovaMdl', 
+                         nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
+  callModule(comparacionRanMulServer, 'ranMulAov', aovModel = aovModel)
   
   callModule(comparacionANCOVAServer, 'ancovaMdl', 
              nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)

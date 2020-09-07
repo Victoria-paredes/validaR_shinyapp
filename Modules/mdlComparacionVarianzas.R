@@ -12,7 +12,7 @@ comparacionVarianUI_1 <- function(id) {
                                               'H1: bar{x} > mu_0' = 'greater')), 
                   sliderInput(ns('signif'), label = 'Seleccione la significancia de la prueba', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
-                  actionButton(ns('doCompare'), label = "Hacer inferencia", styleclass = 'primary', block = TRUE)),
+                  actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
            column(8, verbatimTextOutput(ns('chi_test1sample'))))
 }
 
@@ -45,8 +45,7 @@ comparacionVarianUI_2 <- function(id) {
                                               'H1: bar{x} > mu_0' = 'greater')), 
                   sliderInput(ns('signif'), label = 'Seleccione la significancia de la prueba', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
-                  checkboxInput(ns('paired'), label = 'Muestras emparejadas', value = FALSE),
-                  actionButton(ns('doCompare'), label = "Hacer inferencia", styleclass = 'info', block = TRUE)),
+                  actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
            column(8, verbatimTextOutput(ns('F_test2sample'))))
 }
 
@@ -70,14 +69,9 @@ comparacionVarianUI_m <- function(id) {
   fluidRow(column(2, 
                   uiOutput(ns('selectSeries')),
                   #numericInput(ns('valRef'), label = 'Ingrese valor de referencia', width = '100%', value = 0),
-                  radioButtons(ns('hypAlter'), label = 'Seleccione hipótesis alternativa',
-                               choices = list('H1: bar{x} neq \\(\\mu_0\\)' = 'two.sided', 
-                                              'H1: bar{x} < mu_0' = 'less', 
-                                              'H1: bar{x} > mu_0' = 'greater')), 
                   sliderInput(ns('signif'), label = 'Seleccione la significancia de la prueba', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
-                  checkboxInput(ns('paired'), label = 'Muestras emparejadas', value = FALSE),
-                  actionButton(ns('doCompare'), label = "Hacer inferencia", styleclass = 'primary', block = TRUE)),
+                  actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
            column(3, box(title = tags$b('Ensayo de Barlett'), status = 'primary', width = 12, height = 450, 
                          verbatimTextOutput(ns('outBarlett')))),
            column(3, box(title = tags$b('Prueba de Levene'), status = 'primary', width = 12, height = 450, 
