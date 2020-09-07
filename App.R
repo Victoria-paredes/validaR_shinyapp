@@ -35,6 +35,7 @@ server <- function(input, output, session) {
     eval(parse(text = paste0('datSeries', i, ' <- callModule(ingresarDatosServer, "serieMan', i, '")')))
     #eval(parse(text = paste0('observe(datSeriesNames$Ser', i, ' <- datSeries', i, '$name)')))
     eval(parse(text = paste0('datSeriesCompleteDat$Serie', i, ' <- datSeries', i)))
+    #reactive(eval(parse(text = paste0('datSeriesCompVar.x1$Serie', i, ' <- datSeries', i, '$data()[, 1]'))))
   }
   
   # Modulos de importación de datos -> Esto podrá estar por fuera de las capacidades de la App? Es siquiera necesario?

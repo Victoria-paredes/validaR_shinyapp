@@ -13,7 +13,7 @@ comparacionVarianUI_1 <- function(id) {
                   sliderInput(ns('signif'), label = 'Seleccione la significancia de la prueba', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   actionButton(ns('doCompare'), label = "Hacer inferencia", styleclass = 'primary', block = TRUE)),
-           column(8, verbatimTextOutput(ns('t_test1sample'))))
+           column(8, verbatimTextOutput(ns('chi_test1sample'))))
 }
 
 comparacionVarianServer_1 <- function(input, output, session, nSeries, compl) {
@@ -28,7 +28,7 @@ comparacionVarianServer_1 <- function(input, output, session, nSeries, compl) {
         if(input$refUnits == 3) {return((input$valRef / 100 * mean(compl[[input$selectedSeries]]$data()[, 1]))^2)}}}
   )
   observeEvent(input$doCompare, {
-    output$t_test1sample <- renderPrint(EnvStats::varTest(x = compl[[input$selectedSeries]]$data()[, 1],
+    output$chi_test1sample <- renderPrint(EnvStats::varTest(x = compl[[input$selectedSeries]]$data()[, 1],
                                                           alternative = input$hypAlter, 
                                                           sigma.squared = sigma.squared(),
                                                           conf.level = input$signif))
@@ -46,8 +46,8 @@ comparacionVarianUI_2 <- function(id) {
                   sliderInput(ns('signif'), label = 'Seleccione la significancia de la prueba', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   checkboxInput(ns('paired'), label = 'Muestras emparejadas', value = FALSE),
-                  actionButton(ns('doCompare'), label = "Hacer inferencia", styleclass = 'primary', block = TRUE)),
-           column(8, verbatimTextOutput(ns('t_test1sample'))))
+                  actionButton(ns('doCompare'), label = "Hacer inferencia", styleclass = 'info', block = TRUE)),
+           column(8, verbatimTextOutput(ns('F_test2sample'))))
 }
 
 comparacionVarianServer_2 <- function(input, output, session, nSeries, compl) {
@@ -59,18 +59,16 @@ comparacionVarianServer_2 <- function(input, output, session, nSeries, compl) {
                                                  #choices = list('Series 1' = 1, 'Series 2' = 2)))
                                                  choices = values[1:nSeries()]))
   observeEvent(input$doCompare, {
-    output$t_test1sample <- renderPrint(t.test(x = compl[[input$selectedSeries[1]]]$data()[, 1],
-                                               y = compl[[input$selectedSeries[2]]]$data()[, 1],
-                                               alternative = input$hypAlter, 
-                                               conf.level = input$signif,
-                                               paired = input$paired)
-                                        )
-  })
+    output$F_test2sample <- renderPrint(var.test(x = compl[[input$selectedSeries[1]]]$data()[, 1],
+                                                 y = compl[[input$selectedSeries[2]]]$data()[, 1],
+                                                 alternative = input$hypAlter, 
+                                                 conf.level = input$signif))})
 }
 
 comparacionVarianUI_m <- function(id) {
   ns <- NS(id)
-  fluidRow(column(4, uiOutput(ns('selectSeries')),
+  fluidRow(column(2, 
+                  uiOutput(ns('selectSeries')),
                   #numericInput(ns('valRef'), label = 'Ingrese valor de referencia', width = '100%', value = 0),
                   radioButtons(ns('hypAlter'), label = 'Seleccione hipótesis alternativa',
                                choices = list('H1: bar{x} neq \\(\\mu_0\\)' = 'two.sided', 
@@ -80,23 +78,38 @@ comparacionVarianUI_m <- function(id) {
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   checkboxInput(ns('paired'), label = 'Muestras emparejadas', value = FALSE),
                   actionButton(ns('doCompare'), label = "Hacer inferencia", styleclass = 'primary', block = TRUE)),
-           column(8, verbatimTextOutput(ns('t_test1sample'))))
+           column(3, box(title = tags$b('Ensayo de Barlett'), status = 'primary', width = 12, height = 500, 
+                         verbatimTextOutput(ns('outBarlett')))),
+           column(3, box(title = tags$b('Prueba de Levene'), status = 'primary', width = 12, height = 500, 
+                         radioButtons(ns('leveneLocation'), label = 'Localizador central', inline = TRUE,
+                                      choices = list('Mediana' = 'median', 'Media' = 'mean')),
+                         verbatimTextOutput(ns('outLevene')), 
+                         h4("Revisar los resultados de esta prueba..."))),
+           column(4, box(title = tags$b('Varianzas anómalas: Prueba de Cochran'), status = 'primary', width = 12, height = 500, 
+                         verbatimTextOutput(ns('outCochran')))))
 }
 
 comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
   values <- paste0('Serie', 1:20)
   names(values) <- paste('Serie #', 1:20)
   
-  output$selectSeries <- renderUI(selectizeInput(session$ns("selectedSeries"), label = 'Seleccione 2 conjuntos de datos', 
-                                                 options = list(maxItems = 2), 
-                                                 #choices = list('Series 1' = 1, 'Series 2' = 2)))
-                                                 choices = values[1:nSeries()]))
+  output$selectSeries <- renderUI(
+    pickerInput(session$ns("selectedSeries"), label = 'Seleccione conjuntos de datos', 
+                choices = values[1:nSeries()], width = '100%', inline = FALSE,
+                options = list(`actions-box` = TRUE, size = 10, #`selected-text-format` = "count > 3",
+                               `deselect-all-text` = "Deseleccionar todos", `select-all-text` = "Seleccionar todos",
+                               `none-selected-text` = "(Al menos tres)"),
+                multiple = TRUE))
+
+  complClean <- reactiveValues()
+  observe(
+    for (i in input$selectedSeries) {
+      complClean[[i]] <- compl[[i]]$data()[, 1]
+    }
+  )
   observeEvent(input$doCompare, {
-    output$t_test1sample <- renderPrint(t.test(x = compl[[input$selectedSeries[1]]]$data()[, 1],
-                                               y = compl[[input$selectedSeries[2]]]$data()[, 1],
-                                               alternative = input$hypAlter, 
-                                               conf.level = input$signif,
-                                               paired = input$paired)
-    )
+    output$outBarlett <- renderPrint(bartlett.test(x = isolate(reactiveValuesToList(complClean))))
+    output$outLevene <- renderPrint(car::leveneTest(data = stack(isolate(reactiveValuesToList(complClean))),
+                                                    y = values ~ ind, center = input$leveneLocation))
   })
 }

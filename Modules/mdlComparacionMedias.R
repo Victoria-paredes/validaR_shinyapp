@@ -39,7 +39,7 @@ comparacionMediasUI_2 <- function(id) {
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   checkboxInput(ns('paired'), label = 'Muestras emparejadas', value = FALSE),
                   actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
-           column(8, verbatimTextOutput(ns('t_test1sample'))))
+           column(8, verbatimTextOutput(ns('t_test2samples'))))
 }
 
 comparacionMediasServer_2 <- function(input, output, session, nSeries, compl) {
@@ -51,11 +51,10 @@ comparacionMediasServer_2 <- function(input, output, session, nSeries, compl) {
                                                  #choices = list('Series 1' = 1, 'Series 2' = 2)))
                                                  choices = values[1:nSeries()]))
   observeEvent(input$doCompare, {
-    output$t_test1sample <- renderPrint(t.test(x = compl[[input$selectedSeries[1]]]$data()[, 1],
+    output$t_test2samples <- renderPrint(t.test(x = compl[[input$selectedSeries[1]]]$data()[, 1],
                                                y = compl[[input$selectedSeries[2]]]$data()[, 1],
                                                alternative = input$hypAlter, 
                                                conf.level = input$signif,
-                                               paired = input$paired)
-                                        )
+                                               paired = input$paired))
   })
 }
