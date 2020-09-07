@@ -27,14 +27,16 @@ lyCompVarian <- fluidRow(column(6, box(title = tags$b('Varianza muestral contra 
                                        width = 12, status = 'primary',
                                        solidHeader = TRUE, height = 570, comparacionVarianUI_2('dosVarian'))),
                          column(12, box(title = tags$b('Comparación de varianzas muestrales de más de dos conjuntos de datos'), 
-                                        width = 12, status = 'primary', height = 510, 
+                                        width = 12, status = 'primary', #height = 510, 
                                         comparacionVarianUI_m('mulVarian')),
                                 box(title = NULL, status = 'primary', width = 12, 
-                                    tags$h5('Prueba de \\(\\Chi^2\\) implementada por el paquete ', tags$b('EnvStats'), 
+                                    tags$h5('Prueba de \\(\\Chi^2\\) implementada en R por el paquete ', tags$b('EnvStats'), 
                                             ' [Millard, 2011]'),
-                                    tags$h5('Prueba de Cochran implementada por el paquete ', tags$b('outliers'), 
+                                    tags$h5('Prueba de Cochran implementada en R por el paquete ', tags$b('outliers'), 
                                             ' [Komsta, 2011]'),
-                                    tags$h5('Prueba de Levene implementada por el paquete ', tags$b('car'), 
+                                    tags$h5('Prueba de Hartley implementada en R por el paquete ', tags$b('PMCMRplus'), 
+                                            ' [Pohlert, 2020]'),
+                                    tags$h5('Prueba de Levene implementada en R por el paquete ', tags$b('car'), 
                                             ' [Fox y Weisberg, 2019]'))))
 
 lyCompANOVADscrp <- infoBox(width = 12, "Comparación de medias de varios grupos muestrales", color = 'light-blue',
@@ -45,7 +47,8 @@ lyCompANOVA <- fluidRow(column(8, box(title = tags$b('Análisis de varianza'), w
                                    height = 1080, 
                                    comparacionRanMulUI('ranMulAov')),
                            box(title = NULL, status = 'primary', width = 12, 
-                               tags$h5('Prueba de Duncan para rangos múltiples implementada por el paquete ', tags$b('agricolae'), 
+                               tags$h5('Prueba de Duncan para rangos múltiples y prueba de Fisher para diferencia mínima 
+                                       significativa implementadas en R por el paquete ', tags$b('agricolae'), 
                                        ' [Mendiburu, 2020]'))))
 
 lyCompANCOVADscrp <- infoBox(width = 12, "Análisis de covarianza", color = 'light-blue',

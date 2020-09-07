@@ -39,6 +39,8 @@ comparacionANOVAServer <- function(input, output, session, nSeries, compl) {
 comparacionRanMulUI <- function(id) {
   ns <- NS(id)
   fluidRow(column(12, actionButton(ns('doCompare'), label = "Analizar datos de ANOVA", styleclass = 'primary'), tags$hr()),
+           column(4, box(title = tags$b('Prueba de diferencia significativa mínima de Fisher'), width = 12, height = 900,
+                         tags$br(), verbatimTextOutput(ns('LSDFTest')), tags$br(), plotOutput(ns('LSDFPlot')))),
            column(4, box(title = tags$b('Prueba de diferencias significativas de Tukey'), width = 12, height = 900,
                          tags$br(), verbatimTextOutput(ns('TukeyTest')), tags$br(), plotOutput(ns('TukeyPlot')))),
            column(4, box(title = tags$b('Prueba de rangos múltiples de Duncan'), width = 12, height = 900, 
@@ -49,6 +51,10 @@ comparacionRanMulUI <- function(id) {
 comparacionRanMulServer <- function(input, output, session, aovModel) {
   #aovModel <- reactive(aovModel)
   observeEvent(input$doCompare, {
+    LSDFReac <- reactive(agricolae::LSD.test(y = aovModel$aovSum(), trt = 'ind', alpha = 1 - aovModel$aovSig()))
+    output$LSDFTest <- renderPrint(summary(LSDFReac()))
+    output$LSDFPlot <- renderPlot(plot(LSDFReac()))
+    
     TukeyReac <- reactive(TukeyHSD(x = aovModel$aovSum(), conf.level = aovModel$aovSig()))
     output$TukeyTest <- renderPrint(TukeyReac())
     output$TukeyPlot <- renderPlot(plot(TukeyReac()))

@@ -41,6 +41,12 @@ bibliogrModuleUI <- function(id) {
   </tr><tr><td>&zwnj;</td></tr>
 
   <tr valign="top">
+    <td align="right">[Pohlert, 2020]&emsp;</td>
+    <td> Thorsten Pohlert (2020). PMCMRplus: Calculate Pairwise Multiple Comparisons of Mean Rank Sums Extended. 
+         R package version 1.4.4.
+         <a href="https://CRAN.R-project.org/package=PMCMRplus">https://CRAN.R-project.org/package=PMCMRplus</a></td>
+  </tr><tr><td>&zwnj;</td></tr>
+  <tr valign="top">
     <td align="right">[R Core Team, 2020]&emsp;</td>
     <td>R Core Team, (2020). R: A language and environment for statistical computing. R Foundation for Statistical Computing,
     Vienna, Austria. 
