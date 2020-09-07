@@ -78,14 +78,16 @@ comparacionVarianUI_m <- function(id) {
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   checkboxInput(ns('paired'), label = 'Muestras emparejadas', value = FALSE),
                   actionButton(ns('doCompare'), label = "Hacer inferencia", styleclass = 'primary', block = TRUE)),
-           column(3, box(title = tags$b('Ensayo de Barlett'), status = 'primary', width = 12, height = 500, 
+           column(3, box(title = tags$b('Ensayo de Barlett'), status = 'primary', width = 12, height = 450, 
                          verbatimTextOutput(ns('outBarlett')))),
-           column(3, box(title = tags$b('Prueba de Levene'), status = 'primary', width = 12, height = 500, 
+           column(3, box(title = tags$b('Prueba de Levene'), status = 'primary', width = 12, height = 450, 
                          radioButtons(ns('leveneLocation'), label = 'Localizador central', inline = TRUE,
                                       choices = list('Mediana' = 'median', 'Media' = 'mean')),
                          verbatimTextOutput(ns('outLevene')), 
                          h4("Revisar los resultados de esta prueba..."))),
-           column(4, box(title = tags$b('Varianzas anómalas: Prueba de Cochran'), status = 'primary', width = 12, height = 500, 
+           column(4, box(title = tags$b('Varianzas anómalas: Prueba de Cochran'), status = 'primary', width = 12, height = 450, 
+                         radioButtons(ns('coch.Inly'), label = 'Valor sospechoso', inline = TRUE,
+                                      choices = list('Varianza más grande' = FALSE, 'Varianza más pequeña' = TRUE)),
                          verbatimTextOutput(ns('outCochran')))))
 }
 
@@ -111,5 +113,7 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
     output$outBarlett <- renderPrint(bartlett.test(x = isolate(reactiveValuesToList(complClean))))
     output$outLevene <- renderPrint(car::leveneTest(data = stack(isolate(reactiveValuesToList(complClean))),
                                                     y = values ~ ind, center = input$leveneLocation))
+    output$outCochran <- renderPrint(outliers::cochran.test(data = stack(isolate(reactiveValuesToList(complClean))),
+                                                            object = values ~ ind, inlying = input$coch.Inly))
   })
 }
