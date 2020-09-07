@@ -31,26 +31,30 @@ comparacionANOVAServer <- function(input, output, session, nSeries, compl) {
   })
   
   output$anova1 <- renderPrint(summary(anovaReac()))
-  return(list('aovSum' = anovaReac))
+  return(list('aovSum' = anovaReac, 'aovSig' = reactive(input$signif)))
 }
 
 
 
 comparacionRanMulUI <- function(id) {
   ns <- NS(id)
-  fluidRow(column(4, actionButton(ns('doCompare'), label = "Pruebas", styleclass = 'primary'),
-                  sliderInput(ns('signif'), label = 'Seleccione la significancia de la prueba', 
-                              min = 0.9, max = 0.999, value = 0.95, step = 0.001),
-                  box(title = tags$b('Prueba de diferencias significativas de Tukey'), width = 12, height = 400,
-                      verbatimTextOutput(ns('TukeyTest')),
-                      plotOutput(ns('TukeyPlot')))))
+  fluidRow(column(12, actionButton(ns('doCompare'), label = "Analizar datos de ANOVA", styleclass = 'primary'), tags$hr()),
+           column(4, box(title = tags$b('Prueba de diferencias significativas de Tukey'), width = 12, height = 900,
+                         tags$br(), verbatimTextOutput(ns('TukeyTest')), tags$br(), plotOutput(ns('TukeyPlot')))),
+           column(4, box(title = tags$b('Prueba de rangos múltiples de Duncan'), width = 12, height = 900, 
+                         h5('Esto como se interpreta?'),
+                         tags$br(), verbatimTextOutput(ns('DuncanTest')), tags$br(), plotOutput(ns('DuncanPlot')))))
 }
 
 comparacionRanMulServer <- function(input, output, session, aovModel) {
   #aovModel <- reactive(aovModel)
   observeEvent(input$doCompare, {
-    TukeyReac <- reactive(TukeyHSD(x = aovModel$aovSum(), conf.level = input$signif))
+    TukeyReac <- reactive(TukeyHSD(x = aovModel$aovSum(), conf.level = aovModel$aovSig()))
     output$TukeyTest <- renderPrint(TukeyReac())
     output$TukeyPlot <- renderPlot(plot(TukeyReac()))
+    
+    DuncanReac <- reactive(agricolae::duncan.test(y = aovModel$aovSum(), trt = 'ind', alpha = 1 - aovModel$aovSig()))
+    output$DuncanTest <- renderPrint(summary(DuncanReac()))
+    output$DuncanPlot <- renderPlot(plot(DuncanReac()))
   })
 }

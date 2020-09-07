@@ -42,9 +42,11 @@ lyCompANOVADscrp <- infoBox(width = 12, "Comparación de medias de varios grupos
 lyCompANOVA <- fluidRow(column(8, box(title = tags$b('Análisis de varianza'), width = 12, status = 'primary',
                                       height = 400, comparacionANOVAUI('anovaMdl'))),
                     column(12, box(title = tags$b('Pruebas de detección de diferencias entre grupos'), width = 12, status = 'primary',
-                                   height = 500, h4('Hacer que esto solo esté disponible si el anova determina que hay diferencias...
-                                                    Tukey, Duncan, LSD de fisher... preguntar'),
-                                   comparacionRanMulUI('ranMulAov'))))
+                                   height = 1080, 
+                                   comparacionRanMulUI('ranMulAov')),
+                           box(title = NULL, status = 'primary', width = 12, 
+                               tags$h5('Prueba de Duncan para rangos múltiples implementada por el paquete ', tags$b('agricolae'), 
+                                       ' [Mendiburu, 2020]'))))
 
 lyCompANCOVADscrp <- infoBox(width = 12, "Análisis de covarianza", color = 'light-blue',
                             h4("La comparación de ..."))
