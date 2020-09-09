@@ -5,7 +5,7 @@ customBody <- dashboardBody(
     tabItem(tabName = "defini", h2('Terminos relevantes en la validación de métodos cuantitativos'),
             definicionesUI(id = 'definiciones')),#, introductionModuleUI('introduction')),
     tabItem(tabName = "ingrManDat", h2('Ingreso de datos a la aplicación'), lyIngresoDatDscrp, lyIngresoDat),
-    tabItem(tabName = "ejemData", h2('Series de datos de ejemplo')),
+    tabItem(tabName = "ejemData", h2('Series de datos de ejemplo'), datosEjemploUI('examples')),
     tabItem(tabName = "estDescri", h2("Estadística descriptiva"), lyEstadisticaDescriptiva),#, settingsDs),
     #tabItem(tabName = "estPruebas", h2("Generalidades de las pruebas de comparación"), lyPruebasComparacion),
             tabItem(tabName = 'PrCmp_Med', h2("Pruebas de comparación de medias"), lyCompMediasDscrp, lyCompMedias),

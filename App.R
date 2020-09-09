@@ -37,6 +37,9 @@ server <- function(input, output, session) {
     #reactive(eval(parse(text = paste0('datSeriesCompVar.x1$Serie', i, ' <- datSeries', i, '$data()[, 1]'))))
   }
   
+  # Datos de los ejemplos
+  callModule(datosEjemploServer, 'examples')
+  
   # Modulos de importación de datos -> Esto podrá estar por fuera de las capacidades de la App? Es siquiera necesario?
   # callModule(importarDatosServer, 'serieImp1')
   
