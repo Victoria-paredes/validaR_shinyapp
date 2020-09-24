@@ -14,5 +14,5 @@ lyIntroduccion <- fluidRow(column(3, box(width = 12, height = 350, title = tags$
                            column(3, box(width = 12, height = 350, title = tags$b('Modelos de regresión'), status = 'primary', 
                                          h4('(poner gráficos de regresiones plus una descripción suave)'))),
                            column(6, box(width = 12, height = 350, title = tags$b('Parámetros de validación'), status = 'primary', 
-                                         h4('(pensar que poner acá)')))                      
+                                         h4('(pensar que poner acá... tal vez una lista)')))                      
                       ) 

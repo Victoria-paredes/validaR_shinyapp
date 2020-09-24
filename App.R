@@ -67,7 +67,7 @@ server <- function(input, output, session) {
   
   ### HAY PRUEBA ESTADÏSTICA PARA PROPORCIÖN DE MUESTRAS?
   
-  
+  callModule(regresionServer, 'regModel1', nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
   
   
   callModule(precisionHorRatServer, 'HorRat1')
