@@ -11,9 +11,6 @@ bibliogrModuleUI <- function(id) {
          <a href="https://doi.org/">https://doi.org/</a></td>
   </tr><tr><td>&zwnj;</td></tr>
 
-
-
-  
   <tr valign="top">
     <td align="right">[Fox y Weisberg, 2019]&emsp;</td>
     <td> John Fox and Sanford Weisberg (2019). An {R} Companion to Applied Regression, Third Edition. Thousand Oaks CA: Sage.
@@ -46,11 +43,19 @@ bibliogrModuleUI <- function(id) {
          R package version 1.4.4.
          <a href="https://CRAN.R-project.org/package=PMCMRplus">https://CRAN.R-project.org/package=PMCMRplus</a></td>
   </tr><tr><td>&zwnj;</td></tr>
+
   <tr valign="top">
     <td align="right">[R Core Team, 2020]&emsp;</td>
     <td>R Core Team, (2020). R: A language and environment for statistical computing. R Foundation for Statistical Computing,
     Vienna, Austria. 
         <a href="https://www.R-project.org/">https://www.R-project.org/</a></td>
   </tr>tr><td>&zwnj;</td></tr>
+
+  <tr valign="top">
+    <td align="right">[Therneau, 2018]&emsp;</td>
+    <td> Terry Therneau (2018). deming: Deming, Theil-Sen, Passing-Bablock and Total Least Squares Regression. R package version 1.4. 
+         <a href="https://CRAN.R-project.org/package=deming">https://CRAN.R-project.org/package=deming</a></td>
+  </tr><tr><td>&zwnj;</td></tr>
+
 </table>')))
 }

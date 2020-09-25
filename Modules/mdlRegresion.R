@@ -5,17 +5,18 @@ regresionUI <- function(id) {
         box(title = '', width = 3, uiOutput(ns('selectSeries')),
             selectInput(ns('model'), label = 'Modelo de regresión:', 
                         choices = list('Mínimos cuadrados ordinarios (OLS)' = 1, 'Mínimos cuadrados ponderados (WLS)' = 2,
-                                       'Mínimos cuadrados ortogonales (ODR)' = 3, 'Mínimos cuadrados generalizados (GLS)' = 4)),
+                                       'Mínimos cuadrados ortogonales (ODR)' = 3, 'Mínimos cuadrados generalizados (GLS)' = 4,
+                                       'Regresión no paramétrica (Passing-Bablock)' = 5)),
             selectizeInput(ns('valX'), label = "Seleccione la variable independiente", width = '80%',
                            choices = list('var.x1' = 1, 'var.x2' = 2, 'var.x3' = 3, 'var.x4' = 4)),
             uiOutput(ns('valY')),
             uiOutput(ns('uX')), 
             uiOutput(ns('uY')),
             
-            radioButtons(ns("signif"), label = 'Significancia de los intervalos de confianza',
-                         choices = list('0.99' = 0.99, '0.95' = 0.95)),
+            sliderInput(ns('signif'), label = 'Significancia de los intervalos de confianza', 
+                        min = 0.9, max = 0.999, value = 0.95, step = 0.001),
             actionButton(ns("calcularReg"), label = "Hacer regresión", styleclass = 'primary'),
-            htmlOutput(ns('testtest'))
+            verbatimTextOutput(ns('testtest'))
             ),
         
         #conditionalPanel(condition = "input.calModel == 'calUnES'", ns = ns,
@@ -48,20 +49,23 @@ regresionServer <- function(input, output, session, nSeries, compl) {
   names(ChcsVars) <- paste('var.x', ChcsVars)
   
   output$valY <- renderUI({
-    #choices <- ChcsVars
     selectizeInput(session$ns("valY"), label = "Seleccione la variable dependiente", width = '80%', 
                    choices = ChcsVars[-as.numeric(input$valX)])})
   output$uX <- renderUI({
-    #choices <- ChcsVars
-    #if (!is.null(input$valX)) {choices <- ChcsVars[-input$valX]}
     if(input$model %in% c(2, 4)) {
-      selectizeInput(session$ns("yX"), label = "Seleccione el error en la variable independiente", width = '80%', 
+      selectizeInput(session$ns("uX"), label = "Seleccione el error en la variable independiente", width = '80%', 
                      choices = ChcsVars[-as.numeric(c(input$valX, input$valY))])}}
+  )
+  output$uY <- renderUI({
+    if(input$model %in% 4) {
+      selectizeInput(session$ns("uY"), label = "Seleccione el error en la variable dependiente", width = '80%', 
+                     choices = ChcsVars[-as.numeric(c(input$valX, input$valY, input$uX))])}}
   )
   
   x <- eventReactive(input$calcularReg, compl[[input$selectedSeries]]$data()[, as.numeric(input$valX)])
   y <- eventReactive(input$calcularReg, compl[[input$selectedSeries]]$data()[, as.numeric(input$valY)])
-  w.x <- eventReactive(input$calcularReg, compl[[input$selectedSeries]]$data()[, as.numeric(input$uX)])
+  se.x <- eventReactive(input$calcularReg, compl[[input$selectedSeries]]$data()[, as.numeric(input$uX)])
+  se.y <- eventReactive(input$calcularReg, compl[[input$selectedSeries]]$data()[, as.numeric(input$uY)])
   
   ExCalCurvXlimYlim <- eventReactive(input$calcularReg, {
     ifelse(all(x() == 0), return(c(0, 1, 0, 1)), return(c(range(x()), range(y()))))
@@ -71,7 +75,10 @@ regresionServer <- function(input, output, session, nSeries, compl) {
   
   cCurveESU <- eventReactive(input$calcularReg, {
     if (input$model == 1) return(lm(y() ~ x()))
-    if (input$model == 2) return(lm(y() ~ x(), weights = 1 / w.x()^2))
+    if (input$model == 2) return(lm(y() ~ x(), weights = 1 / se.x()^2))
+    if (input$model == 3) return(deming::deming(y() ~ x()))
+    if (input$model == 4) return(deming::deming(y() ~ x(), xstd = se.x, ystd = se.y))
+    if (input$model == 5) return(deming::pbreg(y() ~ x()))
     })
   
   reactive_RSC <- eventReactive(input$calcularReg, {

@@ -5,6 +5,7 @@ library(ggplot2) #Grammar of graphics
 library(shinysky)
 library(rhandsontable)
 library(purrr) #map-like functional programing
+#library(pracma) # ODR
 
 #library(ggvis) #ggvis: Interactive Grammar of Graphics - input_slider: Create an interactive slider.
 
