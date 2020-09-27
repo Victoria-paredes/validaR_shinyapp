@@ -32,10 +32,10 @@ ingresarDatosUI <- function(id, IntID = 1, value0 = 10) {
 ingresarDatosServer <- function(input, output, session) {
   
   TrnsDt0 <- reactive(
-    data.frame(var.X1  = rep(NA, 15),
-               var.X2  = rep(NA, 15),
-               var.X3  = rep(NA, 15),
-               var.X4  = rep(NA, 15)))
+    data.frame(col.X1  = rep(NA, 15),
+               col.X2  = rep(NA, 15),
+               col.X3  = rep(NA, 15),
+               col.X4  = rep(NA, 15)))
   #Intentar un boton de agregar más filas -> Podrían ser más hotables... se pueden imprimir sin encabezados? Se pueden unir al final?
   
   MyChanges <- reactive({

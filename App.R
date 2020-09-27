@@ -24,6 +24,7 @@ ui <- function(request) {
 
 server <- function(input, output, session) {
   callModule(definicionesServer, 'definiciones')
+  callModule(configDwnFilesServer, 'configDwnFiles')
   
   #datSeries1 <- callModule(ingresarDatosServer, 'serieMan1')
   #datSeries2 <- callModule(ingresarDatosServer, 'serieMan2')
@@ -68,7 +69,7 @@ server <- function(input, output, session) {
   
   ### HAY PRUEBA ESTADÏSTICA PARA PROPORCIÖN DE MUESTRAS?
   
-  callModule(regresionServer, 'regModel1', nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
+  callModule(regresionServer, 'regModel1', nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat) 
   
   
   callModule(precisionHorRatServer, 'HorRat1')

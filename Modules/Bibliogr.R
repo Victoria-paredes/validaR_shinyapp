@@ -52,6 +52,12 @@ bibliogrModuleUI <- function(id) {
   </tr>tr><td>&zwnj;</td></tr>
 
   <tr valign="top">
+    <td align="right">[Ripley y Thompsom, 1987]&emsp;</td>
+            <td> BD Ripley and M Thompson, Regression techniques for the detection of analytical bias, Analyst 112:377-383, 1987. 
+            <a href="https://doi.org/10.1039/AN9871200377">https://doi.org/10.1039/AN9871200377</a></td>
+            </tr><tr><td>&zwnj;</td></tr>
+
+  <tr valign="top">
     <td align="right">[Therneau, 2018]&emsp;</td>
     <td> Terry Therneau (2018). deming: Deming, Theil-Sen, Passing-Bablock and Total Least Squares Regression. R package version 1.4. 
          <a href="https://CRAN.R-project.org/package=deming">https://CRAN.R-project.org/package=deming</a></td>

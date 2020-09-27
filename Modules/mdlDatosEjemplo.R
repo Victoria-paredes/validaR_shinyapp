@@ -16,14 +16,49 @@ datosEjemploUI <- function(id) {
              tabPanel(title = 'Robustex', 'Ss',
                       tableOutput(ns('robusTab')))
              ),
-      tabBox(width = 12, title = tags$b('Pruebas de comparación'), side = 'left', height = 600,
-             tabPanel(title = tags$b('Medias muestrales (incluye ANOVA)'),
-                      box(title = 'Media muestral contra valor de referencia', status = 'warning', width = 2, height = 500,
+      tabBox(width = 12, title = tags$b('Herramientas estadísticas'), side = 'left',
+             tabPanel(title = tags$b('Análisis de regresión'),
+                      box(title = 'Curva de calibración', status = 'warning', width = 3, height = 800,
+                          tags$html(tags$h5('La siguiente tabla contiene datos de una calibración... ... ',
+                                  tags$br(),'Esta serie de datos puede usarse para ejemplificar el uso de las regresiones 
+                                  lineales por mínimos cuadrados ordinarios y por mínimos cuadrados ortogonales:')),
+                          tableOutput(ns('OLSTab'))#, tags$h6('Los datos fueron obtenidos de .')
+                      ),
+                      box(title = 'Pendiente', status = 'warning', width = 3, height = 800,
+                          tags$html(tags$h5('La siguiente tabla contiene datos de ... ',
+                                            tags$br(),'Esta serie de datos puede usarse para ejemplificar el uso de la regresión
+                                  lineal por mínimos cuadrados ponderados:')),
+                          tableOutput(ns('WLSTab'))#, tags$h6('Los datos fueron obtenidos de .')
+                      ),
+                      box(title = 'Comparación entre dos métodos (Con incertidumbres)', status = 'warning', width = 3, height = 800,
+                          tags$html(tags$h5('La siguiente tabla contiene los resultados (en ', HTML('&mu;g L'), tags$sup(-1), 
+                                  ') de la determinación de 
+                                  Arsenato(V) en ríos naturales, utilizando espectrometría de absorción atómica (AAS) y 
+                                  espectrometría de emisión atómica [Ripley y Thompsom, 1987]. Los valores experimentales 
+                                  tienen error conocido para ambas variables porque son resultados de mediciones. 
+                                  Este conjunto de datos puede usarse para ejemplificar el uso de la regresión por mínimos
+                                  cuadrados generalizados.:')),
+                          tableOutput(ns('arsenateFrac'))#, tags$h6('Los datos fueron obtenidos de .')
+                      ),
+                      box(title = 'Regresión no paramétrica (Passing-Bablock)', status = 'warning', width = 3, height = 800,
+                          tags$h5('La siguiente tabla contiene una fracción de los resultados de un ensayo clínico en el que 
+                                  se determinó la concentración de ferritina en la sangre de distintos pacientes usando reactivos 
+                                  de dos lotes distintos [Therneau, 2018].', tags$b(), 'En la serie de datos hay anómalos 
+                                  por lo que el conjunto puede usarse para ejemplificar las regresiones lineales no paramétricas:'),
+                          tableOutput(ns('NonParRegTab'))#, tags$h6('Los datos fueron obtenidos de .')
+                      )),
+             
+             tabPanel(title = tags$b('Comparación de medias y varianzas muestrales'),
+                      box(title = NULL, width = 12, 
+                          tags$h4('Los siguientes conjuntos de datos pueden ser utilizados para la comparación de medias y varianzas,
+                                  contra un valor de referencia, entre dos grupos muestrales, y entre varios grupos muestrales.')),
+                      box(title = 'Comparación contra valor de referencia', status = 'warning', width = 2, height = 500,
                           tags$h5('La siguiente tabla contiene resultados individuales (en mg/kg) de la determinación
                                   de un elemento tóxico en un producto alimenticio:'),
                           tableOutput(ns('media1Tab')),
-                          tags$h6('El valor de referencia en este ejemplo es de 500 mg/kg y corresponde al valor máximo permitido 
-                                  por la regulación para el elemento en cuestión en la matriz considerada.')),
+                          tags$h6('El valor de referencia para la media es de 500 mg/kg y corresponde al valor máximo permitido 
+                                  por la regulación para el elemento en cuestión, en la matriz considerada. 
+                                  Para comparar la varianza de la muestra ')),
                       box(title = 'Dos medias muestrales', status = 'primary', width = 3, height = 500,
                           tags$h6('Las siguientes tablas contienen los resultados reportados por dos analistas diferentes para 
                                   una misma muestra: (PENDIENTE)'),
@@ -36,15 +71,25 @@ datosEjemploUI <- function(id) {
                                    column(2, tableOutput(ns('mediasMulTab4'))), 
                                    column(2, tableOutput(ns('mediasMulTab5'))), 
                                    column(2, tableOutput(ns('mediasMulTab6')))))),
-             tabPanel(title = tags$b('Varianzas muestrales'),
-                      tableOutput(ns('varianzasTab'))),
-             tabPanel(title = tags$b('Análisis de covarianza ANCOVA'),
+             
+             tabPanel(title = tags$b('Análisis de covarianza (ANCOVA)'),
                       tableOutput(ns('ancovaTab')))
              )
     )
 }
 
 datosEjemploServer <- function(input, output, session) {
+  output$OLSTab <- renderTable(data.frame('Serie_1' = rep(0, 9)), digits = 2)
+  output$WLSTab <- renderTable(data.frame('Serie_1' = rep(0, 9)), digits = 2)
+  output$NonParRegTab <- renderTable({
+    set.seed(47); df <- deming::ferritin2[sample(162, 15), 3:4]; colnames(df) <- c('Lote1', 'Lote2')
+    return(df)
+    })
+  output$arsenateFrac <- renderTable({
+    set.seed(1); df <- deming::arsenate[sample(30, 15), c(1, 3, 2, 4)]; colnames(df) <- c('AAS', 'AES', 'u_AAS', 'u_AES')
+    return(df)
+  })
+  
   output$media1Tab <- renderTable(data.frame('Elemento_tox' = c(527, 504, 447, 426, 437, 479, 470, 505)), digits = 0)
   output$medias2Tab1 <- renderTable(data.frame('Analista_A' = rep(0, 9)), digits = 2)
   output$medias2Tab2 <- renderTable(data.frame('Analista_B' = rep(0, 9)), digits = 2)
@@ -55,3 +100,5 @@ datosEjemploServer <- function(input, output, session) {
   output$mediasMulTab5 <- renderTable(data.frame('Serie_5' = rep(0, 9)), digits = 2)
   output$mediasMulTab6 <- renderTable(data.frame('Serie_6' = rep(0, 9)), digits = 2)
 }
+
+i <- 47; plot(deming::ferritin2[sample(162, 15), 3:4], main = i)
