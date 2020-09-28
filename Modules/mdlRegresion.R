@@ -18,17 +18,22 @@ regresionUI <- function(id) {
             
             sliderInput(ns('signif'), label = 'Significancia de los intervalos de confianza', 
                         min = 0.9, max = 0.999, value = 0.95, step = 0.001),
-            actionButton(ns("calcularReg"), label = "Hacer regresión", styleclass = 'primary'),
+            actionButton(ns("calcularReg"), label = "Calcular regresión", styleclass = 'primary'),
             verbatimTextOutput(ns('testtest'))
             ),
         
-        #conditionalPanel(condition = "input.calModel == 'calUnES'", ns = ns,
         tabBox(title = "Gráficos", width = 5,
-               tabPanel("Diagrama de  calibración", plotOutput(ns('nicePltMain')),
+               tabPanel("Diagrama de  calibración", 
+                        dropdownButton(circle = TRUE, status = "danger", icon = icon("gear"), width = "300px", size = 'sm',
+                                       tooltip = tooltipOptions(title = "Etiquetas de eje"),
+                                       textInput(ns('xlab'), label = 'Etiqueta eje X', value = 'Variable independiente'),
+                                       textInput(ns('ylab'), label = 'Etiqueta eje Y', value = 'Variable dependiente'),
+                                       tags$h4('Se debe Recalcular la regresión para que el cambio se haga efectivo.')),
+                        plotOutput(ns('nicePltMain')),
                         downloadButton(ns('DwnECCP'), label = 'Descargar gráfico')),
-               tabPanel("Grafico de residuales", plotOutput(ns('ExCalResiPlot')),
+               tabPanel("Grafico de residuales", plotOutput(ns('nicePltResiduals')),
                         downloadButton(ns('DwnECRP'), label = 'Descargar gráfico'))),#),
-        #conditionalPanel(condition = "input.calModel == 'calUnES'", ns = ns,
+
         column(4, infoBox(width = 12, "Función de calibración", htmlOutput(ns('niceCurvEq')), 
                           color = 'light-blue', icon = icon("vials")),
                infoBox(width = 12, "Función de interpolación", htmlOutput(ns('niceInterpEq')), 
@@ -41,7 +46,7 @@ regresionUI <- function(id) {
       )
 }
 
-regresionServer <- function(input, output, session, nSeries, compl) {
+regresionServer <- function(input, output, session, nSeries, compl, configDwn) {
   values <- paste0('Serie', 1:20)
   names(values) <- paste('Serie #', 1:20)
   output$selectSeries <- renderUI(selectInput(session$ns("selectedSeries"), label = 'Seleccione un conjunto de datos',
@@ -109,18 +114,21 @@ regresionServer <- function(input, output, session, nSeries, compl) {
                                             ifelse(input$ponderados, " ponderados:", ":"), "<br /> Y = (",
                                             signif(cCurveESU()$coefficients[1], 4), "\u00b1",
                                             signif(cCurveESU()$se[1], 2), ") + (",
-                                            signif(cCurveESU()$coefficients[1], 4), "\u00b1",
+                                            signif(cCurveESU()$coefficients[2], 4), "\u00b1",
                                             signif(cCurveESU()$se[2], 2), ") * X"))
-    if (input$model == 5) return(paste0(mssgNcCrvEq[as.numeric(input$model)],
-                                        ifelse(input$ponderados, " ponderado:", ":"), "<br /> Y = ",
+    if (input$model == 5) return(paste0(mssgNcCrvEq[as.numeric(input$model)], "<br /> Y = ",
                                         signif(cCurveESU()$coefficients[1], 4), ' + ',
                                         signif(cCurveESU()$coefficients[2], 4), ' * X'))
-  })     
+  })
+  
+  
+  niceInterpEq <- eventReactive(input$calcularReg, { })
+  niceStatSg <- eventReactive(input$calcularReg, { })
   
   nicePltMain <-  eventReactive(input$calcularReg, {
     p <- ggplot(data = data.frame(x = x(), y = y()), aes(x = x, y = y)) +
            theme_bw() + geom_point(size = 3, shape = 16) +
-           labs(y = 'inputYname', x = 'inputXname') +# (mg k', g^{-1}, ')'))) +
+           labs(y = input$ylab, x = input$xlab) +# (mg k', g^{-1}, ')'))) +
            theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                  axis.text.x = element_text(color = "black"),
                  axis.text.y = element_text(color = "black")) +
@@ -130,57 +138,38 @@ regresionServer <- function(input, output, session, nSeries, compl) {
     
     if (input$model == 1) p <- p + geom_smooth(method = 'lm', formula = y ~ x, fullrange = TRUE, color = 'black', 
                                                size = 0.4, level = InputSignif())
+    if (input$model == 2) p <- p + geom_smooth(data = data.frame(x = x(), y = y(), w = se.x()), method = 'lm', formula = y ~ x, 
+                                               fullrange = TRUE, color = 'black', size = 0.4, level = InputSignif(),
+                                               mapping = aes(weight = w))
+    if (input$model == 3) p <- p + geom_smooth(method = demingJANGLX, formula = y ~ x, fullrange = TRUE, color = 'black', 
+                                               size = 0.4, level = InputSignif())
+    if (input$model %in% 4:5) p <- p + geom_abline(intercept = cCurveESU()$coefficients[1], slope = cCurveESU()$coefficients[2],
+                                                   color = 'black', size = 0.4)
     
+    return(p)
+  })
+  
+  nicePltResiduals <-  eventReactive(input$calcularReg, {
+    p <- ggplot(data = data.frame(Residuales = cCurveESU()$residuals, x = x()),
+                aes(x = x, y = Residuales)) + theme_bw() + geom_point() +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            axis.text.x = element_text(color = "black"),
+            axis.text.y = element_text(color = "black")) +
+      scale_x_continuous(limits = ExCalCurvXlimYlim()[1:2] + diff(ExCalCurvXlimYlim()[1:2]) * c(-2, 2)) +
+      coord_cartesian(xlim = ExCalCurvXlimYlim()[1:2]) +
+      geom_smooth(method = 'lm', color = 'black', fullrange = TRUE)
+
     return(p)
   })
   
   output$testtest <- renderPrint(summary(cCurveESU()))
   
+  output$niceCurvEq   <- renderText(niceCurvEq())
+  output$niceStatSg   <- renderText(niceStatSg())
+  output$niceInterpEq <- renderText(niceInterpEq())
   
-  reactive_RSC <- eventReactive(input$calcularReg, {
-    list(St = ifelse(as.numeric(input$order) == 1,
-                     paste0("<small>p-values for regression coefficients:</small> <br />&emsp;(Intercept): ",
-                            round(summary(cCurveESU())$coefficients[1, 4], 5),
-                            "<br />&emsp;Conc:&emsp;&emsp;&ensp;&nbsp;&nbsp;",
-                            round(summary(cCurveESU())$coefficients[2, 4], 5),
-                            "<hr><small>Residual standard error: ", signif(summary(cCurveESU())$sigma, 4),
-                            " on ", summary(cCurveESU())$df[2], " DF",
-                            "<br />F-statistic: ", signif(summary(cCurveESU())$fstatistic[1], 4),
-                            " on ", summary(cCurveESU())$fstatistic[2], " and ",
-                            summary(cCurveESU())$fstatistic[3], " DF,  p-value: ",
-                            round(1 - pf(summary(cCurveESU())$fstatistic[1],
-                                         summary(cCurveESU())$fstatistic[2],
-                                         summary(cCurveESU())$fstatistic[3]), 5), "</small>"),
-                     paste0("<small>p-values for regression coefficients:</small> <br />&emsp;(Intercept): ",
-                            round(summary(cCurveESU())$coefficients[1, 4], 5),
-                            "<br />&emsp;Conc:&emsp;&emsp;&ensp;&nbsp;&nbsp;",
-                            round(summary(cCurveESU())$coefficients[2, 4], 5),
-                            "<br />&emsp;Conc<sup>2</sup>:&emsp;&emsp;&nbsp;&nbsp;",
-                            round(summary(cCurveESU())$coefficients[3, 4], 5),
-                            "<hr><small>Residual standard error: ", signif(summary(cCurveESU())$sigma, 4),
-                            " on ", summary(cCurveESU())$df[2], " DF",
-                            "<br />F-statistic: ", signif(summary(cCurveESU())$fstatistic[1], 4),
-                            " on ", summary(cCurveESU())$fstatistic[2], " and ",
-                            summary(cCurveESU())$fstatistic[3], " DF,  p-value: ",
-                            round(1 - pf(summary(cCurveESU())$fstatistic[1],
-                                         summary(cCurveESU())$fstatistic[2],
-                                         summary(cCurveESU())$fstatistic[3]), 5), "</small>")),
-         rsd = ggplot(data = data.frame(Residuals = cCurveESU()$residuals, Concentration = ExCalCurvMyChanges()$Conc),
-                      aes(x = Concentration, y = Residuals)) + theme_bw() + geom_point() +
-           theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                 axis.text.x = element_text(color = "black"),
-                 axis.text.y = element_text(color = "black")) +
-           scale_x_continuous(limits = ExCalCurvXlimYlim()[1:2] + diff(ExCalCurvXlimYlim()[1:2]) * c(-2, 2)) +
-           coord_cartesian(xlim = ExCalCurvXlimYlim()[1:2]) +
-           geom_smooth(method = 'lm', color = 'black', fullrange = TRUE))
-  })
-  
-  output$niceCurvEq <- renderText(niceCurvEq())
-  output$niceStatSg <- renderText(reactive_RSC())
-  
-  output$nicePltMain <- renderPlot(nicePltMain())
-#    cCurveESU <- eventReactive(input$calculateRSC, {
-#      if(input$model == 1) {calibCurve(curve = ExCalCurvMyChanges(), order = as.numeric(input$order), plot = FALSE)}})
-    
-#  })
+  output$nicePltMain      <- renderPlot(nicePltMain())
+  output$nicePltResiduals <- renderPlot(nicePltResiduals())
+
+  return(reactive(cCurveESU()))
 }

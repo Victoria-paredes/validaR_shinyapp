@@ -7,7 +7,7 @@ customBody <- dashboardBody(
     tabItem(tabName = "config", h2('Configuración de los archivos descargables'), configDwnFilesUI('configDwnFiles')),
     tabItem(tabName = "ingrManDat", h2('Ingreso de datos a la aplicación'), lyIngresoDatDscrp, lyIngresoDat),
     tabItem(tabName = "ejemData", h2('Series de datos de ejemplo'), datosEjemploUI('examples')),
-    tabItem(tabName = "estDescri", h2("Estadística descriptiva"), lyEstadisticaDescriptiva),
+    tabItem(tabName = "estDescri", h2("Estadística descriptiva"), estadisticaDescriptivaUI("EstDesc")),
     #tabItem(tabName = "estPruebas", h2("Generalidades de las pruebas de comparación"), lyPruebasComparacion),
             tabItem(tabName = 'PrCmp_Med', h2("Pruebas de comparación de medias"), lyCompMediasDscrp, lyCompMedias),
             tabItem(tabName = 'PrCmp_Var', h2("Pruebas de comparación de varianzas"), lyCompVarianDscrp, lyCompVarian), 

@@ -1,10 +1,11 @@
+lyBancoDatosEjemDscrp <- 
 datosEjemploUI <- function(id) {
   ns <- NS(id)
   
     column(12, 
-      infoBox(title = NULL, color = 'light-blue', width = 12, icon = icon('info-circle'),
-              tags$h4('... ... pueden ser copiados y pegados directamente en la sección de ingreso de datos... ...')),
-      tabBox(width = 12, title = tags$b('Parámetros de validación'), side = 'left', height = 500,
+           infoBox(width = 12, "Banco de datos de ejemplos", color = 'light-blue', icon = icon('info-circle'),
+                   "Los datos que se proveen en esta sección..."),
+           tabBox(width = 12, title = tags$b('Parámetros de validación'), side = 'left', height = 500,
              tabPanel(title = 'Selectividad', 'Los siguientes datos corresponden',
                       tableOutput(ns('selTab'))),
              tabPanel(title = 'Exactitud', 'Ss',
@@ -16,7 +17,7 @@ datosEjemploUI <- function(id) {
              tabPanel(title = 'Robustex', 'Ss',
                       tableOutput(ns('robusTab')))
              ),
-      tabBox(width = 12, title = tags$b('Herramientas estadísticas'), side = 'left',
+      tabBox(width = 12, title = tags$b('Herramientas estadísticas'), side = 'left', height = 1200,
              tabPanel(title = tags$b('Análisis de regresión'),
                       box(title = 'Curva de calibración', status = 'warning', width = 3, height = 800,
                           tags$html(tags$h5('La siguiente tabla contiene datos de una calibración... ... ',
@@ -101,4 +102,4 @@ datosEjemploServer <- function(input, output, session) {
   output$mediasMulTab6 <- renderTable(data.frame('Serie_6' = rep(0, 9)), digits = 2)
 }
 
-i <- 47; plot(deming::ferritin2[sample(162, 15), 3:4], main = i)
+#i <- 47; plot(deming::ferritin2[sample(162, 15), 3:4], main = i)

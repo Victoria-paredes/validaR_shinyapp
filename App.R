@@ -24,13 +24,9 @@ ui <- function(request) {
 
 server <- function(input, output, session) {
   callModule(definicionesServer, 'definiciones')
-  callModule(configDwnFilesServer, 'configDwnFiles')
-  
-  #datSeries1 <- callModule(ingresarDatosServer, 'serieMan1')
-  #datSeries2 <- callModule(ingresarDatosServer, 'serieMan2')
+  configDwn <- callModule(configDwnFilesServer, 'configDwnFiles')
   
   # Modulos de ingreso de datos
-  #datSeriesNames <- reactiveValues()
   datSeriesCompleteDat <- reactiveValues()
   for (i in 1:20) {
     eval(parse(text = paste0('datSeries', i, ' <- callModule(ingresarDatosServer, "serieMan', i, '")')))
@@ -45,33 +41,32 @@ server <- function(input, output, session) {
   # Modulos de importación de datos -> Esto podrá estar por fuera de las capacidades de la App? Es siquiera necesario?
   # callModule(importarDatosServer, 'serieImp1')
   
-  callModule(estadisticaDescriptivaServer, 'Series1EstDesc', series = datSeries1)
-  callModule(estadisticaDescriptivaServer, 'Series2EstDesc', series = datSeries2)
-  
+  #Estadística descriptiva e inferencial
+  callModule(estadisticaDescriptivaServer, 'EstDesc', nSeries = reactive(input$numDatSeriesManual),
+             compl = datSeriesCompleteDat, configDwn = configDwn)
   callModule(comparacionMediasServer_1, 'mediaVsReferencia', 
              nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
   callModule(comparacionMediasServer_2, 'dosMedias', 
              nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat) 
-  
   callModule(comparacionVarianServer_1, 'varianVsReferencia', 
              nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
   callModule(comparacionVarianServer_2, 'dosVarian', 
              nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat) 
   callModule(comparacionVarianServer_m, 'mulVarian', 
              nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
-  
   aovModel <- callModule(comparacionANOVAServer, 'anovaMdl', 
                          nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
   callModule(comparacionRanMulServer, 'ranMulAov', aovModel = aovModel)
-  
   callModule(comparacionANCOVAServer, 'ancovaMdl', 
              nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
   
   ### HAY PRUEBA ESTADÏSTICA PARA PROPORCIÖN DE MUESTRAS?
   
-  callModule(regresionServer, 'regModel1', nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat) 
+  # Regresiones
+  callModule(regresionServer, 'regModel1', nSeries = reactive(input$numDatSeriesManual), 
+             compl = datSeriesCompleteDat, configDwn = configDwn) 
   
-  
+  #Parámetros de validación
   callModule(precisionHorRatServer, 'HorRat1')
   
   #observe({
