@@ -21,7 +21,7 @@ customBody <- dashboardBody(
     tabItem(tabName = "exacti", h2("Parámetros de validación: Exactitud"), lyExactitud),
     tabItem(tabName = "lineali", h2("Parámetros de validación: Linealidad")),
     tabItem(tabName = "limDetec", h2("Parámetros de validación: Límite de detección")),
-    tabItem(tabName = "robust", h2("Parámetros de validación: Robustez")),
+    tabItem(tabName = "robust", h2("Parámetros de validación: Robustez"), lyRobustezDscrp, lyRobustez),
     tabItem(tabName = 'planVali', h2("Plan de validación")),
     tabItem(tabName = 'infVali',  h2("Informe de validación")),
     tabItem(tabName = "bibliogr", h2("Bibliografía"), bibliogrModuleUI())

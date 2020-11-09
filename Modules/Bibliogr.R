@@ -19,6 +19,13 @@ bibliogrModuleUI <- function(id) {
   </tr><tr><td>&zwnj;</td></tr>
 
   <tr valign="top">
+    <td align="right">[Grömping, 2014]&emsp;</td>
+    <td> Ulrike Grömping (2014). R Package FrF2 for Creating and Analyzing Fractional Factorial 2-Level Designs. Journal of
+  Statistical Software, 56(1), 1-56.
+         <a href="http://www.jstatsoft.org/v56/i01/">http://www.jstatsoft.org/v56/i01/</a></td>
+  </tr><tr><td>&zwnj;</td></tr>
+
+  <tr valign="top">
     <td align="right">[Komsta, 2011]&emsp;</td>
     <td> Lukasz Komsta (2011). outliers: Tests for outliers. R package version 0.14. 
          <a href="https://CRAN.R-project.org/package=outliers">https://CRAN.R-project.org/package=outliers</a></td>

@@ -1,11 +1,10 @@
-lyBancoDatosEjemDscrp <- 
 datosEjemploUI <- function(id) {
   ns <- NS(id)
   
     column(12, 
            infoBox(width = 12, "Banco de datos de ejemplos", color = 'light-blue', icon = icon('info-circle'),
                    "Los datos que se proveen en esta sección..."),
-           tabBox(width = 12, title = tags$b('Parámetros de validación'), side = 'left', height = 500,
+           tabBox(width = 12, title = tags$b('Parámetros de validación'), side = 'left', height = 500, 
              tabPanel(title = 'Selectividad', 'Los siguientes datos corresponden',
                       tableOutput(ns('selTab'))),
              tabPanel(title = 'Exactitud', 'Ss',

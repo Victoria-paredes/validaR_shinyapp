@@ -68,7 +68,7 @@ server <- function(input, output, session) {
   
   #Parámetros de validación
   callModule(precisionHorRatServer, 'HorRat1')
-  
+  callModule(robustezServer, 'robustez')
   #observe({
   #  reactiveValuesToList(input)
   #  session$doBookmark()
