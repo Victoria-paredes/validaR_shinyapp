@@ -6,16 +6,17 @@ convertMenuItem <- function(mi, tabName) {
 
 customSidebar <- dashboardSidebar(tags$style(".left-side, .main-sidebar {padding-top: 110px;}"), # font-size: larger
                      width = 300, withMathJax(),
-                     bookmarkButton(label = 'Guardar...', 
-                                    title = 'Genera una dirección URL que guarda la información 
-                                            ingresada en la applicación para posterior uso.'),
                      sidebarMenu(id = "tabs",
                        menuItem("Introducción", tabName = "introd", icon = icon("info-circle")),
                        menuItem("Definiciones", tabName = "defini", icon = icon("book")),
-                       menuItem("Configuración archivos descargables", tabName = "config", icon = icon("cog")), tags$hr(),
+                       menuItem("Configuración archivos descargables", tabName = "config", icon = icon("cog")), 
+                       bookmarkButton(label = 'Guardar...', 
+                                      title = 'Genera una dirección URL que guarda la información 
+                                            ingresada en la applicación para posterior uso.'),
+                       tags$hr(),
                        tags$b('Datos experimentales:'),
                        menuItem("Ingreso de datos", tabName = "ingrManDat", icon = icon("hockey-puck")),
-                       menuItem("Banco de datos de ejemplos", tabName = "ejemData", icon = icon("folder-open")), tags$hr(),
+                       menuItem("Datos de ejemplos", tabName = "ejemData", icon = icon("folder-open")), tags$hr(),
                        tags$b('Herramientas estadísticas:'),
                        menuItem("Estadística descriptiva", tabName = "estDescri", icon = icon("poll")),
                        menuItem("Pruebas de comparación", tabName = "estPruebas", icon = icon("greater-than-equal"),
