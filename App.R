@@ -27,11 +27,11 @@ ui <- function(request) {
 server <- function(input, output, session) {
   callModule(definicionesServer, 'definiciones')
   configGen <- callModule(configGenServer, 'configDwnFiles')
-  
+  nRows <- reactive(input$nRows)
   # Modulos de ingreso de datos
   datSeriesCompleteDat <- reactiveValues()
   for (i in 1:20) {
-    eval(parse(text = paste0('datSeries', i, ' <- callModule(ingresarDatosServer, "serieMan', i, '")')))
+    eval(parse(text = paste0('datSeries', i, ' <- callModule(ingresarDatosServer, "serieMan', i, '", nRows = nRows)')))
     #eval(parse(text = paste0('observe(datSeriesNames$Ser', i, ' <- datSeries', i, '$name)')))
     eval(parse(text = paste0('datSeriesCompleteDat$Serie', i, ' <- datSeries', i)))
     #reactive(eval(parse(text = paste0('datSeriesCompVar.x1$Serie', i, ' <- datSeries', i, '$data()[, 1]'))))

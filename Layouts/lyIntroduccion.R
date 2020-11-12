@@ -22,7 +22,7 @@ introduccionLy <- fluidRow(
                tags$br(), tags$br(),
                HTML('&emsp;'), "• Los gráficos que produce la aplicación pueden descargarse en formato PDF y PNG.", tags$br(),
                HTML('&emsp;&emsp;&nbsp;'), "El formato de los archivos y su tamaño deben seleccionarse en ",
-               icon("cog"), tags$b("Configuración general"), ", en el recuadro ", tags$b('Archivos de imagen'),
+               icon("cog"), tags$b("Configuración general,"), " en el recuadro ", tags$b('Archivos de imagen'),
                tags$br(), tags$br(),
                HTML('&emsp;'), "• Para guardar el estado de la aplicación en cualquier momento dado, 
                haga click en el botón", tags$br(),
@@ -42,7 +42,7 @@ introduccionLy <- fluidRow(
                  HTML('&emsp;&emsp;&emsp;&emsp;&emsp;'), 
                  a(href = "guia.pdf", "Descargar la guía de validación...", download = NA, target = "_blank"))))),
     column(12, 
-      box(width = 4, height = 400, title = tags$b('Estadística descriptiva e inferencial'), status = 'primary',
+      box(width = 4, title = tags$b('Estadística descriptiva e inferencial'), status = 'primary', #height = 400,
           collapsible = TRUE, collapsed = TRUE,
         h4('El módulo de estadística descriptiva genera estadísticos de tendencia central y de dispersión
            de las series de datos, realiza las pruebas estadísticas de Wilkinson y de Kolmogorov-Smirnof para
@@ -54,7 +54,7 @@ introduccionLy <- fluidRow(
            'También está disponible una prueba de análisis de covarianza (ANCOVA) para evaluar diferencias entre grupos 
            que poseen una covarianza en común.')),
     #column(3, 
-      box(width = 3, height = 400, title = tags$b('Modelos de regresión'), status = 'primary', 
+      box(width = 3, title = tags$b('Modelos de regresión'), status = 'primary',  #height = 400,
           collapsible = TRUE, collapsed = TRUE,
         h4('La aplicación permite el cálculo de distintos modelos de regresión para datos bivariados:', tags$br(),
            HTML('&emsp;'), "• Mínimos cuadrados ordinarios", tags$br(),
@@ -64,10 +64,10 @@ introduccionLy <- fluidRow(
            HTML('&emsp;'), "• Regresión no paramétrica", tags$br(), tags$br(),
            "Algunos de estos modelos permiten especificar el error asociado a los puntos experimentales en uno o dos de los
            ejes, para ser considerados en el cálculo de los parámetros de regresión. La aplicación genera el grafico de la regresión
-           con el intervalo de confianza,, el gráfico de residuales, y los parámetros de la regresión con su error estándar
+           con el intervalo de confianza, el gráfico de residuales, y los parámetros de la regresión con su error estándar
            asociado.")),
     #column(5, 
-      box(width = 5, height = 400, title = tags$b('Parámetros de validación'), status = 'primary',
+      box(width = 5, title = tags$b('Parámetros de validación'), status = 'primary', # height = 400,
           collapsible = TRUE, collapsed = TRUE,
         h4('El enfoque principal de la aplicación es proveer de herramientas que faciliten los cálculos que conciernen a la 
            validación de métodos químicos cuantitativos. En ese orden de ideas, ... ...'))),
