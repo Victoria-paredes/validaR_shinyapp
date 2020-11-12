@@ -21,11 +21,12 @@ sapply(c(customFunctions, modules, layouts), source)
 ui <- function(request) {
   dashboardPage(skin = "black", header = customHeader, sidebar = customSidebar, body = customBody, 
                 title = "validaR - Instituto Nacional de Metrología") #customStuff in ./Layouts
+
 }
 
 server <- function(input, output, session) {
   callModule(definicionesServer, 'definiciones')
-  configDwn <- callModule(configDwnFilesServer, 'configDwnFiles')
+  configGen <- callModule(configGenServer, 'configDwnFiles')
   
   # Modulos de ingreso de datos
   datSeriesCompleteDat <- reactiveValues()
@@ -44,7 +45,7 @@ server <- function(input, output, session) {
   
   #Estadística descriptiva e inferencial
   callModule(estadisticaDescriptivaServer, 'EstDesc', nSeries = reactive(input$numDatSeriesManual),
-             compl = datSeriesCompleteDat, configDwn = configDwn)
+             compl = datSeriesCompleteDat, configDwn = configGen)
   callModule(comparacionMediasServer_1, 'mediaVsReferencia', 
              nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
   callModule(comparacionMediasServer_2, 'dosMedias', 
@@ -65,7 +66,7 @@ server <- function(input, output, session) {
   
   # Regresiones
   callModule(regresionServer, 'regModel1', nSeries = reactive(input$numDatSeriesManual), 
-             compl = datSeriesCompleteDat, configDwn = configDwn) 
+             compl = datSeriesCompleteDat, configDwn = configGen) 
   
   #Parámetros de validación
   callModule(precisionHorRatServer, 'HorRat1')

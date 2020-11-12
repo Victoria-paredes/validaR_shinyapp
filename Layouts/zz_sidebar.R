@@ -9,7 +9,7 @@ customSidebar <- dashboardSidebar(tags$style(".left-side, .main-sidebar {padding
                      sidebarMenu(id = "tabs",
                        menuItem("Introducción", tabName = "introd", icon = icon("info-circle")),
                        menuItem("Definiciones", tabName = "defini", icon = icon("book")),
-                       menuItem("Configuración archivos descargables", tabName = "config", icon = icon("cog")), 
+                       menuItem("Configuración general", tabName = "config", icon = icon("cog")), 
                        bookmarkButton(label = 'Guardar...', 
                                       title = 'Genera una dirección URL que guarda la información 
                                             ingresada en la applicación para posterior uso.'),
