@@ -52,7 +52,8 @@ ingresarDatosServer <- function(input, output, session, nRows) {
   })
   output$TrnsDt <- renderHotable({MyChanges()}, readOnly = FALSE)
   
-  TrnsDtEx <- eventReactive(input$inputDat, MyChanges()[!is.na(MyChanges()[, 1]), ])
+  TrnsDtEx <- eventReactive(input$inputDat, 
+                            rbind(MyChanges()[1, ], MyChanges()[-1, ][MyChanges()[-1, ][, 1] != 0, ]))
   output$TrnsDtEx <- renderHotable({TrnsDtEx()}, readOnly = TRUE)
   
   

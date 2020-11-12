@@ -2,29 +2,19 @@ datosEjemploUI <- function(id) {
   ns <- NS(id)
   
     column(12, 
-           infoBox(width = 12, "Banco de datos de ejemplos", color = 'light-blue', icon = icon('info-circle'),
-                   "Los datos que se proveen en esta sección..."),
-           tabBox(width = 12, title = tags$b('Parámetros de validación'), side = 'left', height = 500, 
-             tabPanel(title = 'Selectividad', 'Los siguientes datos corresponden',
-                      tableOutput(ns('selTab'))),
-             tabPanel(title = 'Exactitud', 'Ss',
-                      tableOutput(ns('exacTab'))),
-             tabPanel(title = 'Linealidad', 'Ss',
-                      tableOutput(ns('lineTab'))),
-             tabPanel(title = 'Límite de detección', 'Ss',
-                      tableOutput(ns('lodTab'))),
-             tabPanel(title = 'Robustex', 'Ss',
-                      tableOutput(ns('robusTab')))
-             ),
+      infoBox(width = 12, "Banco de datos de ejemplos", color = 'light-blue', icon = icon('info-circle'),
+        h4("Los datos en las siguientes tablas pueden ser copiadas en el módulo de ingreso de datos
+           para ejemplificar el uso de las funciones de la aplicación.")),
       tabBox(width = 12, title = tags$b('Herramientas estadísticas'), side = 'left', height = 1200,
              tabPanel(title = tags$b('Análisis de regresión'),
                       box(title = 'Curva de calibración', status = 'warning', width = 3, height = 800,
-                          tags$html(tags$h5('La siguiente tabla contiene datos de una calibración... ... ',
+                          tags$html(tags$h5('La siguiente tabla contiene datos de una curva de calibración de ión litio 
+                                             por espectrometría de emisión atómica de llama.',
                                   tags$br(),'Esta serie de datos puede usarse para ejemplificar el uso de las regresiones 
                                   lineales por mínimos cuadrados ordinarios y por mínimos cuadrados ortogonales:')),
                           tableOutput(ns('OLSTab'))#, tags$h6('Los datos fueron obtenidos de .')
                       ),
-                      box(title = 'Pendiente', status = 'warning', width = 3, height = 800,
+                      box(title = 'Curva de calibración ponderada', status = 'warning', width = 3, height = 800,
                           tags$html(tags$h5('La siguiente tabla contiene datos de ... ',
                                             tags$br(),'Esta serie de datos puede usarse para ejemplificar el uso de la regresión
                                   lineal por mínimos cuadrados ponderados:')),
@@ -74,12 +64,27 @@ datosEjemploUI <- function(id) {
              
              tabPanel(title = tags$b('Análisis de covarianza (ANCOVA)'),
                       tableOutput(ns('ancovaTab')))
-             )
+             ),
+      tabBox(width = 12, title = tags$b('Parámetros de validación'), side = 'left', height = 500, 
+             tabPanel(title = 'Selectividad', 'Los siguientes datos corresponden',
+                      tableOutput(ns('selTab'))),
+             tabPanel(title = 'Exactitud', 'Ss',
+                      tableOutput(ns('exacTab'))),
+             tabPanel(title = 'Linealidad', 'Ss',
+                      tableOutput(ns('lineTab'))),
+             tabPanel(title = 'Límite de detección', 'Ss',
+                      tableOutput(ns('lodTab'))),
+             tabPanel(title = 'Robustex', 'Ss',
+                      tableOutput(ns('robusTab')))
+      )
     )
 }
 
 datosEjemploServer <- function(input, output, session) {
-  output$OLSTab <- renderTable(data.frame('Serie_1' = rep(0, 9)), digits = 2)
+  output$OLSTab <- renderTable({df <- transmem::curvelithium
+                                df$Conc <- round(df$Conc, 2)
+                                colnames(df) <- c('Conc (mg/kg)', 'Señal')
+                                return(df)}, digits = 3)
   output$WLSTab <- renderTable(data.frame('Serie_1' = rep(0, 9)), digits = 2)
   output$NonParRegTab <- renderTable({
     set.seed(47); df <- deming::ferritin2[sample(162, 15), 3:4]; colnames(df) <- c('Lote1', 'Lote2')
