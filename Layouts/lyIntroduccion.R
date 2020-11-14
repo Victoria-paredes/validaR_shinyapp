@@ -1,6 +1,6 @@
 introduccionLy <- fluidRow(
     column(12, 
-      box(width = 12, status = 'primary', title = '',
+      box(width = 12, status = 'primary',
         fluidRow(
           column(8,
             h4("Esta aplicación provee herramientas estadísticas de uso general con el 

@@ -6,8 +6,10 @@ lyIngresoDatDscrp <- infoBox(
       dato, para cada variable. Los conjuntos de datos que van a ser sometidos
       a pruebas de comparación de algún tipo deben ser ingresados en series independientes. Lo primero que deberá hacer 
       es seleccionar el número de series que quiere ingresar y el numero de filas por cada serie, utilizando los 
-      deslizadores numéricos que se muestran a la derecha. Tenga en cuenta que puede dejar filas o columnas sin llenar (en  ceros) y 
-      que la aplicación registra todas las cifras significativas que ingrese al sistema..", 
+      deslizadores numéricos que se muestran a la derecha. Para que cambiar el número máximo de filas de las tablas es necesario
+      que estas se encuentren llenas únicamente con ceros. Tenga en cuenta que puede dejar filas o columnas sin llenar (en  ceros), y 
+      que la aplicación registra todas las cifras significativas que ingrese al sistema a pesar de nos mostrarlas todas en las 
+      tablas.", 
       tags$br(), tags$br(),
       "El comportamiento de la tabla donde se ponen los valores es muy similar al que ofrecen las hojas de cálculo 
       tradicionales. Esto permite que los datos pueden ser copiados directamente estos recursos. Cuando haya llenado la tabla 
