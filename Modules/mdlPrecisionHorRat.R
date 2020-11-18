@@ -2,8 +2,11 @@ precisionHorRatUI <- function(id) {
   ns <- NS(id)
   fluidRow(column(4, fluidRow(column(4, numericInput(ns('Conc.HorRatEval'), label = 'Concentración:', value = 0.001)),
                               column(8, selectInput(ns('Unts.HorRatEval'), label = 'Unidades: (pendiente)', 
-                                                    choices = list("Fracción másica (adimensional)" = 1, "mg/kg (o equivalente)" = 2,
-                                                                   "ug/kg (o equivalente)" = 3, "ng/kg (o equivalente)" = 3)))), 
+                                                    choices = list("Fracción másica (adimensional)" = 1, 
+                                                                   "g/kg (o equivalente)" = 1e-3,
+                                                                   "mg/kg (o equivalente)" = 1e-6,
+                                                                   "ug/kg (o equivalente)" = 1e-9, 
+                                                                   "ng/kg (o equivalente)" = 1e-12)))), 
                   #Pendiente: https://stackoverflow.com/questions/34902765/vector-input-in-shiny-r-and-then-use-it
                   tags$hr(),
                   textOutput(ns('HorRatRsl1')),
@@ -19,7 +22,7 @@ precisionHorRatUI <- function(id) {
 
 precisionHorRatServer <- function(input, output, session) {
   HorRatFun <- function (x) 2 ^(1 - 0.5 * log10(x))
-  HorRatVal <- reactive(HorRatFun(input$Conc.HorRatEval))
+  HorRatVal <- reactive(HorRatFun(input$Conc.HorRatEval*as.numeric(input$Unts.HorRatEval)))
   HorRatLims <- reactive(10 ^ input$Range.HorRat)
   output$HorRatRsl1 <- reactive({paste0("Coeficiente de variación de Horwitz: ", round(HorRatVal(), 2), " %")})
   output$HorRatRsl2 <- reactive({paste0("Límite para repetibilidad: ", round(HorRatVal() * 0.5, 2), " %")})

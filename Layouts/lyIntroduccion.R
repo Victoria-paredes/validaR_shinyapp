@@ -3,15 +3,24 @@ introduccionLy <- fluidRow(
       box(width = 12, status = 'primary',
         fluidRow(
           column(8,
-            h4("Esta aplicación provee herramientas estadísticas de uso general con el 
-                propósito de facilitar la validación de métodos químicos cuantitativos. 
-                De manera general se incluyen las metodologías y los ejemplos descritos en la",
+            h4("En esta aplicación se encuentran implementados los procedimientos estadísticos que se mencionan en la",
                tags$b("Guía de Validación de Métodos Cuantitativos del Instituto Nacional de Metrología de Colombia"),
-               "(a la derecha).",
+               "(a la derecha). 
+                La aplicación provee herramientas generales de estadística descriptiva, estadística inferencial 
+                (pruebas de comparación), análisis de regresión, cálculo de parámetros de validación, 
+                entre otras funciones, que serán de utilidad para todo aquel que tenga que ver con la validación
+                de métodos analíticos cuantitativos. El propósito de validaR es facilitar el tratamiento de los
+                datos con el fin de que las personas puedan enfocarse en la parte importante del proceso: 
+                documentar resultados, obtener conclusiones, y escoger rutas de acción cuando sea necesario.",
+               tags$br(), tags$br(),
+               "Los ejemplos expuestos en la guía de validación se desarrollaron en esta aplicación. Los 
+                datos de los ejemplos se incluiyeron en la guía para que, entre otras cosas, el usuario final se damiliarice con las
+                funciones de la aplicación.",
+
                tags$br(), tags$br(), tags$br(),
                "La aplicación se divide en un panel principal que ocupa la mayor parte de la página, y
                 un panel lateral a la izquierda que se usa para seleccionar las opciones principales.
-                Cada opción contiene instrucciones que deben ser tenidas en cuenta para el uso de la aplicación. 
+                Cada opción contiene instrucciones que deben considerarse para el uso de la aplicación. 
                 A continuación se listan algunos comentarios generales:", 
                tags$br(), tags$br(),
                HTML('&emsp;'), "• Inicialmente se deben ingresar los datos en la opción ", 
@@ -69,8 +78,8 @@ introduccionLy <- fluidRow(
     #column(5, 
       box(width = 5, title = tags$b('Parámetros de validación'), status = 'primary', # height = 400,
           collapsible = TRUE, collapsed = TRUE,
-        h4('El enfoque principal de la aplicación es proveer de herramientas que faciliten los cálculos que conciernen a la 
-           validación de métodos químicos cuantitativos. En ese orden de ideas, ... ...'))),
+        h4('El objetivo principal de la aplicación es el de proveer herramientas que faciliten los cálculos que son necesarios en la 
+           validación de un método químico cuantitativo. El cálculo de algunos parámetros de validación '))),
     column(12, 
       box(title = NULL, status = 'primary', width = 12, 
         tags$h5('Esta página web corre gracias al programa de computación científica y de 
