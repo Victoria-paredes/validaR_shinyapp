@@ -79,7 +79,8 @@ introduccionLy <- fluidRow(
       box(width = 5, title = tags$b('Parámetros de validación'), status = 'primary', # height = 400,
           collapsible = TRUE, collapsed = TRUE,
         h4('El objetivo principal de la aplicación es el de proveer herramientas que faciliten los cálculos que son necesarios en la 
-           validación de un método químico cuantitativo. El cálculo de algunos parámetros de validación '))),
+           validación de un método químico cuantitativo. La aplicación permite el cálculo de algunos parámetros de validación 
+           y de algunos valores que pueden resultar de interés en la validación de un método analítico'))),
     column(12, 
       box(title = NULL, status = 'primary', width = 12, 
         tags$h5('Esta página web corre gracias al programa de computación científica y de 
