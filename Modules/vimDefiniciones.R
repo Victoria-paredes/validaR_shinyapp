@@ -1,6 +1,7 @@
 nomConceptos <- list(" " = 0, 
                      "Indicación" = 1,
-                     "Indicación del blanco" = 2)
+                     "Indicación del blanco" = 2,
+                    "termino de prueba" = 3)
 
 conceptos <- list(
   Indicacion = box(width = 12, solidHeader = FALSE, status = 'primary',
