@@ -1,4 +1,7 @@
 customBody <- dashboardBody(
+  tags$head(tags$style(
+    HTML('.wrapper {height: auto !important; position:relative; overflow-x:hidden; overflow-y:hidden}')
+  )),
   withMathJax(),
   tabItems(
     tabItem(tabName = "introd", h2('Herramientas para la validación de métodos'), introduccionLy),#, introductionModuleUI('introduction')),
