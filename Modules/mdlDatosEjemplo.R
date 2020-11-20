@@ -39,22 +39,27 @@ datosEjemploUI <- function(id) {
                       )),
              
              tabPanel(title = tags$b('Comparación de medias y varianzas muestrales'),
-                      box(title = NULL, width = 12, 
+                      box(width = 12, 
                           tags$h4('Los siguientes conjuntos de datos pueden ser utilizados para la comparación de medias y varianzas,
                                   contra un valor de referencia, entre dos grupos muestrales, y entre varios grupos muestrales.')),
                       box(title = 'Comparación contra valor de referencia', status = 'warning', width = 2, height = 500,
                           tags$h5('La siguiente tabla contiene resultados individuales (en mg/kg) de la determinación
                                   de un elemento tóxico en un producto alimenticio:'),
                           tableOutput(ns('media1Tab')),
-                          tags$h6('El valor de referencia para la media es de 500 mg/kg y corresponde al valor máximo permitido 
-                                  por la regulación para el elemento en cuestión, en la matriz considerada. 
-                                  Para comparar la varianza de la muestra ')),
-                      box(title = 'Dos medias muestrales', status = 'primary', width = 3, height = 500,
-                          tags$h6('Las siguientes tablas contienen los resultados reportados por dos analistas diferentes para 
-                                  una misma muestra: (PENDIENTE)'),
-                          fluidRow(column(6, tableOutput(ns('medias2Tab1'))), column(6, tableOutput(ns('medias2Tab2'))))),
+                          tags$h5('El valor de referencia para la media es de 500 mg/kg y corresponde al valor máximo permitido 
+                                  por la regulación para el elemento en cuestión, en la matriz considerada.', tags$br(), 
+                                  'Para comparar la varianza de la muestra ')),
+                      
+                      box(title = 'Comparación de muestras independientes', status = 'primary', width = 3, height = 500,
+                          tags$h5('Las siguientes tablas contienen los resultados reportados por dos analistas diferentes para 
+                                  la determinación de nitrógeno amoniacal (en porcentaje másico) una misma muestra:'),
+                          fluidRow(column(6, tableOutput(ns('medias2Tab1'))), column(6, tableOutput(ns('medias2Tab2')))),
+                          tags$h5('Las dos series de datos pueden ser comparadas para evaluar si sus medias muestrales
+                                  presentan diferencias estadísticamente significativas, o si los conjuntos de datos
+                                  presentan homocedasticidad (homogeneidad de varianzas muestrales).')),
+                      
                       box(title = 'Varias medias muestrales (ANOVA)', status = 'primary', width = 7, height = 500,
-                          tags$h6('Las siguientes tablas contienen : (PENDIENTE)'),
+                          tags$h5('Las siguientes tablas contienen : (PENDIENTE)'),
                           fluidRow(column(2, tableOutput(ns('mediasMulTab1'))), 
                                    column(2, tableOutput(ns('mediasMulTab2'))), 
                                    column(2, tableOutput(ns('mediasMulTab3'))), 
@@ -96,14 +101,13 @@ datosEjemploServer <- function(input, output, session) {
   })
   
   output$media1Tab <- renderTable(data.frame('Elemento_tox' = c(527, 504, 447, 426, 437, 479, 470, 505)), digits = 0)
-  output$medias2Tab1 <- renderTable(data.frame('Analista_A' = rep(0, 9)), digits = 2)
-  output$medias2Tab2 <- renderTable(data.frame('Analista_B' = rep(0, 9)), digits = 2)
+  output$medias2Tab1 <- renderTable(data.frame('Analista_A' = c(1.43, 1.27, 1.43, 1.43, 1.34, 1.15)), digits = 2)
+  output$medias2Tab2 <- renderTable(data.frame('Analista_B' = c(1.31, 1.44, 1.50, 1.98, 1.65, 1.34)), digits = 2)
   output$mediasMulTab1 <- renderTable(data.frame('Serie_1' = rep(0, 9)), digits = 2)
   output$mediasMulTab2 <- renderTable(data.frame('Serie_2' = rep(0, 9)), digits = 2)
   output$mediasMulTab3 <- renderTable(data.frame('Serie_3' = rep(0, 9)), digits = 2)
   output$mediasMulTab4 <- renderTable(data.frame('Serie_4' = rep(0, 9)), digits = 2)
   output$mediasMulTab5 <- renderTable(data.frame('Serie_5' = rep(0, 9)), digits = 2)
-  output$mediasMulTab6 <- renderTable(data.frame('Serie_6' = rep(0, 9)), digits = 2)
 }
 
 #i <- 47; plot(deming::ferritin2[sample(162, 15), 3:4], main = i)

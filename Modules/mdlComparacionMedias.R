@@ -37,7 +37,7 @@ comparacionMediasUI_2 <- function(id) {
                                               'H1: bar{x} > mu_0' = 'greater')), 
                   sliderInput(ns('signif'), label = 'Significancia de la prueba', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
-                  checkboxInput(ns('paired'), label = 'Muestras emparejadas', value = FALSE),
+                  materialSwitch(ns('paired'), label = 'Muestras emparejadas', value = FALSE, status = "primary"),
                   actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
            column(8, verbatimTextOutput(ns('t_test2samples'))))
 }
