@@ -1,6 +1,11 @@
 nomConceptos <- list(" " = 0, 
                      "Magnitud" = 1,
                      "Sistema de magnitudes" = 2,
+                     "Sistema Internacional de Magnitudes" = 3,
+                     "Dimensiones de una magnitud" = 4,
+                     "Unidad de medida" = 5,
+                     "Sistema de unidades" = 6,
+                     "
                      
                      
                      
@@ -138,15 +143,47 @@ como el milimol por mol, igual a 10-3, o el microgramo por kilogramo, igual a 10
 h4("NOTA 4 Para una magnitud dada, el nombre
 abreviado “unidad” se combina
 frecuentemente con el nombre de la
-magnitud, por ejemplo “unidad de masa.”"),
+magnitud, por ejemplo “unidad de masa.” AQUÍ DEJÉ DE PREGUNTAR Y SOLAMENTE COMENCÉ A TOMAR MIS DECISIONES"),
  p(style = "text-align: rigth;", "Vocabulario Internacional de Metrología, [JCMG, 2012]")),
 
-  termino = box(width = 12, solidHeader = FALSE, status = 'primary',
+  Sistemadeunidades = box(width = 12, solidHeader = FALSE, status = 'primary',
+                   title = tags$b("Sistema de unidades:"),
+                   h4("conjunto de unidades de base y unidades
+derivadas, sus múltiplos y submúltiplos,
+definidos conforme a reglas dadas, para un
+sistema de magnitudes dado"), tags$hr(),
+                   p(style = "text-align: rigth;", "Vocabulario Internacional de Metrología, [JCMG, 2012]")),
+  Sistemainternacionaldeunidades = box(width = 12, solidHeader = FALSE, status = 'primary',
+                   title = tags$b("Sistema internacional de unidades:"),
+                   h4("sistema de unidades basado en el Sistema
+Internacional de Magnitudes, con nombres
+y símbolos de las unidades, y con una serie
+de prefijos con sus nombres y símbolos, así
+como reglas para su utilización, adoptado por
+la Conferencia General de Pesas y Medidas
+(CGPM) AQUÍ SON LAS MISMAS SIGLAS?"), tags$hr(),
+                   h4("NOTA 1."),
+                   p(style = "text-align: rigth;", "Vocabulario Internacional de Metrología, [JCMG, 2012]")),
+  
+   termino = box(width = 12, solidHeader = FALSE, status = 'primary',
                    title = tags$b("termino:"),
                    h4("definicion"), tags$hr(),
                    h4("NOTA #."),
                    p(style = "text-align: rigth;", "Vocabulario Internacional de Metrología, [JCMG, 2012]")),
-  termino = box(width = 12, solidHeader = FALSE, status = 'primary',
+  
+   termino = box(width = 12, solidHeader = FALSE, status = 'primary',
+                   title = tags$b("termino:"),
+                   h4("definicion"), tags$hr(),
+                   h4("NOTA #."),
+                   p(style = "text-align: rigth;", "Vocabulario Internacional de Metrología, [JCMG, 2012]")),
+  
+   termino = box(width = 12, solidHeader = FALSE, status = 'primary',
+                   title = tags$b("termino:"),
+                   h4("definicion"), tags$hr(),
+                   h4("NOTA #."),
+                   p(style = "text-align: rigth;", "Vocabulario Internacional de Metrología, [JCMG, 2012]")),
+  
+   termino = box(width = 12, solidHeader = FALSE, status = 'primary',
                    title = tags$b("termino:"),
                    h4("definicion"), tags$hr(),
                    h4("NOTA #."),
