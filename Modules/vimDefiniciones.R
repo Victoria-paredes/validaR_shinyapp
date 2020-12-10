@@ -61,17 +61,17 @@ itálicos. Un símbolo dado puede referirse a
 magnitudes diferentes."),
                     h4("NOTA 4 El formato preferido por la IUPAC/IFCC
 para la designación de las magnitudes en
-laboratorios médicos es “Sistema-Componente;
-naturaleza de la magnitud”."),
+laboratorios médicos es 'Sistema-Componente;
+naturaleza de la magnitud'."),
   h4("NOTA 5 Una magnitud, tal como se define aquí,
 es una magnitud escalar. Sin embargo, un vector
 o un tensor, cuyas componentes sean
 magnitudes, también se considera como una
 magnitud."),
-  h4("NOTA 6 El concepto de “magnitud” puede
+  h4("NOTA 6 El concepto de 'magnitud' puede
 dividirse, de forma genérica por ejemplo, en
-“magnitud física”, “magnitud química” y “magnitud
-biológica”, o bien en magnitud de base y
+'magnitud física', 'magnitud química' y 'magnitud
+biológica', o bien en magnitud de base y
 magnitud derivada."),
   p(style = "text-align: rigth;", "Vocabulario Internacional de Metrología, [JCMG, 2012]")),
   
@@ -106,7 +106,7 @@ en términos de las magnitudes de base, dentro
 de un sistema de magnitudes, como el
 producto de potencias de factores
 correspondientes a dichas magnitudes de base,
-omitiendo cualquier factor numérico"), tags$hr(),
+omitiendo cualquier factor numérico."), tags$hr(),
                    h4("NOTA 1 Una potencia de un factor es dicho
 factor elevado a un exponente. Cada factor
 expresa la dimensión de una magnitud de base."),
@@ -119,7 +119,7 @@ derivada es el producto de potencias de las
 dimensiones de las magnitudes de base
 conforme a la definición de la magnitud
 derivada. La dimensión de la magnitud Q se
-denota como dim Q"),
+denota como dim Q."),
 h4("NOTA 3 Para establecer la dimensión de una
 magnitud, no se tiene en cuenta el carácter
 escalar, vectorial o tensorial de la misma."),
@@ -145,7 +145,7 @@ magnitudes que tienen la misma dimensión,
 pueden designarse por el mismo nombre y el
 mismo símbolo, aunque no sean de la misma
 naturaleza. Por ejemplo, se emplea el nombre
-“joule por kelvin” y el símbolo J/K para
+'joule por kelvin' y el símbolo J/K para
 designar a la vez una unidad de capacidad
 térmica y una unidad de entropía, aunque
 estas magnitudes no sean consideradas en
@@ -153,7 +153,7 @@ general de la misma naturaleza. Sin embargo,
 en ciertos casos, se utilizan nombres
 especiales exclusivamente para magnitudes
 de una naturaleza específica. Por ejemplo la
-unidad “segundo a la potencia menos uno”
+unidad 'segundo a la potencia menos uno'
 (1/s) se denomina hertz (Hz) para las
 frecuencias y becquerel (Bq) para las
 actividades de radionucleidos."),
@@ -164,9 +164,9 @@ especiales; por ejemplo radián, estereorradián
 y decibel, o se expresan mediante cocientes
 como el milimol por mol, igual a 10-3, o el microgramo por kilogramo, igual a 10-9."),
 h4("NOTA 4 Para una magnitud dada, el nombre
-abreviado “unidad” se combina
+abreviado 'unidad' se combina
 frecuentemente con el nombre de la
-magnitud, por ejemplo “unidad de masa.”"),
+magnitud, por ejemplo 'nidad de masa'."),
  p(style = "text-align: rigth;", "Vocabulario Internacional de Metrología, [JCMG, 2012]")),
 
   Sistemadeunidades = box(width = 12, solidHeader = FALSE, status = 'primary',
@@ -192,7 +192,7 @@ PONER IMAGEN AQUÍ"),
 h4("NOTA 2 Las unidades de base y las
 unidades derivadas coherentes del SI
 forman un conjunto coherente, denominado
-“conjunto de unidades SI coherentes”."),
+'conjunto de unidades SI coherentes'."),
 h4("NOTA 3 Una descripción y explicación
 completas del Sistema Internacional de
 Unidades puede encontrarse en la última
@@ -201,7 +201,7 @@ la Oficina Internacional de Pesas y Medidas
 (BIPM) y disponible en la página de internet
 del BIPM."),
 h4("NOTA 4 En el álgebra de magnitudes, la
-magnitud “número de entidades” se
+magnitud 'número de entidades' se
 considera frecuentemente como magnitud de
 base, con unidad básica uno, símbolo 1."),
 h4("NOTA 5 PREGUNTAR SI PONER O NO"),
@@ -335,10 +335,10 @@ magnitud que se está midiendo puede diferir del
 mensurando tal como ha sido definido. En este
 caso sería necesario efectuar la corrección
 apropiada."),
-h4("NOTA 4 En química, la “sustancia a analizar”,
+h4("NOTA 4 En química, la 'sustancia a analizar',
 el analito, o el nombre de una sustancia o de un
 compuesto, se emplean algunas veces en lugar
-de “mensurando”. Esta práctica es errónea
+de 'mensurando'. Esta práctica es errónea
 debido a que estos términos no se refieren a
 magnitudes."),
                    p(style = "text-align: rigth;", "Vocabulario Internacional de Metrología, [JCMG, 2012]")),
@@ -404,8 +404,8 @@ utiliza el término “método primario de medición”
 para este concepto."),
 h4("NOTA 2 Las definiciones de dos conceptos
 subordinados, que podrían denominarse
-“procedimiento de medición primario directo” y
-“procedimiento de medición primario relativo”,
+'procedimiento de medición primario directo' y
+'procedimiento de medición primario relativo',
 están dadas por el CCQM (5ª. Reunión, 1999.")
                    p(style = "text-align: rigth;", "Vocabulario Internacional de Metrología, [JCMG, 2012]")),
 
@@ -511,7 +511,7 @@ componentes de la incertidumbre de
 medición, puede considerarse que el
 mensurando tiene un valor verdadero
 “esencialmente único”. Éste es el enfoque de la
-GUM , en la cual el término “verdadero” se
+GUM , en la cual el término 'verdadero' se
 considera redundante."),
 
                    p(style = "text-align: rigth;", "Vocabulario Internacional de Metrología, [JCMG, 2012]")),
@@ -521,8 +521,8 @@ Valorconvencionaldeunamagnitud = box(width = 12, solidHeader = FALSE, status = '
                    h4("Valor asignado a una magnitud, mediante un
 acuerdo, para un determinado propósito"), tags$hr(),
                    h4("NOTA 1 Habitualmente se utiliza para este
-concepto el término “valor convencionalmente
-verdadero”, aunque no se aconseja su uso."),
+concepto el término 'valor convencionalmente
+verdadero', aunque no se aconseja su uso."),
 h4("NOTA 2 Algunas veces, un valor convencional
 es un estimado de un valor verdadero."),
                                      h4("NOTA 3 Un valor convencional se considera
@@ -535,16 +535,16 @@ Exactituddeunamedicion = box(width = 12, solidHeader = FALSE, status = 'primary'
                    title = tags$b("Exactitud de una medición:"),
                    h4("Grado de concordancia entre un valor medido
 y un valor verdadero de un mensurando."), tags$hr(),
-                   h4("NOTA 1 El concepto “exactitud de medición”
+                   h4("NOTA 1 El concepto 'exactitud de medición'
 no es una magnitud y no se expresa
 numéricamente. Se dice que una medición es
 más exacta cuanto más pequeño es el error de
 medición."),
-h4("NOTA 2 El término “exactitud de medición” no
-debe utilizarse en lugar de “veracidad de
-medición”, al igual que el término “precisión
-de medición“ tampoco debe utilizarse en lugar
-de “exactitud de medición”, ya que este último
+h4("NOTA 2 El término 'exactitud de medición' no
+debe utilizarse en lugar de 'veracidad de
+medición', al igual que el término 'precisión
+de medición' tampoco debe utilizarse en lugar
+de 'exactitud de medición', ya que este último
 término incluye ambos conceptos.")
 h4("NOTA 3 La exactitud de medición se
 interpreta a veces como el grado de
@@ -566,8 +566,8 @@ inversamente relacionada con el error
 sistemático, pero no está relacionada con el
 error aleatorio."),
 h4("NOTA 3 No debe utilizarse el término
-“exactitud de medición” en lugar de
-“veracidad de medición”."),
+'exactitud de medición' en lugar de
+'veracidad de medición'."),
                    p(style = "text-align: rigth;", "Vocabulario Internacional de Metrología, [JCMG, 2012]")),
 
 Precisiondemedicion = box(width = 12, solidHeader = FALSE, status = 'primary',
@@ -582,7 +582,7 @@ medición se exprese numéricamente mediante
 medidas de dispersión tales como la desviación
 estándar, la varianza o el coeficiente de
 variación bajo las condiciones especificadas."),
-h4("NOTA 2 Las “condiciones especificadas”
+h4("NOTA 2 Las 'condiciones especificadas'
 pueden ser, por ejemplo, condiciones de
 repetibilidad, condiciones de precisión
 intermedia, o condiciones de
@@ -590,7 +590,7 @@ reproducibilidad."),
 h4("NOTA 3 La precisión se utiliza para definir la
 repetibilidad de medición, la precisión
 intermedia y la reproducibilidad."),
- h4("NOTA 4  Algunas veces, “precisión de medición”
+ h4("NOTA 4  Algunas veces, 'precisión de medición'
 se utiliza, erróneamente, en lugar de “exactitud
 de medición”."),
                    p(style = "text-align: rigth;", "Vocabulario Internacional de Metrología, [JCMG, 2012]")),
@@ -673,8 +673,8 @@ periodo corto de tiempo."), tags$hr(),
 condición de repetibilidad únicamente respecto
 a un conjunto dado de condiciones de
 repetibilidad."),
-h4("NOTAS 2 En química, el término “condición de
-precisión intra-serie” se utiliza algunas veces
+h4("NOTAS 2 En química, el término 'condición de
+precisión intra-serie' se utiliza algunas veces
 para referirse a este concepto."),
  p(style = "text-align: rigth;", "Vocabulario Internacional de Metrología, [JCMG, 2012]")),
 
@@ -701,8 +701,8 @@ h4("NOTA 2 Conviene que, en la medida de lo
 posible, una especificación sobre las
 condiciones indique qué condiciones cambiaron
 y cuáles no."),
-h4("NOTA 3 En química, el término “condición de
-precisión inter-serie” se utiliza algunas veces
+h4("NOTA 3 En química, el término 'condición de
+precisión inter-serie' se utiliza algunas veces
 para referirse a este concepto."),
 
                    p(style = "text-align: rigth;", "Vocabulario Internacional de Metrología, [JCMG, 2012]")),
@@ -870,8 +870,8 @@ probabilidad de cobertura elegida."),
 h4("NOTA 2 El factor que interviene en esta
 definición es un factor de cobertura."),
                                        h4("NOTA 3 La incertidumbre expandida se
-denomina “incertidumbre global” en el párrafo 5
-de la Recomendación INC-1 (1980) (véase la GUM) y simplemente “incertidumbre” en los
+denomina 'incertidumbre global' en el párrafo 5
+de la Recomendación INC-1 (1980) (véase la GUM) y simplemente 'incertidumbre' en los
 documentos IEC."),
 
                    p(style = "text-align: rigth;", "Vocabulario Internacional de Metrología, [JCMG, 2012]")),
@@ -1003,11 +1003,11 @@ técnica acreditada, la trazabilidad metrológica al
 SI y los intervalos entre calibraciones
 establecidos (véase ILAC P-10:2002)."),
 h4("NOTA 8 Algunas veces el término abreviado
-“trazabilidad” se utiliza en lugar de “trazabilidad
-metrológica” así como para otros conceptos,
+'trazabilidad' se utiliza en lugar de 'trazabilidad
+metrológica' así como para otros conceptos,
 como trazabilidad de una muestra, de un
 documento, de un instrumento, de un material,
-etc., cuando interviene el historial (“traza”) del
+etc., cuando interviene el historial ('traza') del
 elemento en cuestión. Por tanto, es preferible
 utilizar el término completo “trazabilidad metrológica si hay algún riesgo de confusión"),
  p(style = "text-align: rigth;", "Vocabulario Internacional de Metrología, [JCMG, 2012]")),
