@@ -53,7 +53,11 @@ ingresarDatosServer <- function(input, output, session, nRows) {
   output$TrnsDt <- renderHotable({MyChanges()}, readOnly = FALSE)
   
   TrnsDtEx <- eventReactive(input$inputDat, 
-                            rbind(MyChanges()[1, ], MyChanges()[-1, ][MyChanges()[-1, ][, 1] != 0, ]))
+                            rbind(MyChanges()[1, ], MyChanges()[-1, ][(MyChanges()[-1, ][, 1] != 0), ]))
+  #TrnsDtEx <- eventReactive(input$inputDat, 
+  #                          rbind(MyChanges()[1, ], MyChanges()[-1, ][all(c(MyChanges()[-1, ][, 1] != 0,
+  #                                                                          MyChanges()[-1, ][, 1] != "")), ]))
+  
   output$TrnsDtEx <- renderHotable({TrnsDtEx()}, readOnly = TRUE)
   
   
