@@ -116,17 +116,3 @@ datosEjemploServer <- function(input, output, session) {
   output$mediasMulTab4 <- renderTable(data.frame('Serie_4' = A4), digits = 2)
   output$mediasMulTab5 <- renderTable(data.frame('Serie_5' = A5), digits = 2)
 }
-
-#i <- 47; plot(deming::ferritin2[sample(162, 15), 3:4], main = i)
-
-#set.seed(0)
-#A1 <- rnorm(6, 105, 4)
-#A2 <- rnorm(5, 100, 6)
-#A3 <- rnorm(5, 115, 3)
-#A4 <- rnorm(7, 96, 7)
-#A5 <- rnorm(6, 90, 5)
-#allVectors <- data.frame(x = c(A1, A2, A3, A4, A5), group = as.factor(c(rep(1, 6), rep(2, 5), rep(3, 5), rep(4, 7), rep(5, 6))))
-#str(allVectors)
-#anova(lm(x ~ group, allVectors))
-
-anova(lm(x ~ group, allVectors))
