@@ -13,7 +13,7 @@ estadisticaDescriptivaUI <- function(id, IntID = 1, value0 = 10) {
                       tableOutput(ns('descripTab'))),
                   tabBox(title = tags$b("Diagramas"), width = 6,
                          tabPanel("Histograma", 
-                                  sliderInput(ns("bins"), label = 'Número de barras', min = 2, max = 20, value = 5, width = '80%'),
+                                  sliderInput(ns("bins"), label = 'Número de barras', min = 2, max = 20, value = 10, width = '80%'),
                                   dropdownButton(circle = TRUE, status = "danger", icon = icon("gear"), width = "300px", size = 'sm',
                                                  tooltip = tooltipOptions(title = "Etiquetas de eje"),
                                                  textInput(ns('xlabHs'), label = 'Etiqueta eje X', value = 'Variable')),
@@ -25,12 +25,12 @@ estadisticaDescriptivaUI <- function(id, IntID = 1, value0 = 10) {
                                                  textInput(ns('xlabSt'), label = 'Etiqueta eje X', value = 'Variable')),
                                   plotOutput(ns('stackedDot')),
                                   downloadButton(ns('DwnstackedDot'), label = 'Descargar gráfico')),
-                         tabPanel("Normalidad (P-P)", 
+                         tabPanel("Normalidad (Q-Q)", 
                                   #dropdownButton(circle = TRUE, status = "danger", icon = icon("gear"), width = "300px", size = 'sm',
                                   #               tooltip = tooltipOptions(title = "Etiquetas de eje"),
                                   #               textInput(ns('xlabSt'), label = 'Etiqueta eje X', value = 'Variable')),
-                                  plotOutput(ns('DiagramaPP')),
-                                  downloadButton(ns('DwnDiagramaPP'), label = 'Descargar gráfico')))),
+                                  plotOutput(ns('DiagramaQQ')),
+                                  downloadButton(ns('DwnDiagramaQQ'), label = 'Descargar gráfico')))),
            
           column(6, tabBox(title = tags$b('Pruebas de normalidad'), width = 12, 
                             tabPanel("Prueba de Shapiro-Wilk", htmlOutput(ns('niceWilkinson'))),
@@ -57,8 +57,9 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
                                                      length(dataF()))))
   
   histogramPlt <-  reactive({
-    p <- ggplot(data = data.frame(x = dataF()), aes(x)) + theme_bw() + geom_histogram(bins = input$bins) +
-      labs(y = 'Frecuencia', x = input$xlabHs) +# (mg k', g^{-1}, ')'))) +
+    p <- ggplot(data = data.frame(x = dataF()), aes(x)) + theme_bw() +
+      geom_histogram(bins = input$bins, aes(y = ..density..), , color = "grey30", fill = "white") +
+      geom_density(fill = '#97d7e4', alpha = 0.4) + labs(y = 'Densidad', x = input$xlabHs) +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             axis.text.x = element_text(color = "black"), axis.text.y = element_text(color = "black"))
     return(p)
@@ -66,9 +67,19 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
   
   stackedDot <-  reactive({dotPlot(dataF(), xlab = input$xlabSt, pch = 16, frame = TRUE)})
   
+  DiagramaQQ <-  reactive({
+    p <- ggplot(data = data.frame(x = dataF())) + theme_bw() + geom_qq(aes(sample = x)) +
+      geom_abline(slope = sd(dataF()), intercept = mean(dataF()), col = 'blue') + 
+      labs(y = 'Cuantil experimental', x = 'Cuantil teórico') +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            axis.text.x = element_text(color = "black"), axis.text.y = element_text(color = "black"))
+    return(p)
+  })
+  
   output$descripTab <- renderTable(descripTabRc())
   output$histogramPlt <- renderPlot(histogramPlt())
   output$stackedDot <- renderPlot(stackedDot())
+  output$DiagramaQQ <- renderPlot(DiagramaQQ())
   
   #return(reactive(list(data = na.rm(MyChanges()), name = input$seriesName(), descr = input$dataDescrip)))
 }
