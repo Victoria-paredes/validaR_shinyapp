@@ -51,15 +51,15 @@ comparacionRanMulUI <- function(id) {
 comparacionRanMulServer <- function(input, output, session, aovModel) {
   #aovModel <- reactive(aovModel)
   observeEvent(input$doCompare, {
-    LSDFReac <- reactive(agricolae::LSD.test(y = aovModel$aovSum(), trt = 'ind', alpha = 1 - aovModel$aovSig()))
+    LSDFReac <- reactive(agricolae::LSD.test(y = aovModel$aovSum(), trt = 'ind', alpha = (1 - aovModel$aovSig())))
     output$LSDFTest <- renderPrint(summary(LSDFReac()))
-    output$LSDFPlot <- renderPlot(plot(LSDFReac()))
+    output$LSDFPlot <- renderPlot(plot(LSDFReac(), main = ''))
     
     TukeyReac <- reactive(TukeyHSD(x = aovModel$aovSum(), conf.level = aovModel$aovSig()))
     output$TukeyTest <- renderPrint(TukeyReac())
     output$TukeyPlot <- renderPlot(plot(TukeyReac()))
     
-    DuncanReac <- reactive(agricolae::duncan.test(y = aovModel$aovSum(), trt = 'ind', alpha = 1 - aovModel$aovSig()))
+    DuncanReac <- reactive(agricolae::duncan.test(y = aovModel$aovSum(), trt = 'ind', alpha = (1 - aovModel$aovSig())))
     output$DuncanTest <- renderPrint(summary(DuncanReac()))
     output$DuncanPlot <- renderPlot(plot(DuncanReac()))
   })

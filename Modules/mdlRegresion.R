@@ -28,7 +28,7 @@ regresionUI <- function(id) {
                                        tooltip = tooltipOptions(title = "Etiquetas de eje"),
                                        textInput(ns('xlab'), label = 'Etiqueta eje X', value = 'Variable independiente'),
                                        textInput(ns('ylab'), label = 'Etiqueta eje Y', value = 'Variable dependiente'),
-                                       tags$h4('Se debe Recalcular la regresión para que el cambio se haga efectivo.')),
+                                       tags$h4('Se debe recalcular la regresión para que el cambio se haga efectivo.')),
                         plotOutput(ns('nicePltMain')),
                         downloadButton(ns('DwnECCP'), label = 'Descargar gráfico')),
                tabPanel("Grafico de residuales", plotOutput(ns('nicePltResiduals')),

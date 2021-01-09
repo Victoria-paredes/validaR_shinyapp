@@ -6,19 +6,38 @@ estadisticaDescriptivaUI <- function(id, IntID = 1, value0 = 10) {
                       uiOutput(ns('selectSeries')),
                       selectizeInput(ns('valX'), label = "Variable para describir", width = '80%',
                                      choices = list('col.X1' = 1, 'col.X2' = 2, 'col.X3' = 3, 'col.X4' = 4)),
-                      actionButton(ns("descrStat"), label = 'Calcular descriptores estadísticos', styleclass = 'primary'),
-                      tableOutput(ns('dataseries'))),
-                  box(title = tags$b("Descriptores estadísticos"), width = 12,  status = 'primary', 
-                      htmlOutput(ns('Descriptores'))),
-                  box(width = 6, title = tags$b("Diagrama de puntos apilados"), 
-                      plotOutput(ns('stackedDot')))),
-            column(6, box(title = tags$b('Pruebas de normalidad'), status = 'warning',  width = 12, 
-                          plotOutput(ns('DiagramaPP')), 
-                          box(title = 'Prueba de Wilkinson', htmlOutput(ns('niceWilkinson'))),
-                          box(title = 'Prueba de Kolmogorov-Smirnof', htmlOutput(ns('niceKolmoSmir'))))),
-            column(6, box(title = tags$b('Posibles anómalos'), status = 'warning',  width = 12, 
-                          box(title = 'Prueba de Grubbs', width = 12, htmlOutput(ns('niceGrubs'))),
-                          box(title = 'Prueba de Dixon', width = 12, htmlOutput(ns('niceDixon')))))
+                      actionButton(ns("descrStat"), label = 'Calcular descriptores estadísticos', styleclass = 'primary')#,
+                      #tableOutput(ns('dataseries'))
+                      ),
+                  box(title = tags$b("Descriptores estadísticos"), width = 3,  status = 'primary', 
+                      tableOutput(ns('descripTab'))),
+                  tabBox(title = tags$b("Diagramas"), width = 6,
+                         tabPanel("Histograma", 
+                                  sliderInput(ns("bins"), label = 'Número de barras', min = 2, max = 20, value = 5, width = '80%'),
+                                  dropdownButton(circle = TRUE, status = "danger", icon = icon("gear"), width = "300px", size = 'sm',
+                                                 tooltip = tooltipOptions(title = "Etiquetas de eje"),
+                                                 textInput(ns('xlabHs'), label = 'Etiqueta eje X', value = 'Variable')),
+                                  plotOutput(ns('histogramPlt')),
+                                  downloadButton(ns('DwnhistogramPlt'), label = 'Descargar gráfico')),
+                         tabPanel("Puntos apilados", 
+                                  dropdownButton(circle = TRUE, status = "danger", icon = icon("gear"), width = "300px", size = 'sm',
+                                                 tooltip = tooltipOptions(title = "Etiquetas de eje"),
+                                                 textInput(ns('xlabSt'), label = 'Etiqueta eje X', value = 'Variable')),
+                                  plotOutput(ns('stackedDot')),
+                                  downloadButton(ns('DwnstackedDot'), label = 'Descargar gráfico')),
+                         tabPanel("Normalidad (P-P)", 
+                                  #dropdownButton(circle = TRUE, status = "danger", icon = icon("gear"), width = "300px", size = 'sm',
+                                  #               tooltip = tooltipOptions(title = "Etiquetas de eje"),
+                                  #               textInput(ns('xlabSt'), label = 'Etiqueta eje X', value = 'Variable')),
+                                  plotOutput(ns('DiagramaPP')),
+                                  downloadButton(ns('DwnDiagramaPP'), label = 'Descargar gráfico')))),
+           
+          column(6, tabBox(title = tags$b('Pruebas de normalidad'), width = 12, 
+                            tabPanel("Prueba de Shapiro-Wilk", htmlOutput(ns('niceWilkinson'))),
+                            tabPanel("Prueba de Kolmogorov-Smirnof", htmlOutput(ns('niceKolmoSmir'))))),
+          column(6, tabBox(title = tags$b('Pruebas de datos anómalos'), width = 12,
+                           tabPanel("Criterios de Grubbs", htmlOutput(ns('niceGrubs'))),
+                           tabPanel("Criterio de Dixon")))
   ))
 }
 
@@ -31,17 +50,25 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
   
   dataF <- eventReactive(input$descrStat, compl[[input$selectedSeries]]$data()[, as.numeric(input$valX)])
   
-  output$dataseries <- renderTable(dataF())
-  output$stackedDot <- renderPlot(dotPlot(dataF(), xlab = 'Serie de datos', pch = 16))
-  dscrptX1 <- reactive(paste0("Promedio = ", signif(mean(dataF()), 4), "<br />",
-                              "Desv. Estándar = ", signif(sd(dataF()), 4), "<br />",
-                              "Desviación estándar relativa = ", signif(sd(dataF())/mean(dataF()), 4), "<br />",
-                              "Número de datos = ", nrow(dataF()),  "<br />",
-                              "Mediana", signif(median(dataF()), 4)))
-  #dscrptX1 <- reactive(paste0(str(series$data())))
-  output$Descriptores <- renderText(dscrptX1())
+  descripTabRc <- reactive(data.frame(Estadístico = c("Promedio", "Desv. Estándar", "Desv. estándar relativa",
+                                                          "Mediana", "Número de datos"), 
+                                           Valor = c(signif(mean(dataF()), 4), signif(sd(dataF()), 4), 
+                                                     signif(sd(dataF())/mean(dataF()), 4), signif(median(dataF()), 4), 
+                                                     length(dataF()))))
   
+  histogramPlt <-  reactive({
+    p <- ggplot(data = data.frame(x = dataF()), aes(x)) + theme_bw() + geom_histogram(bins = input$bins) +
+      labs(y = 'Frecuencia', x = input$xlabHs) +# (mg k', g^{-1}, ')'))) +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            axis.text.x = element_text(color = "black"), axis.text.y = element_text(color = "black"))
+    return(p)
+  })
   
+  stackedDot <-  reactive({dotPlot(dataF(), xlab = input$xlabSt, pch = 16, frame = TRUE)})
+  
+  output$descripTab <- renderTable(descripTabRc())
+  output$histogramPlt <- renderPlot(histogramPlt())
+  output$stackedDot <- renderPlot(stackedDot())
   
   #return(reactive(list(data = na.rm(MyChanges()), name = input$seriesName(), descr = input$dataDescrip)))
 }
