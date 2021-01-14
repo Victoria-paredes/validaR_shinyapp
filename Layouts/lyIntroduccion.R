@@ -85,7 +85,8 @@ introduccionLy <- fluidRow(
     column(12, 
       box(title = NULL, status = 'primary', width = 12, 
         tags$h5('Esta página web corre gracias al programa de computación científica y de 
-                 regresentaciones gráficas R [R Core Team, 2020]. La implementación en este 
+                 regresentaciones gráficas R [R Core Team, 2020].', tags$br(), 'La implementación en este 
                  tablero interactivo fue posible por medio de las librerías 
-                 Shiny y Shinydashboard [Chang y otros., 2020].')))
+                 Shiny y Shinydashboard [Chang y otros., 2020].', tags$br(), 'La mayoría de las representaciones gráficas
+                 son creadas por medio del paquete ggplot2 [Wickham, 2016]')))
 )

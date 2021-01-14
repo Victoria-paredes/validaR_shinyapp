@@ -70,5 +70,11 @@ bibliogrModuleUI <- function(id) {
          <a href="https://CRAN.R-project.org/package=deming">https://CRAN.R-project.org/package=deming</a></td>
   </tr><tr><td>&zwnj;</td></tr>
 
+  <tr valign="top">
+    <td align="right">[Wickham, 2016]&emsp;</td>
+    <td> H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016. 
+         <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a></td>
+  </tr><tr><td>&zwnj;</td></tr>
+
 </table>')))
 }

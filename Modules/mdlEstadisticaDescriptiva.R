@@ -71,7 +71,7 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
   DiagramaQQ <-  reactive({
     p <- ggplot(data = data.frame(x = dataF())) + theme_bw() + geom_qq(aes(sample = x)) +
       geom_abline(slope = sd(dataF()), intercept = mean(dataF()), col = 'blue') + 
-      labs(y = 'Cuantil experimental', x = 'Cuantil teórico') +
+      labs(y = 'Valor experimental', x = 'Valor teórico normalizado') +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             axis.text.x = element_text(color = "black"), axis.text.y = element_text(color = "black"))
     return(p)

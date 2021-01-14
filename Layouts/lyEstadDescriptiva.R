@@ -18,3 +18,7 @@ lyEstadDescrDscrp <- infoBox(
      "Es importante considerar que un posible dato anómalo no debe descartarse sin antes considerar ", 
      tags$br(), HTML('&emsp;&emsp;&nbsp;'), 
      "las posibles causas que pueda tener su comportamiento anormal."))
+
+lyEstadDrescrCitat <- box(title = NULL, status = 'primary', width = 12, 
+                          tags$h5('Pruebas de anómalos de Grubbs y de Dixon implementados en R por el paquete ', 
+                                  tags$b('outliers'), ' [Komsta, 2011].'))
