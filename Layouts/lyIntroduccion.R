@@ -6,46 +6,41 @@ introduccionLy <- fluidRow(
             h4("Esta aplicación implementa los procedimientos estadísticos que se mencionan en la",
                tags$b("Guía de Validación de Métodos Cuantitativos del Instituto Nacional de Metrología de Colombia"),
                "(en proceso de elaboración).
-                La aplicación provee herramientas generales de estadística descriptiva, estadística inferencial 
+                La aplicación ", tags$b("validaR"), " provee herramientas generales de estadística descriptiva, 
+                estadística inferencial 
                 (pruebas de comparación), análisis de regresión, cálculo de parámetros de validación, 
                 entre otras funciones, que serán de utilidad para todo aquel que tenga que ver con la validación
                 de métodos analíticos cuantitativos. El propósito de ", tags$b("validaR"), " es apoyar en el tratamiento de
                 datos experimentales de validación con el fin de que las personas puedan enfocarse en la parte importante del proceso: 
                 documentar los resultados, obtener las conclusiones, y escoger rutas de acción cuando estas sean necesarias.",
                tags$br(), tags$br(),
-              # "Los ejemplos expuestos en la guía de validación se desarrollaron en esta aplicación. Los 
-              #  datos de los ejemplos que se incluyen en la guía aparecenpara que, entre otras cosas, el usuario final se damiliarice con las
-              #  funciones de la aplicación.",
-               tags$br(), tags$br(), tags$br(),
+               # "Los ejemplos expuestos en la guía de validación se desarrollaron en esta aplicación. Los 
+               #  datos de los ejemplos que se incluyen en la guía aparecenpara que, entre otras cosas, el usuario final se damiliarice con las
+               #  funciones de la aplicación.",
+               tags$br(), #tags$br(), tags$br(),
                "La aplicación se divide en un panel principal que ocupa la mayor parte de la página, y
-                un panel lateral a la izquierda, que se usa para seleccionar la sección a la que se desee acceder.
-                Cada opción contiene instrucciones para el uso de las funciones en la aplicación.", 
+                un panel lateral a la izquierda que se usa para navegar entre las distintas secciones de la aplicación.
+                Cada opción contiene instrucciones para el uso de las funciones disponibles. ", 
                tags$br(), tags$br(),
-               HTML('&emsp;'), "• Inicialmente se deben ingresar los datos en la opción ", 
-               icon("hockey-puck"), tags$b("Ingreso de datos"), " del panel lateral. ",
-               tags$br(), tags$br(),
-               HTML('&emsp;'), "• Los datos de los ejemplos incluídos en la Guía de Validación están disponibles en la opción ", 
-               icon("folder-open"), tags$b("Datos de ejemplos."),
-               tags$br(), tags$br(),
-               HTML('&emsp;'), "• Los gráficos que produce la aplicación pueden descargarse en formato PDF y PNG.", tags$br(),
-               HTML('&emsp;&emsp;&nbsp;'), "El formato de los archivos y su tamaño deben seleccionarse en ",
-               icon("cog"), tags$b("Configuración general,"), " en el recuadro ", tags$b('Archivos de imagen'),
-               tags$br(), tags$br(),
-               HTML('&emsp;'), "• Para guardar el estado de la aplicación en cualquier momento dado, 
-               haga click en el botón", tags$br(),
-               HTML('&emsp;&emsp;&nbsp;'), icon("link"), tags$b("Guardar..."), "copie y guarde el link que se genera, y úselo para
-               acceder a la aplicación cuando desee continuar.",
-               tags$br(), tags$br(),
-               HTML('&emsp;'), "• Se recomienda el uso de pantallas con resolución igual o superior a 1920x1080 pixeles.", tags$br(),
-               HTML('&emsp;&emsp;&nbsp;'), "Para pantallas con menor resolución puede ser necesario disminuír el tamaño de la página
-               para visualizar correctamente", tags$br(),
-               HTML('&emsp;&emsp;&nbsp;'), 
-               "el contenido. Puede usarse como referencia la siguiente línea punteada, 
-               la cual debe ocupar únicamente un renglón:", tags$br(),
-               HTML('&emsp;&emsp;&nbsp;'), 
-               ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
-               . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
-               . . . . . . . . . . . . . . . . . .")),
+               tags$ul(
+                 tags$li("Para iniciar se deben ingresar los datos en la opción ", 
+                         icon("hockey-puck"), tags$b("Ingreso de datos"), " del panel lateral. "), tags$br(),
+                 tags$li("Los datos de los ejemplos incluídos en la Guía de Validación están disponibles en la opción ", 
+                         icon("folder-open"), tags$b("Datos de ejemplos.")), tags$br(),
+                 tags$li("Los gráficos que produce la aplicación pueden descargarse en formato PDF o PNG.
+                         El formato de los archivos y su tamaño deberán seleccionarse en ",
+                         icon("cog"), tags$b("Configuración general,"), " en el recuadro ", tags$b('Archivos de imagen')), tags$br(),
+                 tags$li("Para guardar el estado de la aplicación en cualquier momento dado, haga click en el botón", 
+                         icon("link"), tags$b("Guardar..."), "copie y guarde el link que se genera.
+                         Use dicho link para acceder a la aplicación cuando desee continuar.", 
+                         tags$code("(Esta función aún no se encuentra disponible)")), tags$br(),
+                 tags$li("Se recomienda el uso de pantallas con resolución igual o superior a 1920x1080 pixeles.
+                         Para pantallas con menor resolución puede ser necesario disminuír el tamaño de la página 
+                         para visualizar correctamente todo el contenido.", tags$br(), "Como referencia puede usarse 
+                         la siguiente línea punteada que debe ocupar únicamente un renglón:", tags$br(),
+                         ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+                          . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+                          . . . . . . . . . . . . . . . . . .")))),
           column(4, div(img(src = "Guia_p1.png", width = 400), style = "text-align: center;"),
                  HTML('&emsp;&emsp;&emsp;&emsp;&emsp;'), 
                  a(href = "guia.pdf", "Descargar la guía de validación...", download = NA, target = "_blank"))))),
@@ -67,11 +62,12 @@ introduccionLy <- fluidRow(
       box(width = 3, title = tags$b('Modelos de regresión'), status = 'primary',  #height = 400,
           collapsible = TRUE, collapsed = TRUE,
         h4('La aplicación permite el cálculo de distintos modelos de regresión para datos bivariados:', tags$br(),
-           HTML('&emsp;'), "• Mínimos cuadrados ordinarios", tags$br(),
-           HTML('&emsp;'), "• Mínimos cuadrados ponderados", tags$br(),
-           HTML('&emsp;'), "• Mínimos cuadrados ortogonales", tags$br(),
-           HTML('&emsp;'), "• Mínimos cuadrados generalizados", tags$br(),
-           HTML('&emsp;'), "• Regresión no paramétrica", tags$br(), tags$br(),
+           tags$ul(
+             tags$li("Mínimos cuadrados ordinarios"),
+             tags$li("Mínimos cuadrados ponderados"),
+             tags$li("Mínimos cuadrados ortogonales"),
+             tags$li("Mínimos cuadrados generalizados"),
+             tags$li("Regresión no paramétrica"), tags$br()),
            "Algunos de estos modelos permiten especificar el error asociado a los puntos experimentales en uno o dos de los
            ejes, para ser considerados en el cálculo de los parámetros de regresión. La aplicación genera el grafico de la regresión
            con el intervalo de confianza, el gráfico de residuales, y los parámetros de la regresión con su error estándar
