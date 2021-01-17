@@ -2,7 +2,7 @@
 
 definicionesUI <- function(id) {
   ns <- NS(id)
-  fluidRow(column(2, pickerInput(ns("trm"), label = "Buscar término", choices = nomConceptos, selected = 0, multiple = TRUE, 
+  fluidRow(column(2, pickerInput(ns("trm"), label = "Buscar término", choices = nomConceptos, selected = 0, multiple = FALSE, 
                                  options = list(`live-search` = TRUE,
                                                 `none-selected-text` = 'Escriba una opción...',
                                                 `none-results-text` = 'Sin resultados...'))),
