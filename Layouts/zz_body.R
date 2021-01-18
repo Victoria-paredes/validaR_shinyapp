@@ -2,6 +2,15 @@ customBody <- dashboardBody(
   tags$head(tags$style(
     HTML('.wrapper {height: auto !important; position:relative; overflow-x:hidden; overflow-y:hidden}')
   )),
+  #shinyDashboardThemes(theme = "blue_gradient"),
+  customTheme,
+  tags$style(tags$style(HTML('
+        /* ligth-blue */
+        .bg-light-blue {background-color: #34B1C9!important;}
+    '))
+    #type = 'text/css', 
+    #'.bg-light-blue {background-color: #34B1C9!important; }'
+  ),
   withMathJax(),
   tabItems(
     tabItem(tabName = "introd", h2('Herramientas para la validación de métodos'), introduccionLy),#, introductionModuleUI('introduction')),

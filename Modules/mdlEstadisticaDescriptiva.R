@@ -1,6 +1,6 @@
 estadisticaDescriptivaUI <- function(id, IntID = 1, value0 = 10) {
   ns <- NS(id)
-  box(width = 12, 
+  #box(width = 12, 
   fluidRow(column(12, 
                   box(width = 3,  status = 'primary',
                       uiOutput(ns('selectSeries')),
@@ -13,19 +13,26 @@ estadisticaDescriptivaUI <- function(id, IntID = 1, value0 = 10) {
                       tableOutput(ns('descripTab'))),
                   tabBox(title = tags$b("Diagramas"), width = 6,
                          tabPanel("Histograma", 
-                                  sliderInput(ns("bins"), label = 'Número de barras', min = 2, max = 20, value = 10, width = '80%'),
                                   dropdownButton(circle = TRUE, status = "danger", icon = icon("gear"), width = "300px", size = 'sm',
-                                                 tooltip = tooltipOptions(title = "Etiquetas de eje"),
+                                                 tooltip = tooltipOptions(title = "Configuraciones del gráfico"),
+                                                 sliderInput(ns("bins"), label = 'Número de barras', min = 3, max = 40, 
+                                                             value = 10, width = '80%'),
                                                  textInput(ns('xlabHs'), label = 'Etiqueta eje X', value = 'Variable')),
                                   plotOutput(ns('histogramPlt')),
                                   downloadButton(ns('DwnhistogramPlt'), label = 'Descargar gráfico')),
                          tabPanel("Puntos apilados", 
                                   dropdownButton(circle = TRUE, status = "danger", icon = icon("gear"), width = "300px", size = 'sm',
-                                                 tooltip = tooltipOptions(title = "Etiquetas de eje"),
+                                                 tooltip = tooltipOptions(title = "Configuraciones del gráfico"),
                                                  textInput(ns('xlabSt'), label = 'Etiqueta eje X', value = 'Variable')),
                                   plotOutput(ns('stackedDot')),
                                   downloadButton(ns('DwnstackedDot'), label = 'Descargar gráfico')),
                          tabPanel("Normalidad (Q-Q)", 
+                                  dropdownButton(circle = TRUE, status = "danger", icon = icon("gear"), width = "300px", size = 'sm',
+                                                 tooltip = tooltipOptions(title = "Configuraciones del gráfico"),
+                                                 textInput(ns('xlabQQ'), label = 'Etiqueta eje X', 
+                                                           value = 'Valor teórico normalizado'),
+                                                 textInput(ns('ylabQQ'), label = 'Etiqueta eje X', 
+                                                           value = 'Valor experimental')),
                                   #dropdownButton(circle = TRUE, status = "danger", icon = icon("gear"), width = "300px", size = 'sm',
                                   #               tooltip = tooltipOptions(title = "Etiquetas de eje"),
                                   #               textInput(ns('xlabSt'), label = 'Etiqueta eje X', value = 'Variable')),
@@ -39,7 +46,7 @@ estadisticaDescriptivaUI <- function(id, IntID = 1, value0 = 10) {
                            tabPanel("Criterios de Grubbs", 
                                     htmlOutput(ns('niceGrubs1')), htmlOutput(ns('niceGrubs2')), htmlOutput(ns('niceGrubs3'))),
                            tabPanel("Criterio de Dixon", htmlOutput(ns('niceDixon')))))
-  ))
+  )#)
 }
 
 estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl, configDwn) {
@@ -71,7 +78,7 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
   DiagramaQQ <-  reactive({
     p <- ggplot(data = data.frame(x = dataF())) + theme_bw() + geom_qq(aes(sample = x)) +
       geom_abline(slope = sd(dataF()), intercept = mean(dataF()), col = 'blue') + 
-      labs(y = 'Valor experimental', x = 'Valor teórico normalizado') +
+      labs(y = input$ylabQQ, x = input$xlabQQ) +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             axis.text.x = element_text(color = "black"), axis.text.y = element_text(color = "black"))
     return(p)

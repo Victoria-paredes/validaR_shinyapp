@@ -1,11 +1,14 @@
 library(shiny)
 library(shinydashboard)
+library(dashboardthemes) #https://cran.r-project.org/web/packages/dashboardthemes/vignettes/using_dashboardthemes.html
 library(shinyWidgets)
 library(ggplot2) #Grammar of graphics
 library(shinysky)
 library(rhandsontable)
 library(purrr) # map-like functional programing (?)
 library(BHH2) # dotPlot(faithful$waiting, pch = 16)
+
+#actionButton <- shiny::actionButton() #Unmask actionbutton
 #library(pracma) # ODR
 
 #library(ggvis) #ggvis: Interactive Grammar of Graphics - input_slider: Create an interactive slider.
@@ -15,12 +18,12 @@ library(BHH2) # dotPlot(faithful$waiting, pch = 16)
 customFunctions <- paste0('CustomFunctions/', list.files(path = "CustomFunctions")) # functions in the server side
 modules         <- paste0('Modules/', list.files(path = "Modules"))
 layouts         <- paste0('Layouts/', list.files(path = "Layouts")) # functions in the client side
-
 sapply(c(customFunctions, modules, layouts), source)
 
 ui <- function(request) {
-  dashboardPage(skin = "black", header = customHeader, sidebar = customSidebar, body = customBody, 
+  dashboardPage(header = customHeader, sidebar = customSidebar, body = customBody, 
                 title = "validaR - Instituto Nacional de Metrología") #customStuff in ./Layouts
+  # tags$script(HTML("if (window.innerHeight < 400) alert('Screen too small');")) ??????????????????
 }
 
 server <- function(input, output, session) {

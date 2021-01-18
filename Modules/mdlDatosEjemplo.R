@@ -2,9 +2,11 @@ datosEjemploUI <- function(id) {
   ns <- NS(id)
   
     column(12, 
-      infoBox(width = 12, "Banco de datos de ejemplos", color = 'light-blue', icon = icon('info-circle'),
-        h4("Los datos en las siguientes tablas pueden ser copiadas en el módulo de ingreso de datos
-           para ejemplificar el uso de las funciones de la aplicación.")),
+      infoBox(width = 12, "Banco de datos de ejemplos", color = 'navy', icon = icon('info-circle'),
+        h5("Los datos de las siguientes tablas pueden ser copiadas al módulo de ", 
+           icon("hockey-puck"), tags$b("Ingreso de datos"), 
+           "para poder usar las funciones implementadas, en caso de que no disponga de datos propios y desee aprender a usar 
+           la aplicación..")),
       tabBox(width = 12, title = tags$b('Herramientas estadísticas'), side = 'left', height = 1200,
              tabPanel(title = tags$b('Análisis de regresión'),
                       box(title = 'Curva de calibración', status = 'warning', width = 3, height = 800,

@@ -15,7 +15,8 @@ introduccionLy <- fluidRow(
                 documentar los resultados, obtener las conclusiones, y escoger rutas de acción cuando estas sean necesarias.",
                tags$br(), tags$br(),
                # "Los ejemplos expuestos en la guía de validación se desarrollaron en esta aplicación. Los 
-               #  datos de los ejemplos que se incluyen en la guía aparecenpara que, entre otras cosas, el usuario final se damiliarice con las
+               #  datos de los ejemplos que se incluyen en la guía aparecenpara que, entre otras cosas, el usuario 
+               # final se damiliarice con las
                #  funciones de la aplicación.",
                tags$br(), #tags$br(), tags$br(),
                "La aplicación se divide en un panel principal que ocupa la mayor parte de la página, y
@@ -38,9 +39,8 @@ introduccionLy <- fluidRow(
                          Para pantallas con menor resolución puede ser necesario disminuír el tamaño de la página 
                          para visualizar correctamente todo el contenido.", tags$br(), "Como referencia puede usarse 
                          la siguiente línea punteada que debe ocupar únicamente un renglón:", tags$br(),
-                         ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-                          . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
-                          . . . . . . . . . . . . . . . . . .")))),
+                         ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+                          . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .")))),
           column(4, div(img(src = "Guia_p1.png", width = 400), style = "text-align: center;"),
                  HTML('&emsp;&emsp;&emsp;&emsp;&emsp;'), 
                  a(href = "guia.pdf", "Descargar la guía de validación...", download = NA, target = "_blank"))))),

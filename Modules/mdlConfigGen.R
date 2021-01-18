@@ -11,8 +11,8 @@ configGenUI <- function(id) {
                ),
            box(title = tags$b(''), status = 'danger', width = 6, height = 340),
            column(5),
-           actionBttn(ns('refreshConf'), label = "Actualizar configuraciones", style = "material-flat", 
-                      color = "success",icon = icon("cog")))
+           shiny::actionButton(inputId = ns('refreshConf'), label = "Actualizar configuraciones", #style = "material-flat", 
+                               icon = icon("cog"), icon.library = "font-awesome"))
   
 }
 

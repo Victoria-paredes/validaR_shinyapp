@@ -25,7 +25,7 @@ ingresarDatosUI <- function(id, IntID = 1, value0 = 10) {
            column(8, box(title = 'Tabla de llenado de datos', width = 12, #collapsible = TRUE, collapsed = FALSE, 
                          hotable(ns("TrnsDt")))),
            #actionButton(ns("Add20Rows"), "Añadir 20 filas más")),
-           column(4, actionButton(ns('inputDat'), "Cargar datos", styleclass = 'primary', block = TRUE), tags$br(),
+           column(4, shiny::actionButton(ns('inputDat'), "Cargar datos", styleclass = 'primary', block = TRUE), tags$br(), tags$br(),
                   hotable(ns("TrnsDtEx")))))
 }
 
