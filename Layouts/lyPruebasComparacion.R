@@ -39,19 +39,19 @@ lyCompVarian <- fluidRow(column(6, box(title = tags$b('Varianza muestral contra 
                                     tags$h5('Prueba de Levene implementada en R por el paquete ', tags$b('car'), 
                                             ' [Fox y Weisberg, 2019]'))))
 
-lyCompANOVADscrp <- infoBox(width = 12, "Comparación de medias de varios grupos muestrales", color = 'light-blue',
+lyCompANOVADscrp <- infoBox(width = 12, "Comparación de medias de varios grupos muestrales", color = 'navy',
                          h4("La comparación de varioa medias muestrales evalua ..."))
-lyCompANOVA <- fluidRow(column(8, box(title = tags$b('Análisis de varianza'), width = 12, status = 'primary',
+lyCompANOVA <- fluidRow(column(6, box(title = tags$b('Análisis de varianza'), width = 12, status = 'primary',
                                       height = 400, comparacionANOVAUI('anovaMdl'))),
                     column(12, box(title = tags$b('Pruebas de detección de diferencias entre grupos'), width = 12, status = 'primary',
-                                   height = 1080, 
+                                   height = 1080,
                                    comparacionRanMulUI('ranMulAov')),
                            box(title = NULL, status = 'primary', width = 12, 
                                tags$h5('Prueba de Duncan para rangos múltiples y prueba de Fisher para diferencia mínima 
                                        significativa implementadas en R por el paquete ', tags$b('agricolae'), 
                                        ' [Mendiburu, 2020]'))))
 
-lyCompANCOVADscrp <- infoBox(width = 12, "Análisis de covarianza", color = 'light-blue',
+lyCompANCOVADscrp <- infoBox(width = 12, "Análisis de covarianza", color = 'navy',
                             h4("La comparación de ..."))
 lyCompANCOVA <- fluidRow(column(6, box(title = tags$b('Analisis de covarianza '), width = 12, status = 'primary',
                                       height = 500, comparacionANCOVAUI('ancovaMdl'))))

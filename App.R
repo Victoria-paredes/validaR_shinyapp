@@ -62,7 +62,8 @@ server <- function(input, output, session) {
   callModule(comparacionVarianServer_m, 'mulVarian', 
              nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
   aovModel <- callModule(comparacionANOVAServer, 'anovaMdl', 
-                         nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
+                         nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat, 
+                         formatP = formatP, dimensP = dimensP)
   callModule(comparacionRanMulServer, 'ranMulAov', aovModel = aovModel)
   callModule(comparacionANCOVAServer, 'ancovaMdl', 
              nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)

@@ -2,7 +2,7 @@ estadisticaDescriptivaUI <- function(id, IntID = 1, value0 = 10) {
   ns <- NS(id)
   #box(width = 12, 
   fluidRow(column(12, 
-                  box(width = 3,  status = 'primary', title = 'Datos para analizar',
+                  box(width = 3,  status = 'primary', title = tags$b('Datos para analizar'),
                       uiOutput(ns('selectSeries')),
                        selectizeInput(ns('valX'), label = "Seleccione una variable", width = '80%',
                                      choices = list('col.X1' = 1, 'col.X2' = 2, 'col.X3' = 3, 'col.X4' = 4)),
@@ -96,6 +96,8 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
   output$niceDixon      <- renderPrint(outliers::dixon.test(dataF()))
   
   output$DwnhistogramPlt <- dwldhndlr(name = 'Histograma', formatP = formatP, dimensP = dimensP, plt = histogramPlt())
+  output$DwnstackedDot   <- dwldhndlr(name = 'PuntosApilados', formatP = formatP, dimensP = dimensP, plt = stackedDot())
+  output$DwnDiagramaQQ   <- dwldhndlr(name = 'cuartilCuartil', formatP = formatP, dimensP = dimensP, plt = DiagramaQQ())
   
   #return(reactive(list(data = na.rm(MyChanges()), name = input$seriesName(), descr = input$dataDescrip)))
 }

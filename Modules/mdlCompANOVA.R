@@ -7,7 +7,7 @@ comparacionANOVAUI <- function(id) {
            column(8, verbatimTextOutput(ns('anova1'))))
 }
 
-comparacionANOVAServer <- function(input, output, session, nSeries, compl) {
+comparacionANOVAServer <- function(input, output, session, nSeries, compl, formatP, dimensP) {
   values <- paste0('Serie', 1:20)
   names(values) <- paste('Serie #', 1:20)
   
