@@ -27,9 +27,12 @@ ui <- function(request) {
 }
 
 server <- function(input, output, session) {
-  callModule(definicionesServer, 'definiciones')
-  configGen <- callModule(configGenServer, 'configDwnFiles')
+  formatP  <- reactive(input$Format)
+  dimensP  <- reactive(c(input$plotsW, input$plotsH) / 25.4 * 1.6)
   nRows <- reactive(input$nRows)
+  
+    callModule(definicionesServer, 'definiciones')
+  
   # Modulos de ingreso de datos
   datSeriesCompleteDat <- reactiveValues()
   for (i in 1:20) {
@@ -47,7 +50,7 @@ server <- function(input, output, session) {
   
   #Estadística descriptiva e inferencial
   callModule(estadisticaDescriptivaServer, 'EstDesc', nSeries = reactive(input$numDatSeriesManual),
-             compl = datSeriesCompleteDat, configDwn = configGen)
+             compl = datSeriesCompleteDat, formatP = formatP, dimensP = dimensP)
   callModule(comparacionMediasServer_1, 'mediaVsReferencia', 
              nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
   callModule(comparacionMediasServer_2, 'dosMedias', 

@@ -13,7 +13,7 @@ introduccionLy <- fluidRow(
                 de métodos analíticos cuantitativos. El propósito de ", tags$b("validaR"), " es apoyar en el tratamiento de
                 datos experimentales de validación con el fin de que las personas puedan enfocarse en la parte importante del proceso: 
                 documentar los resultados, obtener las conclusiones, y escoger rutas de acción cuando estas sean necesarias.",
-               tags$br(), tags$br(),
+               tags$br(),
                # "Los ejemplos expuestos en la guía de validación se desarrollaron en esta aplicación. Los 
                #  datos de los ejemplos que se incluyen en la guía aparecenpara que, entre otras cosas, el usuario 
                # final se damiliarice con las
@@ -29,8 +29,10 @@ introduccionLy <- fluidRow(
                  tags$li("Los datos de los ejemplos incluídos en la Guía de Validación están disponibles en la opción ", 
                          icon("folder-open"), tags$b("Datos de ejemplos.")), tags$br(),
                  tags$li("Los gráficos que produce la aplicación pueden descargarse en formato PDF o PNG.
-                         El formato de los archivos y su tamaño deberán seleccionarse en ",
-                         icon("cog"), tags$b("Configuración general,"), " en el recuadro ", tags$b('Archivos de imagen')), tags$br(),
+                         El formato de los archivos y su tamaño se configuran en la sección",
+                         icon("cog"), tags$b("Configuración archivos."), 
+                         "Algunas opciones de los gráficos pueden personalizarse haciendo seleccionando el botón 
+                         circular rojo que se encuentra cerca de cada gráfico."), tags$br(),
                  tags$li("Para guardar el estado de la aplicación en cualquier momento dado, haga click en el botón", 
                          icon("link"), tags$b("Guardar..."), "copie y guarde el link que se genera.
                          Use dicho link para acceder a la aplicación cuando desee continuar.", 

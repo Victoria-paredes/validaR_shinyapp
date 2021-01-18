@@ -2,11 +2,11 @@ estadisticaDescriptivaUI <- function(id, IntID = 1, value0 = 10) {
   ns <- NS(id)
   #box(width = 12, 
   fluidRow(column(12, 
-                  box(width = 3,  status = 'primary',
+                  box(width = 3,  status = 'primary', title = 'Datos para analizar',
                       uiOutput(ns('selectSeries')),
-                      selectizeInput(ns('valX'), label = "Variable para describir", width = '80%',
+                       selectizeInput(ns('valX'), label = "Seleccione una variable", width = '80%',
                                      choices = list('col.X1' = 1, 'col.X2' = 2, 'col.X3' = 3, 'col.X4' = 4)),
-                      actionButton(ns("descrStat"), label = 'Calcular descriptores estadísticos', styleclass = 'primary')#,
+                      shiny::actionButton(ns("descrStat"), label = 'Calcular descriptores estadísticos', styleclass = 'primary')#,
                       #tableOutput(ns('dataseries'))
                       ),
                   box(title = tags$b("Descriptores estadísticos"), width = 3,  status = 'primary', 
@@ -40,8 +40,8 @@ estadisticaDescriptivaUI <- function(id, IntID = 1, value0 = 10) {
                                   downloadButton(ns('DwnDiagramaQQ'), label = 'Descargar gráfico')))),
            
           column(6, tabBox(title = tags$b('Pruebas de normalidad'), width = 12, height = '600px',
-                            tabPanel("Prueba de Shapiro-Wilk", htmlOutput(ns('niceShapWilk'))),
-                            tabPanel("Prueba de Kolmogorov-Smirnof", htmlOutput(ns('niceKolmoSmir'))))),
+                            tabPanel("Shapiro-Wilk", htmlOutput(ns('niceShapWilk'))),
+                            tabPanel("Kolmogorov-Smirnof", htmlOutput(ns('niceKolmoSmir'))))),
           column(6, tabBox(title = tags$b('Pruebas de datos anómalos'), width = 12, height = '600px',
                            tabPanel("Criterios de Grubbs", 
                                     htmlOutput(ns('niceGrubs1')), htmlOutput(ns('niceGrubs2')), htmlOutput(ns('niceGrubs3'))),
@@ -49,7 +49,7 @@ estadisticaDescriptivaUI <- function(id, IntID = 1, value0 = 10) {
   )#)
 }
 
-estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl, configDwn) {
+estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl, formatP, dimensP) {
   values <- paste0('Serie', 1:20)
   names(values) <- paste('Serie #', 1:20)
   output$selectSeries <- renderUI(selectInput(session$ns("selectedSeries"), label = 'Seleccione un conjunto de datos',
@@ -58,10 +58,10 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
   
   dataF <- eventReactive(input$descrStat, compl[[input$selectedSeries]]$data()[, as.numeric(input$valX)])
   
-  descripTabRc <- reactive(data.frame(Estadístico = c("Promedio", "Desv. Estándar", "Desv. estándar relativa", "",
+  descripTabRc <- reactive(data.frame(Estadístico = c("Promedio", "Desv. Estándar", "Desv. estándar relativa (%)", "",
                                                           "Mediana", "Número de datos", "Valor mínimo", "Valor máximo", "Rango"), 
                                            Valor = c(signif(mean(dataF()), 4), signif(sd(dataF()), 4), 
-                                                     signif(sd(dataF())/mean(dataF()), 4), NA, signif(median(dataF()), 4), 
+                                                     signif(sd(dataF())/mean(dataF()) * 100, 4), NA, signif(median(dataF()), 4), 
                                                      length(dataF()), min(dataF()), max(dataF()), (max(dataF()) - min(dataF())))))
   
   histogramPlt <-  reactive({
@@ -95,6 +95,7 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
   output$niceGrubs3     <- renderPrint(outliers::grubbs.test(dataF(), type = 20))
   output$niceDixon      <- renderPrint(outliers::dixon.test(dataF()))
   
+  output$DwnhistogramPlt <- dwldhndlr(name = 'Histograma', formatP = formatP, dimensP = dimensP, plt = histogramPlt())
   
   #return(reactive(list(data = na.rm(MyChanges()), name = input$seriesName(), descr = input$dataDescrip)))
 }
