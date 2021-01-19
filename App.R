@@ -31,7 +31,7 @@ server <- function(input, output, session) {
   dimensP  <- reactive(c(input$plotsW, input$plotsH) / 25.4 * 1.6)
   nRows <- reactive(input$nRows)
   
-    callModule(definicionesServer, 'definiciones')
+  callModule(definicionesServer, 'definiciones')
   
   # Modulos de ingreso de datos
   datSeriesCompleteDat <- reactiveValues()

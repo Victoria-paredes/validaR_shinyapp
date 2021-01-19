@@ -18,7 +18,8 @@ customSidebar <- dashboardSidebar(tags$style(".left-side, .main-sidebar {padding
                                                 sliderInput("plotsH", label = "altura del gráfico (mm)", 
                                                             min = 40, max = 300, value = 60)),
                                        tabName = "config"),
-                       bookmarkButton(label = 'Guardar...', 
+                       tags$hr(),
+                       bookmarkButton(label = 'Guardar estado de la app', 
                                       title = 'Genera una dirección URL que guarda la información 
                                             ingresada en la applicación para posterior uso.'),
                        tags$hr(),

@@ -6,7 +6,7 @@ comparacionMediasUI_1 <- function(id) {
                                choices = list('H1: bar{x} neq \\(\\mu_0\\)' = 'two.sided', 
                                               'H1: bar{x} < mu_0' = 'less', 
                                               'H1: bar{x} > mu_0' = 'greater')), 
-                  sliderInput(ns('signif'), label = 'Significancia de la prueba', 
+                  sliderInput(ns('signif'), label = 'Nivel de confianza:', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
            column(8, verbatimTextOutput(ns('t_test1sample'))))
@@ -32,10 +32,10 @@ comparacionMediasUI_2 <- function(id) {
   fluidRow(column(4, uiOutput(ns('selectSeries')),
                   #numericInput(ns('valRef'), label = 'Ingrese valor de referencia', width = '100%', value = 0),
                   radioButtons(ns('hypAlter'), label = 'Seleccione hipótesis alternativa',
-                               choices = list('H1: bar{x} neq \\(\\mu_0\\)' = 'two.sided', 
+                               choices = list('H1: bar{x} \\(\\neq\\) \\(\\mu_0\\)' = 'two.sided', 
                                               'H1: bar{x} < mu_0' = 'less', 
                                               'H1: bar{x} > mu_0' = 'greater')), 
-                  sliderInput(ns('signif'), label = 'Significancia de la prueba', 
+                  sliderInput(ns('ConfLev'), label = 'Nivel de confianza:', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   materialSwitch(ns('paired'), label = 'Muestras emparejadas', value = FALSE, status = "primary"),
                   actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
@@ -54,7 +54,7 @@ comparacionMediasServer_2 <- function(input, output, session, nSeries, compl) {
     output$t_test2samples <- renderPrint(t.test(x = compl[[input$selectedSeries[1]]]$data()[, 1],
                                                y = compl[[input$selectedSeries[2]]]$data()[, 1],
                                                alternative = input$hypAlter, 
-                                               conf.level = input$signif,
+                                               conf.level = input$ConfLev,
                                                paired = input$paired))
   })
 }

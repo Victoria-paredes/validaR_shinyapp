@@ -3,8 +3,7 @@
 #lyPruebasComparacion <- box(width = 12,
 #                            lyPruebasComparacionDscrp)
 
-
-lyCompMediasDscrp <- infoBox(width = 12, "Pruebas de comparación de medias", color = 'light-blue',
+lyCompMediasDscrp <- infoBox(width = 12, "Instrucciones", color = 'navy',
                              h4("hablar de los tres tipos más importantes... "),
                              h5("Se recomienda que los datos seleccionados sean de naturaleza univariada. 
                                 En conjuntos de datos de otro tipo de naturaleza solo se tiene en cuenta la primera columna."))
@@ -18,7 +17,7 @@ lyCompMedias <- fluidRow(column(6, box(title = tags$b('Media muestral contra un 
                                 h4('Para  comparar las medias de varios grupos muestrales por favor diríjase a la sección de 
                                    análisis de varianza (ANOVA).'))))
 
-lyCompVarianDscrp <- infoBox(width = 12, "Pruebas de comparación de varianza", color = 'light-blue',
+lyCompVarianDscrp <- infoBox(width = 12, "Instrucciones", color = 'navy',
                              h4("hablar de los tres tipos más importantes"))
 lyCompVarian <- fluidRow(column(6, box(title = tags$b('Varianza muestral contra un valor de referencia (prueba \\(\\chi^2\\))'), 
                                        solidHeader = FALSE, width = 12, status = 'primary',

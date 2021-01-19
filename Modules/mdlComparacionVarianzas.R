@@ -10,7 +10,7 @@ comparacionVarianUI_1 <- function(id) {
                                choices = list('H1: bar{x} neq \\(\\mu_0\\)' = 'two.sided', 
                                               'H1: bar{x} < mu_0' = 'less', 
                                               'H1: bar{x} > mu_0' = 'greater')), 
-                  sliderInput(ns('signif'), label = 'Seleccione la significancia de la prueba', 
+                  sliderInput(ns('ConfLev'), label = 'Nivel de confianza:', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
            column(8, verbatimTextOutput(ns('chi_test1sample'))))
@@ -31,7 +31,7 @@ comparacionVarianServer_1 <- function(input, output, session, nSeries, compl) {
     output$chi_test1sample <- renderPrint(EnvStats::varTest(x = compl[[input$selectedSeries]]$data()[, 1],
                                                           alternative = input$hypAlter, 
                                                           sigma.squared = sigma.squared(),
-                                                          conf.level = input$signif))
+                                                          conf.level = input$ConfLev))
   })
 }
 
@@ -43,7 +43,7 @@ comparacionVarianUI_2 <- function(id) {
                                choices = list('H1: bar{x} neq \\(\\mu_0\\)' = 'two.sided', 
                                               'H1: bar{x} < mu_0' = 'less', 
                                               'H1: bar{x} > mu_0' = 'greater')), 
-                  sliderInput(ns('signif'), label = 'Seleccione la significancia de la prueba', 
+                  sliderInput(ns('ConfLev'), label = 'Nivel de confianza:', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
            column(8, verbatimTextOutput(ns('F_test2sample'))))
@@ -61,7 +61,7 @@ comparacionVarianServer_2 <- function(input, output, session, nSeries, compl) {
     output$F_test2sample <- renderPrint(var.test(x = compl[[input$selectedSeries[1]]]$data()[, 1],
                                                  y = compl[[input$selectedSeries[2]]]$data()[, 1],
                                                  alternative = input$hypAlter, 
-                                                 conf.level = input$signif))})
+                                                 conf.level = input$ConfLev))})
 }
 
 comparacionVarianUI_m <- function(id) {
@@ -69,7 +69,7 @@ comparacionVarianUI_m <- function(id) {
   fluidRow(column(2, 
                   uiOutput(ns('selectSeries')),
                   #numericInput(ns('valRef'), label = 'Ingrese valor de referencia', width = '100%', value = 0),
-                  sliderInput(ns('signif'), label = 'Seleccione la significancia de la prueba', 
+                  sliderInput(ns('ConfLev'), label = 'Nivel de confianza:', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
            column(10, box(title = tags$b('Prueba de Barlett'), status = 'primary', width = 6, height = 250, 

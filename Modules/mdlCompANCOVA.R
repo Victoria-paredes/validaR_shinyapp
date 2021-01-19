@@ -3,7 +3,7 @@ comparacionANCOVAUI <- function(id) {
   fluidRow(column(4, uiOutput(ns('selectSeries')),
                   selectInput(ns("selCovariate"), label = 'Seleccione la columna con la covariable', 
                               choices = list('var.X2' = 2, 'var.X2' = 2, 'var.X2' = 2), width = '100%'),
-                  sliderInput(ns('signif'), label = 'Seleccione la significancia de la prueba', 
+                  sliderInput(ns('ConfLev'), label = 'Nivel de confianza:', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
            column(8, verbatimTextOutput(ns('ancova1'))))

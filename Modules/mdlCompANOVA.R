@@ -1,7 +1,7 @@
 comparacionANOVAUI <- function(id) {
   ns <- NS(id)
   fluidRow(column(4, uiOutput(ns('selectSeries')),
-                  sliderInput(ns('signif'), label = 'Seleccione la significancia de la prueba', 
+                  sliderInput(ns('ConfLev'), label = 'Nivel de confianza:', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
            column(8, verbatimTextOutput(ns('anova1'))))
@@ -31,7 +31,7 @@ comparacionANOVAServer <- function(input, output, session, nSeries, compl, forma
   })
   
   output$anova1 <- renderPrint(summary(anovaReac()))
-  return(list('aovSum' = anovaReac, 'aovSig' = reactive(input$signif)))
+  return(list('aovSum' = anovaReac, 'aovSig' = reactive(input$ConfLev)))
 }
 
 

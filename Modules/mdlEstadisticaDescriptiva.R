@@ -4,8 +4,10 @@ estadisticaDescriptivaUI <- function(id, IntID = 1, value0 = 10) {
   fluidRow(column(12, 
                   box(width = 3,  status = 'primary', title = tags$b('Datos para analizar'),
                       uiOutput(ns('selectSeries')),
-                       selectizeInput(ns('valX'), label = "Seleccione una variable", width = '80%',
+                      selectizeInput(ns('valX'), label = "Seleccione una variable", width = '80%',
                                      choices = list('col.X1' = 1, 'col.X2' = 2, 'col.X3' = 3, 'col.X4' = 4)),
+                      sliderInput(ns('ConfLev'), label = 'Nivel de confianza para las pruebas de normalidad y de datos anómalos:', 
+                                  min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                       shiny::actionButton(ns("descrStat"), label = 'Calcular descriptores estadísticos', styleclass = 'primary')#,
                       #tableOutput(ns('dataseries'))
                       ),
@@ -39,12 +41,12 @@ estadisticaDescriptivaUI <- function(id, IntID = 1, value0 = 10) {
                                   plotOutput(ns('DiagramaQQ')),
                                   downloadButton(ns('DwnDiagramaQQ'), label = 'Descargar gráfico')))),
            
-          column(6, tabBox(title = tags$b('Pruebas de normalidad'), width = 12, height = '600px',
+          column(6, tabBox(title = tags$b('Pruebas de normalidad'), width = 12, height = '400px',
                             tabPanel("Shapiro-Wilk", htmlOutput(ns('niceShapWilk'))),
                             tabPanel("Kolmogorov-Smirnof", htmlOutput(ns('niceKolmoSmir'))))),
-          column(6, tabBox(title = tags$b('Pruebas de datos anómalos'), width = 12, height = '600px',
+          column(6, tabBox(title = tags$b('Pruebas de datos anómalos'), width = 12, height = '400px',
                            tabPanel("Criterios de Grubbs", 
-                                    htmlOutput(ns('niceGrubs1')), htmlOutput(ns('niceGrubs2')), htmlOutput(ns('niceGrubs3'))),
+                                    htmlOutput(ns('niceGrubs10')), htmlOutput(ns('niceGrubs11')), htmlOutput(ns('niceGrubs20'))),
                            tabPanel("Criterio de Dixon", htmlOutput(ns('niceDixon')))))
   )#)
 }
@@ -84,16 +86,58 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
     return(p)
   })
   
+  niceShapWilk <- reactive({
+    SW <- shapiro.test(dataF())
+    SWtx <- ifelse(SW$p.value <= (1 - input$ConfLev),
+                   'La muestra estadística (NO PASA) xxx. Valor p de la prueba: ',
+                   'La muestra estadística (SÍ PASA) .... Valor p de la prueba:')
+    return(tags$h4(SWtx, tags$b(pround(SW$p.value, digits = 4), '.')))})
+  
+  niceKolmoSmir <- reactive({
+    KS <- ks.test(dataF(), y = 'pnorm')
+    KStx <- ifelse(KS$p.value <= (1 - input$ConfLev),
+                   'La muestra estadística (NO PASA) xxx. Valor p de la prueba: ',
+                   'La muestra estadística (SÍ PASA) .... Valor p de la prueba:')
+    return(tags$h4(KStx, tags$b(pround(KS$p.value, digits = 4), '.')))})
+  
+  niceGrubs10 <- reactive({
+    Gr10 <- outliers::grubbs.test(dataF(), type = 10)
+    Gr10tx <- ifelse(Gr10$p.value <= (1 - input$ConfLev),
+                   'La muestra estadística (NO PASA) xxx. Valor p de la prueba: ',
+                   'La muestra estadística (SÍ PASA) .... Valor p de la prueba:')
+    return(tags$h4(Gr10tx, tags$b(pround(Gr10$p.value, digits = 4), '.')))})
+  
+  niceGrubs11 <- reactive({
+    Gr11 <- outliers::grubbs.test(dataF(), type = 11)
+    Gr11tx <- ifelse(Gr11$p.value <= (1 - input$ConfLev),
+                     'La muestra estadística (NO PASA) xxx. Valor p de la prueba: ',
+                     'La muestra estadística (SÍ PASA) .... Valor p de la prueba:')
+    return(tags$h4(Gr11tx, tags$b(pround(Gr11$p.value, digits = 4), '.')))})
+  
+  niceGrubs20 <- reactive({
+    Gr20 <- outliers::grubbs.test(dataF(), type = 20)
+    Gr20tx <- ifelse(Gr20$p.value <= (1 - input$ConfLev),
+                     'La muestra estadística (NO PASA) xxx. Valor p de la prueba: ',
+                     'La muestra estadística (SÍ PASA) .... Valor p de la prueba:')
+    return(tags$h4(Gr20tx, tags$b(pround(Gr20$p.value, digits = 4), '.')))})
+  
+  niceDixon <- reactive({
+    Dix <- outliers::dixon.test(dataF())
+    Dixtx <- ifelse(Dix$p.value <= (1 - input$ConfLev),
+                     'La muestra estadística (NO PASA) xxx. Valor p de la prueba: ',
+                     'La muestra estadística (SÍ PASA) .... Valor p de la prueba:')
+    return(tags$h4(Dixtx, tags$b(pround(Dix$p.value, digits = 4), '.')))})
+  
   output$descripTab     <- renderTable(descripTabRc())
   output$histogramPlt   <- renderPlot(histogramPlt())
   output$stackedDot     <- renderPlot(stackedDot())
   output$DiagramaQQ     <- renderPlot(DiagramaQQ())
-  output$niceShapWilk   <- renderPrint(shapiro.test(dataF()))
-  output$niceKolmoSmir  <- renderPrint(ks.test(dataF(), y = 'pnorm'))
-  output$niceGrubs1     <- renderPrint(outliers::grubbs.test(dataF(), type = 10))
-  output$niceGrubs2     <- renderPrint(outliers::grubbs.test(dataF(), type = 11))
-  output$niceGrubs3     <- renderPrint(outliers::grubbs.test(dataF(), type = 20))
-  output$niceDixon      <- renderPrint(outliers::dixon.test(dataF()))
+  output$niceShapWilk   <- renderPrint(niceShapWilk())
+  output$niceKolmoSmir  <- renderPrint(niceKolmoSmir())
+  output$niceGrubs10    <- renderPrint(niceGrubs10())
+  output$niceGrubs11    <- renderPrint(niceGrubs11())
+  output$niceGrubs20    <- renderPrint(niceGrubs20())
+  output$niceDixon      <- renderPrint(niceDixon())
   
   output$DwnhistogramPlt <- dwldhndlr(name = 'Histograma', formatP = formatP, dimensP = dimensP, plt = histogramPlt())
   output$DwnstackedDot   <- dwldhndlr(name = 'PuntosApilados', formatP = formatP, dimensP = dimensP, plt = stackedDot())
