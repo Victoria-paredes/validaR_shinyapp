@@ -4,21 +4,34 @@
 #                            lyPruebasComparacionDscrp)
 
 lyCompMediasDscrp <- infoBox(width = 12, "Instrucciones", color = 'navy',
-                             h4("hablar de los tres tipos más importantes... "),
-                             h5("Se recomienda que los datos seleccionados sean de naturaleza univariada. 
-                                En conjuntos de datos de otro tipo de naturaleza solo se tiene en cuenta la primera columna."))
+                             h5("Este módulo permite comparar una media muestral contra un valor de referencia o contra
+                                otra media muestral. Para el caso de dos medias muestrales, los datos de las muestras estadísticas 
+                                pueden ser independientes o puede tratarse de datos emparejados.", tags$br(),
+                                "Los conjuntos de datos a analizar deben ser de naturaleza univariada. 
+                                Si la serie de datos contiene varias 
+                                columnas activas, la aplicación solo tiene en cuenta la primera de estas.", tags$br(),
+                                tags$ul(
+                                  tags$li('Comparar una media muestral contra un valor de referencia requiere un conjunto de datos,
+                                          el valor de referencia, una hipótesis alternativa y un nivel de confianza para la prueba.
+                                          El valor de referencia debe estar en las mismas unidades que los valores del conjunto de 
+                                          datos que  compone la muestra estadística.'),
+                                  tags$li('Para comparar dos muestras estadísticas es necesario escoger los conjuntos de datos,
+                                          una hipótesis alternativa y un nivel de confianza. Las muestras pueden ser independientes 
+                                          o pueden estar emparejadas, en cuyo caso debe activarse la opción de muestras emparejadas.
+                                          Si las muestras estadísticas son independientes, la aplicación autom+aticamente verifica 
+                                          si las varianzas son homogéneas o no, para calcular el estadístico t que corresponda.'),
+                                  #tags$li(''),
+                                  tags$li('Para  comparar las medias de más de dos grupos muestrales por favor diríjase a la 
+                                          sección', tags$b('Análisis de varianza (ANOVA).')))))
 lyCompMedias <- fluidRow(column(6, box(title = tags$b('Media muestral contra un valor de referencia (prueba t)'),
                                        width = 12, status = 'primary',
                                        height = 500, comparacionMediasUI_1('mediaVsReferencia'))),
                          column(6, box(title = tags$b('Media muestral contra otra media muestral (prueba t)'), 
                                        width = 12, status = 'primary',
-                                       height = 500, comparacionMediasUI_2('dosMedias'))), tags$br(), 
-                         column(12, box(title = NULL, width = 12, status = 'primary',
-                                h4('Para  comparar las medias de varios grupos muestrales por favor diríjase a la sección de 
-                                   análisis de varianza (ANOVA).'))))
+                                       height = 500, comparacionMediasUI_2('dosMedias'))), tags$br())
 
 lyCompVarianDscrp <- infoBox(width = 12, "Instrucciones", color = 'navy',
-                             h4("hablar de los tres tipos más importantes"))
+                             h5("hablar de los tres tipos más importantes"))
 lyCompVarian <- fluidRow(column(6, box(title = tags$b('Varianza muestral contra un valor de referencia (prueba \\(\\chi^2\\))'), 
                                        solidHeader = FALSE, width = 12, status = 'primary',
                                        height = 570, comparacionVarianUI_1('varianVsReferencia'))),

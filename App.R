@@ -10,7 +10,6 @@ library(BHH2) # dotPlot(faithful$waiting, pch = 16)
 
 #actionButton <- shiny::actionButton() #Unmask actionbutton
 #library(pracma) # ODR
-
 #library(ggvis) #ggvis: Interactive Grammar of Graphics - input_slider: Create an interactive slider.
 
 

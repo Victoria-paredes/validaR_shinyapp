@@ -91,42 +91,42 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
     SWtx <- ifelse(SW$p.value <= (1 - input$ConfLev),
                    'La muestra estadística (NO PASA) xxx. Valor p de la prueba: ',
                    'La muestra estadística (SÍ PASA) .... Valor p de la prueba:')
-    return(tags$h4(SWtx, tags$b(pround(SW$p.value, digits = 4), '.')))})
+    return(tags$h4(SWtx, tags$b(pround(SW$p.value, digits = 4))))})
   
   niceKolmoSmir <- reactive({
     KS <- ks.test(dataF(), y = 'pnorm')
     KStx <- ifelse(KS$p.value <= (1 - input$ConfLev),
                    'La muestra estadística (NO PASA) xxx. Valor p de la prueba: ',
                    'La muestra estadística (SÍ PASA) .... Valor p de la prueba:')
-    return(tags$h4(KStx, tags$b(pround(KS$p.value, digits = 4), '.')))})
+    return(tags$h4(KStx, tags$b(pround(KS$p.value, digits = 4))))})
   
   niceGrubs10 <- reactive({
     Gr10 <- outliers::grubbs.test(dataF(), type = 10)
     Gr10tx <- ifelse(Gr10$p.value <= (1 - input$ConfLev),
                    'La muestra estadística (NO PASA) xxx. Valor p de la prueba: ',
                    'La muestra estadística (SÍ PASA) .... Valor p de la prueba:')
-    return(tags$h4(Gr10tx, tags$b(pround(Gr10$p.value, digits = 4), '.')))})
+    return(tags$h4(Gr10tx, tags$b(pround(Gr10$p.value, digits = 4))))})
   
   niceGrubs11 <- reactive({
     Gr11 <- outliers::grubbs.test(dataF(), type = 11)
     Gr11tx <- ifelse(Gr11$p.value <= (1 - input$ConfLev),
                      'La muestra estadística (NO PASA) xxx. Valor p de la prueba: ',
                      'La muestra estadística (SÍ PASA) .... Valor p de la prueba:')
-    return(tags$h4(Gr11tx, tags$b(pround(Gr11$p.value, digits = 4), '.')))})
+    return(tags$h4(Gr11tx, tags$b(pround(Gr11$p.value, digits = 4))))})
   
   niceGrubs20 <- reactive({
     Gr20 <- outliers::grubbs.test(dataF(), type = 20)
     Gr20tx <- ifelse(Gr20$p.value <= (1 - input$ConfLev),
                      'La muestra estadística (NO PASA) xxx. Valor p de la prueba: ',
                      'La muestra estadística (SÍ PASA) .... Valor p de la prueba:')
-    return(tags$h4(Gr20tx, tags$b(pround(Gr20$p.value, digits = 4), '.')))})
+    return(tags$h4(Gr20tx, tags$b(pround(Gr20$p.value, digits = 4))))})
   
   niceDixon <- reactive({
     Dix <- outliers::dixon.test(dataF())
     Dixtx <- ifelse(Dix$p.value <= (1 - input$ConfLev),
                      'La muestra estadística (NO PASA) xxx. Valor p de la prueba: ',
                      'La muestra estadística (SÍ PASA) .... Valor p de la prueba:')
-    return(tags$h4(Dixtx, tags$b(pround(Dix$p.value, digits = 4), '.')))})
+    return(tags$h4(Dixtx, tags$b(pround(Dix$p.value, digits = 4))))})
   
   output$descripTab     <- renderTable(descripTabRc())
   output$histogramPlt   <- renderPlot(histogramPlt())
