@@ -9,13 +9,48 @@ comparacionMediasUI_1 <- function(id) {
                   sliderInput(ns('ConfLev'), label = 'Nivel de confianza:', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   shiny::actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
-           column(8, htmlOutput(ns('t_test1sample'))))
+           column(8, uiOutput(ns('t_test1sample'))))
+}
+
+comparacionMediasServer_1 <- function(input, output, session, nSeries, compl) {
+   values <- paste0('Serie', 1:20)
+  names(values) <- paste('Serie #', 1:20)
+  
+  output$selectSeries <- renderUI(selectInput(session$ns("selectedSeries"), label = 'Seleccione un conjunto de datos',
+                                              #choices = list('Series 1' = 1, 'Series 2' = 2)))
+                                              choices = values[1:nSeries()]))
+  
+  dataF <- eventReactive(input$doCompare, compl[[input$selectedSeries]]$data()[, 1])
+  
+  T1 <- eventReactive(input$doCompare, {
+    t.test(x = dataF(), alternative = input$hypAlter,  mu = input$valRef, conf.level = input$ConfLev)})
+  
+  t_test1sample <- eventReactive(input$doCompare, {
+    if(T1()$p.value <= (1 - input$ConfLev)) {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
+                 footer = 'Resultados estadísticamente significativos al nivel de confianza escogido.',
+                 tags$h4('La muestra estadística (NO PASA) xxx.'),
+                 tags$br(), tableOutput(session$ns("tableResults"))))
+    } else {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
+                 footer = 'Resultados estadísticamente no significativos al nivel de confianza escogido.',
+                 tags$h4('La muestra estadística (PASA) xxx.'), 
+                 tags$br(), tableOutput(session$ns("tableResults"))))
+    }
+  })
+  
+  tableResults <- reactive(
+    data.frame('Datos prueba' = c('Valor p', 'Media muestral', 'Error estándar de la media', 'Intervalo de confianza:', 
+                                  '~, límite inferior', '~, límite superior', 'Nivel de confianza (%)'), 
+               'Valor' = c(T1()$p.value, T1()$estimate, T1()$stderr, NA, T1()$conf.int[1], T1()$conf.int[2], (input$ConfLev * 100))))
+
+  output$tableResults <- renderTable(tableResults())
+  output$t_test1sample <- renderUI(t_test1sample())
 }
 
 comparacionMediasUI_2 <- function(id) {
   ns <- NS(id)
   fluidRow(column(4, uiOutput(ns('selectSeries')),
-                  #numericInput(ns('valRef'), label = 'Ingrese valor de referencia', width = '100%', value = 0),
                   radioButtons(ns('hypAlter'), label = 'Hipótesis alternativa',
                                choices = list('\\(H_1\\!\\!: \\,\\bar{x}_1 \\neq \\bar{x}_2\\)' = 'two.sided', 
                                               '\\(H_1\\!\\!: \\,\\bar{x}_1 < \\bar{x}_2\\)' = 'less', 
@@ -24,56 +59,52 @@ comparacionMediasUI_2 <- function(id) {
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   materialSwitch(ns('paired'), label = 'Muestras emparejadas', value = FALSE, status = "primary"),
                   shiny::actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
-           column(8, htmlOutput(ns('t_test2samples'))))
-}
-
-
-
-
-comparacionMediasServer_1 <- function(input, output, session, nSeries, compl) {
-  values <- paste0('Serie', 1:20)
-  names(values) <- paste('Serie #', 1:20)
-  
-  output$selectSeries <- renderUI(selectInput(session$ns("selectedSeries"), label = 'Seleccione un conjunto de datos',
-                                              #choices = list('Series 1' = 1, 'Series 2' = 2)))
-                                              choices = values[1:nSeries()]))
-  t_test1sample <- eventReactive(input$doCompare, {
-    T1 <- t.test(x = compl[[input$selectedSeries]]$data()[, 1],
-                 alternative = input$hypAlter, 
-                 mu = input$valRef,
-                 conf.level = input$ConfLev)
-    T1tx <- ifelse(T1$p.value <= (1 - input$ConfLev),
-                   'La muestra estadística (NO PASA) xxx. Valor p de la prueba: ',
-                   'La muestra estadística (SÍ PASA) .... Valor p de la prueba:')
-    return(tags$h4(T1tx, tags$b(pround(T1$p.value, digits = 4)), tags$br(),
-                   'Media aritmética muestral:', T1$estimate, tags$br(),
-                   'Intervalo de confianza para la media:', T1$conf.int, 'a un', 
-                   input$ConfLev * 100, '% de nivel de confianza.'))})
-  
-  output$t_test1sample <- renderPrint(t_test1sample())
+           column(8, uiOutput(ns('t_test2samples'))))
 }
 
 comparacionMediasServer_2 <- function(input, output, session, nSeries, compl) {
   values <- paste0('Serie', 1:20)
   names(values) <- paste('Serie #', 1:20)
-  
+##  
   output$selectSeries <- renderUI(selectizeInput(session$ns("selectedSeries"), label = 'Seleccione 2 conjuntos de datos', 
                                                  options = list(maxItems = 2), 
                                                  #choices = list('Series 1' = 1, 'Series 2' = 2)))
                                                  choices = values[1:nSeries()]))
-  t_test2samples <- eventReactive(input$doCompare, {
-    T2 <- t.test(x = compl[[input$selectedSeries[1]]]$data()[, 1],
-                 y = compl[[input$selectedSeries[2]]]$data()[, 1],
-                 alternative = input$hypAlter, 
-                 conf.level = input$ConfLev,
-                 paired = input$paired)
-    T2tx <- ifelse(T2$p.value <= (1 - input$ConfLev),
-                   'La muestra estadística (NO PASA) xxx. Valor p de la prueba: ',
-                   'La muestra estadística (SÍ PASA) .... Valor p de la prueba:')
-    return(tags$h4(T2tx, tags$b(pround(T2$p.value, digits = 4)), tags$br(),
-                   'Diferencia de las medias aritméticas muestrales:', T2$estimate, tags$br(),
-                   'Intervalo de confianza para la diferencia:', T2$conf.int, 'a un', 
-                   input$ConfLev * 100, '% de nivel de confianza.'))})
+  dataF1 <- eventReactive(input$doCompare, compl[[input$selectedSeries[1]]]$data()[, 1])
+  dataF2 <- eventReactive(input$doCompare, compl[[input$selectedSeries[2]]]$data()[, 1])
   
-    output$t_test2samples <- renderPrint(t_test2samples())
+  T2 <- eventReactive(input$doCompare, {
+    t.test(x = dataF1(), y = dataF2(), alternative = input$hypAlter, conf.level = input$ConfLev, paired = input$paired)})
+  
+  t_test2samples <- eventReactive(input$doCompare, {
+    if(T2()$p.value <= (1 - input$ConfLev)) {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
+                 footer = 'Resultados estadísticamente significativos al nivel de confianza escogido.',
+                 tags$h4('La muestra estadística (NO PASA) xxx.'),
+                 tags$br(), tableOutput(session$ns("tableResults"))))
+    } else {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
+                 footer = 'Resultados estadísticamente no significativos al nivel de confianza escogido.',
+                 tags$h4('La muestra estadística (PASA) xxx.'), 
+                 tags$br(), tableOutput(session$ns("tableResults"))))
+    }
+  })
+
+  tableResults <- eventReactive(input$doCompare, {
+    if (!input$paired) {
+      return(data.frame('Datos prueba' = c('Valor p', 'Diferencia de la medias', 'Error estándar de la diferencia', 
+                                           'Intervalo de confianza de la diferencia:', 
+                                           '~, límite inferior', '~, límite superior', 'Nivel de confianza (%)'), 
+               'Valor' = c(T2()$p.value, T2()$estimate[1] - T2()$estimate[2], T2()$stderr, NA, T2()$conf.int[1], T2()$conf.int[2], 
+                           (input$ConfLev * 100))))
+    } else {  
+      return(data.frame('Datos prueba' = c('Valor p', 'Media de las diferencias', 'Error estándar de la media de diferencias', 
+                                           'Intervalo de confianza de la media de diferencias:', 
+                                           '~, límite inferior', '~, límite superior', 'Nivel de confianza (%)'), 
+                        'Valor' = c(T2()$p.value, T2()$estimate[1] - T2()$estimate[2], T2()$stderr, NA, 
+                                    T2()$conf.int[1], T2()$conf.int[2], (input$ConfLev * 100))))
+    }})
+  
+  output$tableResults <- renderTable(tableResults())
+  output$t_test2samples <- renderUI(t_test2samples())
 }

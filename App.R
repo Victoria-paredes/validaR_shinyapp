@@ -53,7 +53,7 @@ server <- function(input, output, session) {
   callModule(comparacionMediasServer_1, 'mediaVsReferencia', 
              nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
   callModule(comparacionMediasServer_2, 'dosMedias', 
-             nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat) 
+             nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
   callModule(comparacionVarianServer_1, 'varianVsReferencia', 
              nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
   callModule(comparacionVarianServer_2, 'dosVarian', 

@@ -17,18 +17,20 @@ lyCompMediasDscrp <- infoBox(width = 12, "Instrucciones", color = 'navy',
                                           datos que  compone la muestra estadística.'),
                                   tags$li('Para comparar dos muestras estadísticas es necesario escoger los conjuntos de datos,
                                           una hipótesis alternativa y un nivel de confianza. Las muestras pueden ser independientes 
-                                          o pueden estar emparejadas, en cuyo caso debe activarse la opción de muestras emparejadas.
-                                          Si las muestras estadísticas son independientes, la aplicación autom+aticamente verifica 
-                                          si las varianzas son homogéneas o no, para calcular el estadístico t que corresponda.'),
+                                          o pueden estar emparejadas, en cuyo caso debe activarse la opción de muestras emparejadas
+                                          antes de correr el análisis.
+                                          Si las muestras estadísticas son independientes, la aplicación automáticamente verifica 
+                                          si las varianzas muestrales son homogéneas o no, para calcular el estadístico', tags$b('t'), 
+                                          'que corresponda según el caso.'),
                                   #tags$li(''),
                                   tags$li('Para  comparar las medias de más de dos grupos muestrales por favor diríjase a la 
                                           sección', tags$b('Análisis de varianza (ANOVA).')))))
 lyCompMedias <- fluidRow(column(6, box(title = tags$b('Media muestral contra un valor de referencia (prueba t)'),
                                        width = 12, status = 'primary',
-                                       height = 500, comparacionMediasUI_1('mediaVsReferencia'))),
+                                       height = 700, comparacionMediasUI_1('mediaVsReferencia'))),
                          column(6, box(title = tags$b('Media muestral contra otra media muestral (prueba t)'), 
                                        width = 12, status = 'primary',
-                                       height = 500, comparacionMediasUI_2('dosMedias'))), tags$br())
+                                       height = 700, comparacionMediasUI_2('dosMedias'))), tags$br())
 
 lyCompVarianDscrp <- infoBox(width = 12, "Instrucciones", color = 'navy',
                              h5("hablar de los tres tipos más importantes"))

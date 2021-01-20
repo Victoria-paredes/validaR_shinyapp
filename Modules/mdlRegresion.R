@@ -1,6 +1,6 @@
 regresionUI <- function(id) {
   ns <- NS(id)
-  box(title = '', width = 12, status = 'primary', height = 800, 
+  #box(title = '', width = 12, status = 'primary', height = 800, 
       fluidRow(
         box(title = '', width = 3, uiOutput(ns('selectSeries')),
             selectInput(ns('model'), label = 'Modelo de regresión:', 
@@ -43,7 +43,7 @@ regresionUI <- function(id) {
                infoBox(width = 12, "Analisis de varianza de la regresión", htmlOutput(ns('niceANOVAReg')),
                        color = 'light-blue', icon = icon("chart-line")))#)
       )
-      )
+   #   )
 }
 
 regresionServer <- function(input, output, session, nSeries, compl, configDwn) {
