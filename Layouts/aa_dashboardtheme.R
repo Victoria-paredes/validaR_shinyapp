@@ -91,9 +91,9 @@ customTheme <- shinyDashboardThemeDIY(
   ,boxDefaultColor = "rgb(210,214,220)"
   ,boxPrimaryColor = "rgb(44,62,80)"
   ,boxInfoColor = "rgb(210,214,220)"
-  ,boxSuccessColor = "rgba(0,255,213,1)"
+  ,boxSuccessColor = "rgba(0,166,90,1)"
   ,boxWarningColor = "rgb(52, 177, 201)"
-  ,boxDangerColor = "rgb(255,88,55)"
+  ,boxDangerColor = "rgb(221,75,57)"
   
   ,tabBoxTabColor = "rgb(248,248,248)"
   ,tabBoxTabTextSize = 14
