@@ -13,7 +13,7 @@ comparacionVarianUI_1 <- function(id) {
                   sliderInput(ns('ConfLev'), label = 'Nivel de confianza:', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   shiny::actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
-           column(8, verbatimTextOutput(ns('chi_test1sample'))))
+           column(8, uiOutput(ns('chi_test1sample'))))
 }
 
 comparacionVarianServer_1 <- function(input, output, session, nSeries, compl) {
@@ -27,12 +27,34 @@ comparacionVarianServer_1 <- function(input, output, session, nSeries, compl) {
       if(input$refUnits == 2) {return(input$valRef^2)} else {
         if(input$refUnits == 3) {return((input$valRef / 100 * mean(compl[[input$selectedSeries]]$data()[, 1]))^2)}}}
   )
-  observeEvent(input$doCompare, {
-    output$chi_test1sample <- renderPrint(EnvStats::varTest(x = compl[[input$selectedSeries]]$data()[, 1],
-                                                          alternative = input$hypAlter, 
-                                                          sigma.squared = sigma.squared(),
-                                                          conf.level = input$ConfLev))
-  })
+  Chi2 <- eventReactive(input$doCompare, {
+    EnvStats::varTest(x = compl[[input$selectedSeries]]$data()[, 1], alternative = input$hypAlter, 
+                      sigma.squared = sigma.squared(), conf.level = input$ConfLev)})
+  
+  chi_test1sample <- eventReactive(input$doCompare, {
+    if(Chi2()$p.value <= (1 - input$ConfLev)) {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
+                 footer = tags$span(style = "color:red", 
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (NO PASA) xxx.'),
+                 tags$br(), tableOutput(session$ns("tableResults"))))
+    } else {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
+                 footer = tags$span(style = "color:green", 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (PASA) xxx.'), 
+                 tags$br(), tableOutput(session$ns("tableResults"))))
+    }})
+  
+  tableResults <- reactive(
+    data.frame('Datos prueba' = c('Estadístico \\(\\chi^2\\)', 'Grados de libertad',
+                                  'Valor p', 'Varianza muestral', 'Intervalo de confianza:', 
+                                  '~, límite inferior', '~, límite superior', 'Nivel de confianza (%)'), 
+               'Valor' = c(Chi2()$statistic, Chi2()$parameters, Chi2()$p.value, Chi2()$estimate, NA, 
+                           Chi2()$conf.int[1], Chi2()$conf.int[2], (input$ConfLev * 100))))
+  
+  output$tableResults <- renderTable(tableResults())
+  output$chi_test1sample <- renderUI(chi_test1sample())
 }
 
 comparacionVarianUI_2 <- function(id) {
@@ -46,7 +68,7 @@ comparacionVarianUI_2 <- function(id) {
                   sliderInput(ns('ConfLev'), label = 'Nivel de confianza:', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   shiny::actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
-           column(8, verbatimTextOutput(ns('F_test2sample'))))
+           column(8, uiOutput(ns('F_test2sample'))))
 }
 
 comparacionVarianServer_2 <- function(input, output, session, nSeries, compl) {
@@ -57,11 +79,37 @@ comparacionVarianServer_2 <- function(input, output, session, nSeries, compl) {
                                                  options = list(maxItems = 2), 
                                                  #choices = list('Series 1' = 1, 'Series 2' = 2)))
                                                  choices = values[1:nSeries()]))
-  observeEvent(input$doCompare, {
-    output$F_test2sample <- renderPrint(var.test(x = compl[[input$selectedSeries[1]]]$data()[, 1],
-                                                 y = compl[[input$selectedSeries[2]]]$data()[, 1],
-                                                 alternative = input$hypAlter, 
-                                                 conf.level = input$ConfLev))})
+  
+  F2 <- eventReactive(input$doCompare, {
+    var.test(x = compl[[input$selectedSeries[1]]]$data()[, 1],
+             y = compl[[input$selectedSeries[2]]]$data()[, 1],
+             alternative = input$hypAlter, 
+             conf.level = input$ConfLev)})
+  
+  F_test2sample <- eventReactive(input$doCompare, {
+    if(F2()$p.value <= (1 - input$ConfLev)) {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
+                 footer = tags$span(style = "color:red", 
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (NO PASA) xxx.'),
+                 tags$br(), tableOutput(session$ns("tableResults"))))
+    } else {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
+                 footer = tags$span(style = "color:green", 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (PASA) xxx.'), 
+                 tags$br(), tableOutput(session$ns("tableResults"))))
+    }})
+  
+  tableResults <- reactive(
+    data.frame('Datos prueba' = c('Estadístico F', 'Grados de libertad', '~, numerador', '~, denominador',
+                                  'Valor p', 'Relación de varianzas', 'Intervalo de confianza:', 
+                                  '~, límite inferior', '~, límite superior', 'Nivel de confianza (%)'), 
+               'Valor' = c(F2()$statistic, NA, F2()$parameters[1], F2()$parameters[2], F2()$p.value, F2()$estimate, NA, 
+                           F2()$conf.int[1], F2()$conf.int[2], (input$ConfLev * 100))))
+  
+  output$tableResults <- renderTable(tableResults())
+  output$F_test2sample <- renderUI(F_test2sample())
 }
 
 comparacionVarianUI_m <- function(id) {

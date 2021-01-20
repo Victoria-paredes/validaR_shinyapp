@@ -42,9 +42,11 @@ comparacionMediasServer_1 <- function(input, output, session, nSeries, compl) {
   })
   
   tableResults <- reactive(
-    data.frame('Datos prueba' = c('Valor p', 'Media muestral', 'Error estándar de la media', 'Intervalo de confianza:', 
+    data.frame('Datos prueba' = c('Estadístico t', 'Grados de libertad',
+                                  'Valor p', 'Media muestral', 'Error estándar de la media', 'Intervalo de confianza:', 
                                   '~, límite inferior', '~, límite superior', 'Nivel de confianza (%)'), 
-               'Valor' = c(T1()$p.value, T1()$estimate, T1()$stderr, NA, T1()$conf.int[1], T1()$conf.int[2], (input$ConfLev * 100))))
+               'Valor' = c(T1()$statistic, T1()$parameter, T1()$p.value, 
+                           T1()$estimate, T1()$stderr, NA, T1()$conf.int[1], T1()$conf.int[2], (input$ConfLev * 100))))
 
   output$tableResults <- renderTable(tableResults())
   output$t_test1sample <- renderUI(t_test1sample())
@@ -96,16 +98,20 @@ comparacionMediasServer_2 <- function(input, output, session, nSeries, compl) {
 
   tableResults <- eventReactive(input$doCompare, {
     if (!input$paired) {
-      return(data.frame('Datos prueba' = c('Valor p', 'Diferencia de la medias', 'Error estándar de la diferencia', 
+      return(data.frame('Datos prueba' = c('Estadístico t', 'Grados de libertad',
+                                           'Valor p', 'Diferencia de la medias', 'Error estándar de la diferencia', 
                                            'Intervalo de confianza de la diferencia:', 
                                            '~, límite inferior', '~, límite superior', 'Nivel de confianza (%)'), 
-               'Valor' = c(T2()$p.value, T2()$estimate[1] - T2()$estimate[2], T2()$stderr, NA, T2()$conf.int[1], T2()$conf.int[2], 
+               'Valor' = c(T1()$statistic, T1()$parameter, T2()$p.value, T2()$estimate[1] - T2()$estimate[2], 
+                           T2()$stderr, NA, T2()$conf.int[1], T2()$conf.int[2], 
                            (input$ConfLev * 100))))
     } else {  
-      return(data.frame('Datos prueba' = c('Valor p', 'Media de las diferencias', 'Error estándar de la media de diferencias', 
+      return(data.frame('Datos prueba' = c('Estadístico t', 'Grados de libertad',
+                                           'Valor p', 'Media de las diferencias', 'Error estándar de la media de diferencias', 
                                            'Intervalo de confianza de la media de diferencias:', 
                                            '~, límite inferior', '~, límite superior', 'Nivel de confianza (%)'), 
-                        'Valor' = c(T2()$p.value, T2()$estimate[1] - T2()$estimate[2], T2()$stderr, NA, 
+                        'Valor' = c(T2()$statistic, T2()$parameter, 
+                                    T2()$p.value, T2()$estimate, T2()$stderr, NA, 
                                     T2()$conf.int[1], T2()$conf.int[2], (input$ConfLev * 100))))
     }})
   
