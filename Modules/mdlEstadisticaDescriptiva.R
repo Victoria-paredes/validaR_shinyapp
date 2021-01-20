@@ -41,11 +41,10 @@ estadisticaDescriptivaUI <- function(id, IntID = 1, value0 = 10) {
                                   plotOutput(ns('DiagramaQQ')),
                                   downloadButton(ns('DwnDiagramaQQ'), label = 'Descargar gráfico')))),
            
-          column(6, box(title = tags$b('Pruebas de normalidad'), width = 12, status = 'primary', #height = '400px',
-                        uiOutput(ns('niceShapWilk')), uiOutput(ns('niceKolmoSmir')))),
-          column(6, box(title = tags$b('Pruebas de datos anómalos'), width = 12, status = 'primary', # height = '400px',
-                        uiOutput(ns('niceGrubs10')), uiOutput(ns('niceGrubs11')), uiOutput(ns('niceGrubs20')),
-                        uiOutput(ns('niceDixon'))))
+          column(12, box(title = tags$b('Pruebas de normalidad'), width = 6, status = 'primary', #height = '400px',
+                        uiOutput(ns('niceShapWilk')), uiOutput(ns('niceKolmoSmir'))),
+                 box(title = tags$b('Pruebas de datos anómalos'), width = 6, status = 'primary', # height = '400px',
+                     uiOutput(ns('niceGrubs10')), uiOutput(ns('niceGrubs11')), uiOutput(ns('niceGrubs20')), uiOutput(ns('niceDixon'))))
   )#)
 }
 

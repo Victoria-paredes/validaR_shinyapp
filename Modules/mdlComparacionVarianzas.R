@@ -12,7 +12,7 @@ comparacionVarianUI_1 <- function(id) {
                                               'H1: bar{x} > mu_0' = 'greater')), 
                   sliderInput(ns('ConfLev'), label = 'Nivel de confianza:', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
-                  actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
+                  shiny::actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
            column(8, verbatimTextOutput(ns('chi_test1sample'))))
 }
 
@@ -45,7 +45,7 @@ comparacionVarianUI_2 <- function(id) {
                                               'H1: bar{x} > mu_0' = 'greater')), 
                   sliderInput(ns('ConfLev'), label = 'Nivel de confianza:', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
-                  actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
+                  shiny::actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
            column(8, verbatimTextOutput(ns('F_test2sample'))))
 }
 
@@ -71,7 +71,7 @@ comparacionVarianUI_m <- function(id) {
                   #numericInput(ns('valRef'), label = 'Ingrese valor de referencia', width = '100%', value = 0),
                   sliderInput(ns('ConfLev'), label = 'Nivel de confianza:', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
-                  actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
+                  shiny::actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
            column(10, box(title = tags$b('Prueba de Barlett'), status = 'primary', width = 6, height = 250, 
                           verbatimTextOutput(ns('outBarlett'))),
                   box(title = tags$b('Prueba de Levene'), status = 'primary', width = 6, height = 250, 

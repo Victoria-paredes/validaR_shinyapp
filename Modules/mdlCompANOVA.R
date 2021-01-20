@@ -39,13 +39,14 @@ comparacionANOVAServer <- function(input, output, session, nSeries, compl, forma
 comparacionRanMulUI <- function(id) {
   ns <- NS(id)
   fluidRow(column(12, actionButton(ns('doCompare'), label = "Analizar datos de ANOVA", styleclass = 'primary'), tags$hr()),
-           column(4, box(title = tags$b('Prueba de diferencia significativa mínima de Fisher'), width = 12, height = 900,
-                         tags$br(), verbatimTextOutput(ns('LSDFTest')), tags$br(), plotOutput(ns('LSDFPlot')))),
-           column(4, box(title = tags$b('Prueba de diferencias significativas de Tukey'), width = 12, height = 900,
-                         tags$br(), verbatimTextOutput(ns('TukeyTest')), tags$br(), plotOutput(ns('TukeyPlot')))),
-           column(4, box(title = tags$b('Prueba de rangos múltiples de Duncan'), width = 12, height = 900, 
-                         h5('Esto como se interpreta?'),
-                         tags$br(), verbatimTextOutput(ns('DuncanTest')), tags$br(), plotOutput(ns('DuncanPlot')))))
+           column(12, 
+                  box(title = tags$b('Prueba de diferencia significativa mínima de Fisher'), width = 4, height = 900,
+                      tags$br(), verbatimTextOutput(ns('LSDFTest')), tags$br(), plotOutput(ns('LSDFPlot'))),
+                  box(title = tags$b('Prueba de diferencias significativas de Tukey'), width = 4, height = 900,
+                      tags$br(), verbatimTextOutput(ns('TukeyTest')), tags$br(), plotOutput(ns('TukeyPlot'))),
+                  box(title = tags$b('Prueba de rangos múltiples de Duncan'), width = 4, height = 900, 
+                      h5('Esto como se interpreta?'),
+                      tags$br(), verbatimTextOutput(ns('DuncanTest')), tags$br(), plotOutput(ns('DuncanPlot')))))
 }
 
 comparacionRanMulServer <- function(input, output, session, aovModel) {
