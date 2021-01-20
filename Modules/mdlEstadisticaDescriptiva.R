@@ -41,13 +41,11 @@ estadisticaDescriptivaUI <- function(id, IntID = 1, value0 = 10) {
                                   plotOutput(ns('DiagramaQQ')),
                                   downloadButton(ns('DwnDiagramaQQ'), label = 'Descargar gráfico')))),
            
-          column(6, tabBox(title = tags$b('Pruebas de normalidad'), width = 12, height = '400px',
-                            tabPanel("Shapiro-Wilk", htmlOutput(ns('niceShapWilk'))),
-                            tabPanel("Kolmogorov-Smirnof", htmlOutput(ns('niceKolmoSmir'))))),
-          column(6, tabBox(title = tags$b('Pruebas de datos anómalos'), width = 12, height = '400px',
-                           tabPanel("Criterios de Grubbs", 
-                                    htmlOutput(ns('niceGrubs10')), htmlOutput(ns('niceGrubs11')), htmlOutput(ns('niceGrubs20'))),
-                           tabPanel("Criterio de Dixon", htmlOutput(ns('niceDixon')))))
+          column(6, box(title = tags$b('Pruebas de normalidad'), width = 12, status = 'primary', #height = '400px',
+                        uiOutput(ns('niceShapWilk')), uiOutput(ns('niceKolmoSmir')))),
+          column(6, box(title = tags$b('Pruebas de datos anómalos'), width = 12, status = 'primary', # height = '400px',
+                        uiOutput(ns('niceGrubs10')), uiOutput(ns('niceGrubs11')), uiOutput(ns('niceGrubs20')),
+                        uiOutput(ns('niceDixon'))))
   )#)
 }
 
@@ -86,58 +84,109 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
     return(p)
   })
   
-  niceShapWilk <- reactive({
-    SW <- shapiro.test(dataF())
-    SWtx <- ifelse(SW$p.value <= (1 - input$ConfLev),
-                   'La muestra estadística (NO PASA) xxx. Valor p de la prueba: ',
-                   'La muestra estadística (SÍ PASA) .... Valor p de la prueba:')
-    return(tags$h4(SWtx, tags$b(pround(SW$p.value, digits = 4))))})
+  SW <- reactive(shapiro.test(dataF()))
+  niceShapWilk <- eventReactive(input$descrStat, {
+    if(SW()$p.value <= (1 - input$ConfLev)) {
+      return(box(title = tags$b('Resultado de la prueba de Shapiro-Wilk'), width = 12, status = 'danger',
+                 footer = tags$span(style = "color:red", 
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (NO PASA) xxx.', tags$b(pround(SW()$p.value, digits = 4)))))
+    } else {
+      return(box(title = tags$b('Resultado de la prueba de Shapiro-Wilk'), width = 12, status = 'success',
+                 footer = tags$span(style = "color:green", 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (PASA) xxx.', tags$b(pround(SW()$p.value, digits = 4)))))
+    }})
   
-  niceKolmoSmir <- reactive({
-    KS <- ks.test(dataF(), y = 'pnorm')
-    KStx <- ifelse(KS$p.value <= (1 - input$ConfLev),
-                   'La muestra estadística (NO PASA) xxx. Valor p de la prueba: ',
-                   'La muestra estadística (SÍ PASA) .... Valor p de la prueba:')
-    return(tags$h4(KStx, tags$b(pround(KS$p.value, digits = 4))))})
+  KS <- reactive(ks.test(dataF(), y = 'pnorm'))
+  niceKolmoSmir <- eventReactive(input$descrStat, {
+    if(KS()$p.value <= (1 - input$ConfLev)) {
+      return(box(title = tags$b('Resultado de la prueba de Kolmogorov-Smirnov'), width = 12, status = 'danger',
+                 footer = tags$span(style = "color:red", 
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (NO PASA) xxx.', tags$b(pround(KS()$p.value, digits = 4)))))
+    } else {
+      return(box(title = tags$b('Resultado de la prueba de Kolmogorov-Smirnov'), width = 12, status = 'success',
+                 footer = tags$span(style = "color:green", 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (PASA) xxx.', tags$b(pround(KS()$p.value, digits = 4)))))
+    }})
+
+  Gr10 <- reactive(outliers::grubbs.test(dataF(), type = 10))
+  niceGrubs10 <- eventReactive(input$descrStat, {
+    if(Gr10()$p.value <= (1 - input$ConfLev)) {
+      return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para un único dato anómalo'), 
+                 width = 12, status = 'danger',
+                 footer = tags$span(style = "color:red", 
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (NO PASA) xxx.', tags$b(pround(Gr10()$p.value, digits = 4)))))
+    } else {
+      return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para un único dato anómalo'), 
+                 width = 12, status = 'success',
+                 footer = tags$span(style = "color:green", 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (PASA) xxx.', tags$b(pround(Gr10()$p.value, digits = 4)))))
+    }})
+
+  Gr11 <- reactive(outliers::grubbs.test(dataF(), type = 11))
+  niceGrubs11 <- eventReactive(input$descrStat, {
+    if(Gr11()$p.value <= (1 - input$ConfLev)) {
+      return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para un dato anómalo en cada extremo'), 
+                 width = 12, status = 'danger',
+                 footer = tags$span(style = "color:red", 
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (NO PASA) xxx.', tags$b(pround(Gr11()$p.value, digits = 4)))))
+    } else {
+      return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para un dato anómalo en cada extremo'), 
+                 width = 12, status = 'success',
+                 footer = tags$span(style = "color:green", 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (PASA) xxx.', tags$b(pround(Gr11()$p.value, digits = 4)))))
+    }})
   
-  niceGrubs10 <- reactive({
-    Gr10 <- outliers::grubbs.test(dataF(), type = 10)
-    Gr10tx <- ifelse(Gr10$p.value <= (1 - input$ConfLev),
-                   'La muestra estadística (NO PASA) xxx. Valor p de la prueba: ',
-                   'La muestra estadística (SÍ PASA) .... Valor p de la prueba:')
-    return(tags$h4(Gr10tx, tags$b(pround(Gr10$p.value, digits = 4))))})
+  Gr20 <- reactive(outliers::grubbs.test(dataF(), type = 20))
+  niceGrubs20 <- eventReactive(input$descrStat, {
+    if(Gr20()$p.value <= (1 - input$ConfLev)) {
+      return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para dos datos anómalos en el mismo extremo'), 
+                 width = 12, status = 'danger',
+                 footer = tags$span(style = "color:red", 
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (NO PASA) xxx.', tags$b(pround(Gr20()$p.value, digits = 4)))))
+    } else {
+      return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para dos datos anómalos en el mismo extremo'), 
+                 width = 12, status = 'success',
+                 footer = tags$span(style = "color:green", 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (PASA) xxx.', tags$b(pround(Gr20()$p.value, digits = 4)))))
+    }})
+
+  Dx <- reactive(outliers::dixon.test(dataF()))
+  niceDixon <- eventReactive(input$descrStat, {
+    if(Dx()$p.value <= (1 - input$ConfLev)) {
+      return(box(title = tags$b('Resultado de la prueba de datos anómalos de Dixon'), 
+                 width = 12, status = 'danger',
+                 footer = tags$span(style = "color:red", 
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (NO PASA) xxx.', tags$b(pround(Dx()$p.value, digits = 4)))))
+    } else {
+      return(box(title = tags$b('Resultado de la prueba de datos anómalos de Dixon'), 
+                 width = 12, status = 'success',
+                 footer = tags$span(style = "color:green", 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (PASA) xxx.', tags$b(pround(Dx()$p.value, digits = 4)))))
+    }})
   
-  niceGrubs11 <- reactive({
-    Gr11 <- outliers::grubbs.test(dataF(), type = 11)
-    Gr11tx <- ifelse(Gr11$p.value <= (1 - input$ConfLev),
-                     'La muestra estadística (NO PASA) xxx. Valor p de la prueba: ',
-                     'La muestra estadística (SÍ PASA) .... Valor p de la prueba:')
-    return(tags$h4(Gr11tx, tags$b(pround(Gr11$p.value, digits = 4))))})
-  
-  niceGrubs20 <- reactive({
-    Gr20 <- outliers::grubbs.test(dataF(), type = 20)
-    Gr20tx <- ifelse(Gr20$p.value <= (1 - input$ConfLev),
-                     'La muestra estadística (NO PASA) xxx. Valor p de la prueba: ',
-                     'La muestra estadística (SÍ PASA) .... Valor p de la prueba:')
-    return(tags$h4(Gr20tx, tags$b(pround(Gr20$p.value, digits = 4))))})
-  
-  niceDixon <- reactive({
-    Dix <- outliers::dixon.test(dataF())
-    Dixtx <- ifelse(Dix$p.value <= (1 - input$ConfLev),
-                     'La muestra estadística (NO PASA) xxx. Valor p de la prueba: ',
-                     'La muestra estadística (SÍ PASA) .... Valor p de la prueba:')
-    return(tags$h4(Dixtx, tags$b(pround(Dix$p.value, digits = 4))))})
-  
+
   output$descripTab     <- renderTable(descripTabRc())
   output$histogramPlt   <- renderPlot(histogramPlt())
   output$stackedDot     <- renderPlot(stackedDot())
   output$DiagramaQQ     <- renderPlot(DiagramaQQ())
-  output$niceShapWilk   <- renderPrint(niceShapWilk())
-  output$niceKolmoSmir  <- renderPrint(niceKolmoSmir())
-  output$niceGrubs10    <- renderPrint(niceGrubs10())
-  output$niceGrubs11    <- renderPrint(niceGrubs11())
-  output$niceGrubs20    <- renderPrint(niceGrubs20())
-  output$niceDixon      <- renderPrint(niceDixon())
+  output$niceShapWilk   <- renderUI(niceShapWilk())
+  output$niceKolmoSmir  <- renderUI(niceKolmoSmir())
+  output$niceGrubs10    <- renderUI(niceGrubs10())
+  output$niceGrubs11    <- renderUI(niceGrubs11())
+  output$niceGrubs20    <- renderUI(niceGrubs20())
+  output$niceDixon      <- renderUI(niceDixon())
   
   output$DwnhistogramPlt <- dwldhndlr(name = 'Histograma', formatP = formatP, dimensP = dimensP, plt = histogramPlt())
   output$DwnstackedDot   <- dwldhndlr(name = 'PuntosApilados', formatP = formatP, dimensP = dimensP, plt = stackedDot())

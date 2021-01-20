@@ -28,12 +28,14 @@ comparacionMediasServer_1 <- function(input, output, session, nSeries, compl) {
   t_test1sample <- eventReactive(input$doCompare, {
     if(T1()$p.value <= (1 - input$ConfLev)) {
       return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
-                 footer = 'Resultados estadísticamente significativos al nivel de confianza escogido.',
+                 footer = tags$span(style = "color:red", 
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
                  tags$h4('La muestra estadística (NO PASA) xxx.'),
                  tags$br(), tableOutput(session$ns("tableResults"))))
     } else {
       return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
-                 footer = 'Resultados estadísticamente no significativos al nivel de confianza escogido.',
+                 footer = tags$span(style = "color:green", 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
                  tags$h4('La muestra estadística (PASA) xxx.'), 
                  tags$br(), tableOutput(session$ns("tableResults"))))
     }
@@ -79,12 +81,14 @@ comparacionMediasServer_2 <- function(input, output, session, nSeries, compl) {
   t_test2samples <- eventReactive(input$doCompare, {
     if(T2()$p.value <= (1 - input$ConfLev)) {
       return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
-                 footer = 'Resultados estadísticamente significativos al nivel de confianza escogido.',
+                 footer = tags$span(style = "color:red", 
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
                  tags$h4('La muestra estadística (NO PASA) xxx.'),
                  tags$br(), tableOutput(session$ns("tableResults"))))
     } else {
       return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
-                 footer = 'Resultados estadísticamente no significativos al nivel de confianza escogido.',
+                 footer = tags$span(style = "color:green", 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
                  tags$h4('La muestra estadística (PASA) xxx.'), 
                  tags$br(), tableOutput(session$ns("tableResults"))))
     }
