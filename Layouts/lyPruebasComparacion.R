@@ -82,8 +82,8 @@ lyCompVarian <- fluidRow(column(12,
 
 lyCompANOVADscrp <- infoBox(width = 12, "Comparación de medias de varios grupos muestrales", color = 'navy',
                          h4("La comparación de varioa medias muestrales evalua ..."))
-lyCompANOVA <- fluidRow(column(6, box(title = tags$b('Análisis de varianza'), width = 12, status = 'primary',
-                                      height = 400, comparacionANOVAUI('anovaMdl'))),
+lyCompANOVA <- fluidRow(comparacionANOVAUI('anovaMdl'),#column(6, box(title = tags$b('Análisis de varianza'), width = 12, status = 'primary',
+                                      #height = 400, comparacionANOVAUI('anovaMdl'))),
                     column(12, box(title = tags$b('Pruebas de detección de diferencias entre grupos'), width = 12, status = 'primary',
                                    height = 1080,
                                    comparacionRanMulUI('ranMulAov')),
