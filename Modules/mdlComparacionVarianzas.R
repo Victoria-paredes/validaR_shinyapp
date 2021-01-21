@@ -7,9 +7,9 @@ comparacionVarianUI_1 <- function(id) {
                                              "Desviación estandar" = 2,
                                              "Desviación estándar relativa (%)" = 3)),
                   radioButtons(ns('hypAlter'), label = 'Seleccione hipótesis alternativa',
-                               choices = list('H1: bar{x} neq \\(\\mu_0\\)' = 'two.sided', 
-                                              'H1: bar{x} < mu_0' = 'less', 
-                                              'H1: bar{x} > mu_0' = 'greater')), 
+                               choices = list('\\(H_1\\!\\!: S^2 \\neq \\sigma^2\\)' = 'two.sided', 
+                                              '\\(H_1\\!\\!: S^2 < \\sigma^2\\)' = 'less', 
+                                              '\\(H_1\\!\\!: S^2 > \\sigma^2\\)' = 'greater')), 
                   sliderInput(ns('ConfLev'), label = 'Nivel de confianza:', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   shiny::actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
@@ -62,9 +62,9 @@ comparacionVarianUI_2 <- function(id) {
   fluidRow(column(4, uiOutput(ns('selectSeries')),
                   #numericInput(ns('valRef'), label = 'Ingrese valor de referencia', width = '100%', value = 0),
                   radioButtons(ns('hypAlter'), label = 'Seleccione hipótesis alternativa',
-                               choices = list('H1: bar{x} neq \\(\\mu_0\\)' = 'two.sided', 
-                                              'H1: bar{x} < mu_0' = 'less', 
-                                              'H1: bar{x} > mu_0' = 'greater')), 
+                               choices = list('\\(H_1\\!\\!: S^2_1  \\neq S^2_2\\)' = 'two.sided', 
+                                              '\\(H_1\\!\\!: S^2_1 < S^2_2\\)' = 'less', 
+                                              '\\(H_1\\!\\!: S^2_1 > S^2_2\\)' = 'greater')), 
                   sliderInput(ns('ConfLev'), label = 'Nivel de confianza:', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   shiny::actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
@@ -105,7 +105,7 @@ comparacionVarianServer_2 <- function(input, output, session, nSeries, compl) {
     data.frame('Datos prueba' = c('Estadístico F', 'Grados de libertad', '~, numerador', '~, denominador',
                                   'Valor p', 'Relación de varianzas', 'Intervalo de confianza:', 
                                   '~, límite inferior', '~, límite superior', 'Nivel de confianza (%)'), 
-               'Valor' = c(F2()$statistic, NA, F2()$parameters[1], F2()$parameters[2], F2()$p.value, F2()$estimate, NA, 
+               'Valor' = c(F2()$statistic, NA, F2()$parameter[1], F2()$parameter[2], F2()$p.value, F2()$estimate, NA, 
                            F2()$conf.int[1], F2()$conf.int[2], (input$ConfLev * 100))))
   
   output$tableResults <- renderTable(tableResults())
@@ -120,20 +120,21 @@ comparacionVarianUI_m <- function(id) {
                   sliderInput(ns('ConfLev'), label = 'Nivel de confianza:', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   shiny::actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
-           column(10, box(title = tags$b('Prueba de Barlett'), status = 'primary', width = 6, height = 250, 
-                          verbatimTextOutput(ns('outBarlett'))),
-                  box(title = tags$b('Prueba de Levene'), status = 'primary', width = 6, height = 250, 
-                      radioButtons(ns('leveneLocation'), label = 'Localizador central', inline = TRUE,
-                                   choices = list('Mediana' = 'median', 'Media' = 'mean')),
-                      verbatimTextOutput(ns('outLevene')), 
+           column(10,# tabBox(title = tags$b('Pruebas multivariadas'), width = NULL, 
+                    #         tabItem(title = tags$b('Prueba de Barlett'), ))
+                  box(title = tags$b('Prueba de Barlett'), status = 'primary', width = 6, height = 600, 
+                          uiOutput(ns('outBarlett'))),
+                  box(title = tags$b('Prueba de Levene'), status = 'primary', width = 6, height = 600, 
+                      #radioButtons(ns('leveneLocation'), label = 'Localizador central', inline = TRUE,
+                      #             choices = list('Mediana' = 'median', 'Media' = 'mean')),
+                      uiOutput(ns('outLevene1')), uiOutput(ns('outLevene2')), 
                       h4("Revisar los resultados de esta prueba...")),
                   box(title = tags$b('Prueba Fmax de Hartley'), status = 'primary', width = 6, height = 450, 
-                      verbatimTextOutput(ns('outHartley')), 
-                      h4("Revisar los resultados de esta prueba...")),
+                      uiOutput(ns('outHartley'))),
                   box(title = tags$b('Varianzas anómalas: Prueba de Cochran'), status = 'primary', width = 6, height = 450, 
-                      radioButtons(ns('coch.Inly'), label = 'Valor sospechoso', inline = TRUE,
-                                   choices = list('Varianza más grande' = FALSE, 'Varianza más pequeña' = TRUE)),
-                      verbatimTextOutput(ns('outCochran')))))
+                      #radioButtons(ns('coch.Inly'), label = 'Valor sospechoso', inline = TRUE,
+                      #             choices = list('Varianza más grande' = FALSE, 'Varianza más pequeña' = TRUE)),
+                      uiOutput(ns('outCochranOut')), uiOutput(ns('outCochranIn')))))
 }
 
 comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
@@ -154,13 +155,163 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
       complClean[[i]] <- compl[[i]]$data()[, 1]
     }
   )
-  observeEvent(input$doCompare, {
-    output$outBarlett <- renderPrint(bartlett.test(x = isolate(reactiveValuesToList(complClean))))
-    output$outLevene <- renderPrint(car::leveneTest(data = stack(isolate(reactiveValuesToList(complClean))),
-                                                    y = values ~ ind, center = input$leveneLocation))
-    output$outHartley <- renderPrint(PMCMRplus::hartleyTest(formula = values ~ ind, 
-                                                            data = stack(isolate(reactiveValuesToList(complClean)))))
-    output$outCochran <- renderPrint(outliers::cochran.test(data = stack(isolate(reactiveValuesToList(complClean))),
-                                                            object = values ~ ind, inlying = input$coch.Inly))
+  
+  #BARLETT
+  Brltt <- eventReactive(input$doCompare, {bartlett.test(x = isolate(reactiveValuesToList(complClean)))})
+  outBarlett <- eventReactive(input$doCompare, {
+    if(Brltt()$p.value <= (1 - input$ConfLev)) {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
+                 footer = tags$span(style = "color:red", 
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (NO PASA) xxx.'),
+                 tags$br(), tableOutput(session$ns("BrltttableResults"))))
+    } else {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
+                 footer = tags$span(style = "color:green", 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (PASA) xxx.'), 
+                 tags$br(), tableOutput(session$ns("BrltttableResults"))))
+    }
   })
+  BrltttableResults <- reactive(
+    data.frame('Datos prueba' = c('Estadístico K^2', 'Grados de libertad', 'Valor p', 'Nivel de confianza (%)'), 
+               'Valor' = c(Brltt()$statistic, Brltt()$parameter, Brltt()$p.value, (input$ConfLev * 100))))
+  output$BrltttableResults <- renderTable(BrltttableResults())
+  output$outBarlett <- renderUI(outBarlett())
+  
+  #LEVENE1
+  LVN1 <- eventReactive(input$doCompare, {
+    car::leveneTest(data = stack(isolate(reactiveValuesToList(complClean))), y = values ~ ind, center = 'mean')})
+  outLevene1 <- eventReactive(input$doCompare, {
+    if(LVN1()$Pr[1] <= (1 - input$ConfLev)) {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
+                 footer = tags$span(style = "color:red", 
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (NO PASA) xxx.'),
+                 tags$br(), tableOutput(session$ns("LVN1tableResults"))))
+    } else {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
+                 footer = tags$span(style = "color:green", 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (PASA) xxx.'), 
+                 tags$br(), tableOutput(session$ns("LVN1tableResults"))))
+    }
+  })
+  LVN1tableResults <- reactive(
+    data.frame('Datos prueba' = c('Estadístico F', 'Grados de libertad', '~, numerador', '~, denominador',
+                                  'Valor p', 'Nivel de confianza (%)'), 
+               'Valor' = c(LVN1()$F[1], NA, LVN1()$Df[1], LVN1()$Df[2], LVN1()$Pr[1], (input$ConfLev * 100))))
+  output$LVN1tableResults <- renderTable(LVN1tableResults())
+  output$outLevene1 <- renderUI(outLevene1())
+  
+  #LEVENE2
+  LVN2 <- eventReactive(input$doCompare, {
+    car::leveneTest(data = stack(isolate(reactiveValuesToList(complClean))), y = values ~ ind, center = 'median')})
+  outLevene2 <- eventReactive(input$doCompare, {
+    if(LVN2()$Pr[1] <= (1 - input$ConfLev)) {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
+                 footer = tags$span(style = "color:red", 
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (NO PASA) xxx.'),
+                 tags$br(), tableOutput(session$ns("LVN2tableResults"))))
+    } else {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
+                 footer = tags$span(style = "color:green", 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (PASA) xxx.'), 
+                 tags$br(), tableOutput(session$ns("LVN2tableResults"))))
+    }
+  })
+  LVN2tableResults <- reactive(
+    data.frame('Datos prueba' = c('Estadístico F', 'Grados de libertad', '~, numerador', '~, denominador',
+                                  'Valor p', 'Nivel de confianza (%)'), 
+               'Valor' = c(LVN2()$F[1], NA, LVN2()$Df[1], LVN2()$Df[2], LVN2()$Pr[1], (input$ConfLev * 100))))
+  output$LVN2tableResults <- renderTable(LVN2tableResults())
+  output$outLevene2 <- renderUI(outLevene2())
+  
+  #HARTLEY
+  HRTLY <- eventReactive(input$doCompare, {
+    PMCMRplus::hartleyTest(formula = values ~ ind, data = stack(isolate(reactiveValuesToList(complClean))))})
+  outHartley <- eventReactive(input$doCompare, {
+    if(HRTLY()$p.value <= (1 - input$ConfLev)) {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
+                 footer = tags$span(style = "color:red", 
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (NO PASA) xxx.'),
+                 tags$br(), tableOutput(session$ns("HRTLYtableResults"))))
+    } else {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
+                 footer = tags$span(style = "color:green", 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (PASA) xxx.'), 
+                 tags$br(), tableOutput(session$ns("HRTLYtableResults"))))
+    }
+  })
+  HRTLYtableResults <- reactive(
+    data.frame('Datos prueba' = c('Estadístico Fmáx', 'Grados de libertad', 'Parámetro k', 'Valor p', 'Nivel de confianza (%)'), 
+               'Valor' = c(HRTLY()$statistic, HRTLY()$parameter[1], HRTLY()$parameter[2], HRTLY()$p.value, (input$ConfLev * 100))))
+  output$HRTLYtableResults <- renderTable(HRTLYtableResults())
+  output$outHartley <- renderUI(outHartley())
+  
+  #COCHRAN outlying
+  CCHRNout <- eventReactive(input$doCompare, {
+    outliers::cochran.test(data = stack(isolate(reactiveValuesToList(complClean))), object = values ~ ind, inlying = FALSE)})
+  outCochranOut <- eventReactive(input$doCompare, {
+    if(CCHRNout()$p.value <= (1 - input$ConfLev)) {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
+                 footer = tags$span(style = "color:red", 
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (NO PASA) xxx.'),
+                 tags$br(), tableOutput(session$ns("CCHRNouttableResults"))))
+    } else {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
+                 footer = tags$span(style = "color:green", 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (PASA) xxx.'), 
+                 tags$br(), tableOutput(session$ns("CCHRNouttableResults"))))
+    }
+  })
+  CCHRNouttableResults <- reactive(
+    data.frame('Datos prueba' = c('Estadístico de Cochran', 'Grados de libertad', 'Parámetro k', 'Valor p', 'Nivel de confianza (%)',
+                                  'Varianza más grande'), 
+               'Valor' = c(CCHRNout()$statistic, CCHRNout()$parameter[1], CCHRNout()$parameter[2], CCHRNout()$p.value, 
+                           (input$ConfLev * 100), max(CCHRNout()$estimate))))
+  output$CCHRNouttableResults <- renderTable(CCHRNouttableResults())
+  output$outCochranOut <- renderUI(outCochranOut())
+  
+  #COCHRAN inlying
+  CCHRNin <- eventReactive(input$doCompare, {
+    outliers::cochran.test(data = stack(isolate(reactiveValuesToList(complClean))), object = values ~ ind, inlying = TRUE)})
+  outCochranIn <- eventReactive(input$doCompare, {
+    if(CCHRNin()$p.value <= (1 - input$ConfLev)) {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
+                 footer = tags$span(style = "color:red", 
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (NO PASA) xxx.'),
+                 tags$br(), tableOutput(session$ns("CCHRNintableResults"))))
+    } else {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
+                 footer = tags$span(style = "color:green", 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (PASA) xxx.'), 
+                 tags$br(), tableOutput(session$ns("CCHRNintableResults"))))
+    }
+  })
+  CCHRNintableResults <- reactive(
+    data.frame('Datos prueba' = c('Estadístico de Cochran', 'Grados de libertad', 'Parámetro k', 'Valor p', 'Nivel de confianza (%)',
+                                  'Varianza más pequeña'), 
+               'Valor' = c(CCHRNin()$statistic, CCHRNin()$parameter[1], CCHRNin()$parameter[2], CCHRNin()$p.value, 
+                           (input$ConfLev * 100), min(CCHRNin()$estimate))))
+  output$CCHRNintableResults <- renderTable(CCHRNintableResults())
+  output$outCochranIn <- renderUI(outCochranIn())
+  
+  #observeEvent(input$doCompare, {
+  #  output$outBarlett <- renderPrint(bartlett.test(x = isolate(reactiveValuesToList(complClean))))
+  #  output$outLevene <- renderPrint(car::leveneTest(data = stack(isolate(reactiveValuesToList(complClean))),
+  #                                                  y = values ~ ind, center = input$leveneLocation))
+  #  output$outHartley <- renderPrint(PMCMRplus::hartleyTest(formula = values ~ ind, 
+  #                                                          data = stack(isolate(reactiveValuesToList(complClean)))))
+  #  output$outCochran <- renderPrint(outliers::cochran.test(data = stack(isolate(reactiveValuesToList(complClean))),
+  #                                                          object = values ~ ind, inlying = input$coch.Inly))
+  #})
 }

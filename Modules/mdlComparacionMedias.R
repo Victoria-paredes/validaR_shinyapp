@@ -102,7 +102,7 @@ comparacionMediasServer_2 <- function(input, output, session, nSeries, compl) {
                                            'Valor p', 'Diferencia de la medias', 'Error estándar de la diferencia', 
                                            'Intervalo de confianza de la diferencia:', 
                                            '~, límite inferior', '~, límite superior', 'Nivel de confianza (%)'), 
-               'Valor' = c(T1()$statistic, T1()$parameter, T2()$p.value, T2()$estimate[1] - T2()$estimate[2], 
+               'Valor' = c(T2()$statistic, T2()$parameter, T2()$p.value, T2()$estimate[1] - T2()$estimate[2], 
                            T2()$stderr, NA, T2()$conf.int[1], T2()$conf.int[2], 
                            (input$ConfLev * 100))))
     } else {  

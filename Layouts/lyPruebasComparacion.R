@@ -51,7 +51,8 @@ lyCompVarianDscrp <- infoBox(width = 12, "Instrucciones", color = 'navy',
                                   tags$li("La prueba F de Fisher permite comparar la homogeneidad de las varianzas de dos muestras 
                                           estadísticas."),
                                   tags$li("Para comparar la homogeneidad de varianzas entre más de dos muestras estadísticas
-                                          están disponibles cuatro pruebas de inferencia estadística:", tags$br(),
+                                          están disponibles cuatro pruebas de inferencia estadística que funcionan de 
+                                          manera similar:", tags$br(),
                                           tags$ol(
                                             tags$li(tags$b('Prueba de Barlett:'), 'Calcula el estadístico ...'),
                                             tags$li(tags$b('Prueba de Levene:'), 'Calcula el estadístico ...'),
