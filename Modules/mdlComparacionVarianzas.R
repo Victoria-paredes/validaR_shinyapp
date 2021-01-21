@@ -120,21 +120,25 @@ comparacionVarianUI_m <- function(id) {
                   sliderInput(ns('ConfLev'), label = 'Nivel de confianza:', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   shiny::actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
-           column(10,# tabBox(title = tags$b('Pruebas multivariadas'), width = NULL, 
-                    #         tabItem(title = tags$b('Prueba de Barlett'), ))
-                  box(title = tags$b('Prueba de Barlett'), status = 'primary', width = 6, height = 600, 
-                          uiOutput(ns('outBarlett'))),
-                  box(title = tags$b('Prueba de Levene'), status = 'primary', width = 6, height = 600, 
-                      #radioButtons(ns('leveneLocation'), label = 'Localizador central', inline = TRUE,
-                      #             choices = list('Mediana' = 'median', 'Media' = 'mean')),
-                      uiOutput(ns('outLevene1')), uiOutput(ns('outLevene2')), 
-                      h4("Revisar los resultados de esta prueba...")),
-                  box(title = tags$b('Prueba Fmax de Hartley'), status = 'primary', width = 6, height = 450, 
-                      uiOutput(ns('outHartley'))),
-                  box(title = tags$b('Varianzas anómalas: Prueba de Cochran'), status = 'primary', width = 6, height = 450, 
-                      #radioButtons(ns('coch.Inly'), label = 'Valor sospechoso', inline = TRUE,
-                      #             choices = list('Varianza más grande' = FALSE, 'Varianza más pequeña' = TRUE)),
-                      uiOutput(ns('outCochranOut')), uiOutput(ns('outCochranIn')))))
+           column(10, tabBox(title = tags$b('Pruebas múltiples'), width = 12, height = 600,
+                             tabPanel(title = tags$b('Levene'), uiOutput(ns('outLevene1')), uiOutput(ns('outLevene2'))),
+                             tabPanel(title = tags$b('Cochran (varianzas anómalas)'), 
+                                     uiOutput(ns('outCochranOut')), uiOutput(ns('outCochranIn'))),
+                             tabPanel(title = tags$b('Barlett'), uiOutput(ns('outBarlett'))),
+                             tabPanel(title = tags$b('Hartley'), uiOutput(ns('outHartley'))))))
+                  #box(title = tags$b('Prueba de Barlett'), status = 'primary', width = 6, height = 600, 
+                  #        uiOutput(ns('outBarlett'))),
+                  #box(title = tags$b('Prueba de Levene'), status = 'primary', width = 6, height = 600, 
+                  #    #radioButtons(ns('leveneLocation'), label = 'Localizador central', inline = TRUE,
+                  #    #             choices = list('Mediana' = 'median', 'Media' = 'mean')),
+                  #    uiOutput(ns('outLevene1')), uiOutput(ns('outLevene2')), 
+                  #    h4("Revisar los resultados de esta prueba...")),
+                  #box(title = tags$b('Prueba Fmax de Hartley'), status = 'primary', width = 6, height = 450, 
+                  #    uiOutput(ns('outHartley'))),
+                  #box(title = tags$b('Varianzas anómalas: Prueba de Cochran'), status = 'primary', width = 6, height = 450, 
+                  #    #radioButtons(ns('coch.Inly'), label = 'Valor sospechoso', inline = TRUE,
+                  #    #             choices = list('Varianza más grande' = FALSE, 'Varianza más pequeña' = TRUE)),
+                  #    uiOutput(ns('outCochranOut')), uiOutput(ns('outCochranIn')))))
 }
 
 comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
@@ -184,13 +188,13 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
     car::leveneTest(data = stack(isolate(reactiveValuesToList(complClean))), y = values ~ ind, center = 'mean')})
   outLevene1 <- eventReactive(input$doCompare, {
     if(LVN1()$Pr[1] <= (1 - input$ConfLev)) {
-      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
+      return(box(title = tags$b('Resultado de la prueba'), width = 6, status = 'danger',
                  footer = tags$span(style = "color:red", 
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
                  tags$h4('La muestra estadística (NO PASA) xxx.'),
                  tags$br(), tableOutput(session$ns("LVN1tableResults"))))
     } else {
-      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
+      return(box(title = tags$b('Resultado de la prueba'), width = 6, status = 'success',
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
                  tags$h4('La muestra estadística (PASA) xxx.'), 
@@ -209,13 +213,13 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
     car::leveneTest(data = stack(isolate(reactiveValuesToList(complClean))), y = values ~ ind, center = 'median')})
   outLevene2 <- eventReactive(input$doCompare, {
     if(LVN2()$Pr[1] <= (1 - input$ConfLev)) {
-      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
+      return(box(title = tags$b('Resultado de la prueba'), width = 6, status = 'danger',
                  footer = tags$span(style = "color:red", 
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
                  tags$h4('La muestra estadística (NO PASA) xxx.'),
                  tags$br(), tableOutput(session$ns("LVN2tableResults"))))
     } else {
-      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
+      return(box(title = tags$b('Resultado de la prueba'), width = 6, status = 'success',
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
                  tags$h4('La muestra estadística (PASA) xxx.'), 
@@ -258,13 +262,13 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
     outliers::cochran.test(data = stack(isolate(reactiveValuesToList(complClean))), object = values ~ ind, inlying = FALSE)})
   outCochranOut <- eventReactive(input$doCompare, {
     if(CCHRNout()$p.value <= (1 - input$ConfLev)) {
-      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
+      return(box(title = tags$b('Resultado de la prueba'), width = 6, status = 'danger',
                  footer = tags$span(style = "color:red", 
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
                  tags$h4('La muestra estadística (NO PASA) xxx.'),
                  tags$br(), tableOutput(session$ns("CCHRNouttableResults"))))
     } else {
-      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
+      return(box(title = tags$b('Resultado de la prueba'), width = 6, status = 'success',
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
                  tags$h4('La muestra estadística (PASA) xxx.'), 
@@ -284,13 +288,13 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
     outliers::cochran.test(data = stack(isolate(reactiveValuesToList(complClean))), object = values ~ ind, inlying = TRUE)})
   outCochranIn <- eventReactive(input$doCompare, {
     if(CCHRNin()$p.value <= (1 - input$ConfLev)) {
-      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
+      return(box(title = tags$b('Resultado de la prueba'), width = 6, status = 'danger',
                  footer = tags$span(style = "color:red", 
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
                  tags$h4('La muestra estadística (NO PASA) xxx.'),
                  tags$br(), tableOutput(session$ns("CCHRNintableResults"))))
     } else {
-      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
+      return(box(title = tags$b('Resultado de la prueba'), width = 6, status = 'success',
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
                  tags$h4('La muestra estadística (PASA) xxx.'), 
