@@ -80,8 +80,12 @@ lyCompVarian <- fluidRow(column(12,
                                     tags$h5('Prueba de Levene implementada en R por el paquete ', tags$b('car'), 
                                             ' [Fox y Weisberg, 2019]'))))
 
-lyCompANOVADscrp <- infoBox(width = 12, "Comparación de medias de varios grupos muestrales", color = 'navy',
-                         h4("La comparación de varioa medias muestrales evalua ..."))
+lyCompANOVADscrp <- infoBox(width = 12, "Instrucciones", color = 'navy',
+                         h4("El análisis de varianza (ANOVA) compara las medias muestrales de más de dos conjuntos de datos
+                            para determinar si al menos uno de ellos es significativamente diferente a los demás desde 
+                            un punto de vista estadístico. ", tags$br(),
+                            "Para realizar ANOVA  
+                            La comparación de varioa medias muestrales evalua ..."))
 lyCompANOVA <- fluidRow(comparacionANOVAUI('anovaMdl'),#column(6, box(title = tags$b('Análisis de varianza'), width = 12, status = 'primary',
                                       #height = 400, comparacionANOVAUI('anovaMdl'))),
                     column(12, box(title = tags$b('Pruebas de detección de diferencias entre grupos'), width = 12, status = 'primary',

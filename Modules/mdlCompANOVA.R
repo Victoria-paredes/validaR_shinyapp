@@ -5,10 +5,11 @@ comparacionANOVAUI <- function(id) {
         fluidRow(
           column(3, uiOutput(ns('selectSeries')),
                  sliderInput(ns('ConfLev'), label = 'Nivel de confianza:', min = 0.9, max = 0.999, value = 0.95, step = 0.001),
-                 shiny::actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE),
-                 tags$hr(), tags$h4(tags$b('Supuestos del análisis:')), 
-                 uiOutput(ns('aovAss1')), uiOutput(ns('aovAss2')), uiOutput(ns('aovAss3'))),
-          column(5, verbatimTextOutput(ns('anova1'))),
+                 shiny::actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
+          column(9, #tags$h4(tags$b('Supuestos del análisis:')), 
+                 uiOutput(ns('aovAss1')), uiOutput(ns('aovAss2')), uiOutput(ns('aovAss3')))),
+        tags$hr(), 
+        fluidRow(
           column(4, 
                  tabBox(title = tags$b("Diagramas"), width = 12,
                         tabPanel("Cajas y bigotes", 
@@ -33,9 +34,8 @@ comparacionANOVAUI <- function(id) {
                                                           value = 'Grupos')
                                  ),
                                  plotOutput(ns('ResidPlt')),
-                                 downloadButton(ns('DwnResidPlt'), label = 'Descargar gráfico')))))))
-                 
-    
+                                 downloadButton(ns('DwnResidPlt'), label = 'Descargar gráfico')))),
+        column(8, uiOutput(ns('anova1'))))))
 }
 
 comparacionANOVAServer <- function(input, output, session, nSeries, compl, formatP, dimensP) {
@@ -57,11 +57,36 @@ comparacionANOVAServer <- function(input, output, session, nSeries, compl, forma
   
   anovaReac <- reactive(aov(formula = values ~ ind, data = StData()))
   
-  BoxWPlt <- reactive(boxplot(formula = values ~ ind, data = StData(), xlab = input$xBoxW, ylab = input$yBoxW))
+  anova1 <- eventReactive(input$doCompare, {
+    if(summary(anovaReac())[[1]][["Pr(>F)"]][[1]]  <= (1 - input$ConfLev)) {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
+                 footer = tags$span(style = "color:red", 
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (NO PASA) xxx.'),
+                 tags$br(), tableOutput(session$ns("anovaTable"))))
+    } else {
+      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
+                 footer = tags$span(style = "color:green", 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                 tags$h4('La muestra estadística (PASA) xxx.'), 
+                 tags$br(), tableOutput(session$ns("anovaTable"))))
+    }
+  })
+  
+  anovaTable <- reactive(
+    data.frame('Fuente de variación' = c('Entre grupos', 'Dentro de los grupos'), 
+               'G.L.'  = floor(summary(anovaReac())[[1]][["Df"]]),
+               'Suma de cuadrados'  = summary(anovaReac())[[1]][["Sum Sq"]],
+               'Cuadrado medio'  = summary(anovaReac())[[1]][["Mean Sq"]],
+               'Estadístico F'  = summary(anovaReac())[[1]][["F value"]],
+               'Valor p'  = summary(anovaReac())[[1]][["Pr(>F)"]]))
+  
+  
+  BoxWPlt <- reactive({boxplot(formula = values ~ ind, data = StData(), xlab = input$xBoxW, ylab = input$yBoxW)})
   ResidPlt <- reactive({
     Model <- data.frame(Fitted = fitted(anovaReac()), Residuals = resid(anovaReac()), Treatment = StData()$ind)
     p <- ggplot(Model, aes(Fitted, Residuals, colour = Treatment)) + geom_point() + theme_bw() +
-      labs(y = input$ylabQQ, x = input$xlabQQ) + geom_smooth(method = 'loess', formula = 'y ~ x', col = 'blue') +
+      labs(y = input$ylabQQ, x = input$xlabQQ) + geom_smooth(method = 'loess', formula = 'y ~ x', col = 'blue', se = FALSE) +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             axis.text.x = element_text(color = "black"), axis.text.y = element_text(color = "black"))
     if(input$LegResid) {
@@ -77,11 +102,11 @@ comparacionANOVAServer <- function(input, output, session, nSeries, compl, forma
       if ((outliers::dixon.test(Data()[[i]]))$p.value <= (1 - input$ConfLev) || 
           (outliers::grubbs.test(Data()[[i]])$p.value <= (1 - input$ConfLev))) {switchAlert <- TRUE; break()}}
     if (switchAlert) {
-      return(box(title = tags$b('Ausencia de anómalos'), width = NULL, status = 'danger',
+      return(box(title = tags$b('Supuestos del análisis: Ausencia de anómalos'), width = 12, status = 'danger',
                  h5('Es posible que el supuesto de ausencia de datos anómalos al interior de los grupos no se cumpla.
                     Revise las pruebas de anómalos en la sección', tags$b('Estadística descriptiva.'))))
     } else {
-      return(box(title = tags$b('Ausencia de anómalos'), width = NULL, status = 'success',
+      return(box(title = tags$b('Supuestos del análisis: Ausencia de anómalos'), width = 12, status = 'success',
                  h5('No se encontró evidencia en contra del supuesto de ausencia de datos anómalos al interior de los grupos.')))}})
   
   aovAss2 <- eventReactive(input$doCompare, {
@@ -89,11 +114,11 @@ comparacionANOVAServer <- function(input, output, session, nSeries, compl, forma
     for (i in 1:length(Data())) {
       if (shapiro.test(Data()[[i]])$p.value <= (1 - input$ConfLev)) {switchAlert <- TRUE; break()}}
     if (switchAlert) {
-      return(box(title = tags$b('Normalidad de los datos'), width = NULL, status = 'danger',
+      return(box(title = tags$b('Supuestos del análisis: Normalidad de los datos'), width = 12, status = 'danger',
                  h5('Es posible que el supuesto de normalidad no se cumpla para alguno de los grupos. 
                     Revise las pruebas de normalidad en la sección', tags$b('Estadística descriptiva.'))))
     } else {
-      return(box(title = tags$b('Normalidad de los datos'), width = NULL, status = 'success',
+      return(box(title = tags$b('Supuestos del análisis: Normalidad de los datos'), width = 12, status = 'success',
                  h5('No se encontró evidencia en contra del supuesto de normalidad al interior de los grupos.')))}})
   
   aovAss3 <- eventReactive(input$doCompare, {
@@ -105,21 +130,22 @@ comparacionANOVAServer <- function(input, output, session, nSeries, compl, forma
           (outliers::cochran.test(data = StData(), object = values ~ ind))$p.value <= (1 - input$ConfLev)) {switchAlert <- TRUE}
     
     if (switchAlert) {
-      return(box(title = tags$b('Homocedasticidad entre series'), width = NULL, status = 'danger',
+      return(box(title = tags$b('Supuestos del análisis: Homocedasticidad entre series'), width = 12, status = 'danger',
                  h5('Es posible que el supuesto de varianza homogénea no se cumpla entre las series analizadas.
                     Revise las pruebas de comparación de múltiples varianzas en la sección', tags$b('Comparación de varianzas.'))))
     } else {
-      return(box(title = tags$b('Homocedasticidad entre series'), width = NULL, status = 'success',
+      return(box(title = tags$b('Supuestos del análisis: Homocedasticidad entre series'), width = 12, status = 'success',
                  h5('No se encontró evidencia en contra del supuesto de homogeneidad de varianzas entre los grupos.')))}})
   
-  output$anova1      <- renderPrint(summary(anovaReac()))
+  output$anova1      <- renderUI(anova1())
+  output$anovaTable  <- renderTable(anovaTable())
   output$BoxWPlt     <- renderPlot(BoxWPlt())
   output$ResidPlt    <- renderPlot(ResidPlt())
   output$DwnBoxWPlt  <- dwldhndlr(name = 'CajasBigotes', formatP = formatP, dimensP = dimensP, plt = BoxWPlt())
   output$DwnResidPlt <- dwldhndlr(name = 'residualesANOVA', formatP = formatP, dimensP = dimensP, plt = ResidPlt())
-  output$aovAss1    <- renderUI(aovAss1())
-  output$aovAss2    <- renderUI(aovAss2())
-  output$aovAss3    <- renderUI(aovAss3())
+  output$aovAss1     <- renderUI(aovAss1())
+  output$aovAss2     <- renderUI(aovAss2())
+  output$aovAss3     <- renderUI(aovAss3())
   
   return(list('aovSum' = anovaReac, 'aovSig' = reactive(input$ConfLev)))
 }
