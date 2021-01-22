@@ -27,8 +27,10 @@ lyIngresoDat <- fluidRow(column(12, lyIngresoDatDscrp,
                                     sliderInput('numDatSeriesManual', label = 'Número de series de datos a ingresar:', 
                                                 min = 1, max = 20, value = 3, round = TRUE, width = '100%'),
                                     tags$hr(),
-                                    sliderInput('nRows', label = 'Número de filas de datos por serie:', 
-                                                min = 5, max = 100, value = 15, round = TRUE, width = '100%')
+                                    sliderInput('nRows', label = 'Número máximo de filas por serie de datos:', 
+                                                min = 5, max = 100, value = 15, round = TRUE, width = '100%'),
+                                    h5('Las celdas sin valores son ignoradas. La tabla de datos debe estar vacía para 
+                                       que el cambio en el número máximo de filas se haga efectivo.')
                                 )),
                        column(12,
                          ingresarDatosUI(id = 'serieMan1'),

@@ -33,27 +33,30 @@ ingresarDatosUI <- function(id, IntID = 1, value0 = 10) {
 ingresarDatosServer <- function(input, output, session, nRows) {
   
   TrnsDt0 <- reactive({
-    data.frame(col.X1  = rep(0, nRows()),
-               col.X2  = rep(0, nRows()),
-               col.X3  = rep(0, nRows()),
-               col.X4  = rep(0, nRows()))})
+    data.frame(col.X1  = as.numeric(rep(NA, nRows())),
+               col.X2  = as.numeric(rep(NA, nRows())),
+               col.X3  = as.numeric(rep(NA, nRows())),
+               col.X4  = as.numeric(rep(NA, nRows())))})
   #Intentar un boton de agregar más filas -> Podrían ser más hotables... se pueden imprimir sin encabezados? Se pueden unir al final?
   
   MyChanges <- reactive({
-    if(all(as.data.frame(hot.to.df(input$TrnsDt)) == 0)) {
+    if(all(is.na(as.data.frame(hot.to.df(input$TrnsDt))))) {
       return(TrnsDt0())
     } else {
       #if(!identical(TrnsDt0(), input$TrnsDt)) {
         # hot.to.df function will convert your updated table into the dataframe
         #as.data.frame(hot.to.df(input$TrnsDt))
-        return(as.data.frame(data.matrix(hot.to.df(input$TrnsDt))))
+      BadAssDF <- as.data.frame(data.matrix(hot.to.df(input$TrnsDt)))
+        return(BadAssDF)
       #}
     }
   })
   output$TrnsDt <- renderHotable({MyChanges()}, readOnly = FALSE)
   
   TrnsDtEx <- eventReactive(input$inputDat, 
-                            rbind(MyChanges()[1, ], MyChanges()[-1, ][(MyChanges()[-1, ][, 1] != 0), ]))
+                            #rbind(MyChanges()[1, ], MyChanges()[-1, ][(MyChanges()[-1, ][, 1] != 0), ])
+                            MyChanges()[!is.na(MyChanges()[, 1]), ]
+                            )
   #TrnsDtEx <- eventReactive(input$inputDat, 
   #                          rbind(MyChanges()[1, ], MyChanges()[-1, ][all(c(MyChanges()[-1, ][, 1] != 0,
   #                                                                          MyChanges()[-1, ][, 1] != "")), ]))
