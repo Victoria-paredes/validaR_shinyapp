@@ -25,7 +25,7 @@ lyIngresoDatInstr <- infoBox(title = 'Instrucciones', icon = icon("question-circ
 lyIngresoDat <- fluidRow(column(12, lyIngresoDatDscrp,
                                 box(width = 4, 
                                     sliderInput('numDatSeriesManual', label = 'Número de series de datos a ingresar:', 
-                                                min = 1, max = 20, value = 2, round = TRUE, width = '100%'),
+                                                min = 1, max = 20, value = 3, round = TRUE, width = '100%'),
                                     tags$hr(),
                                     sliderInput('nRows', label = 'Número de filas de datos por serie:', 
                                                 min = 5, max = 100, value = 15, round = TRUE, width = '100%')

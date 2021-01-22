@@ -40,14 +40,13 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
                 multiple = TRUE))
 
   complClean <- reactiveValues()
-  observe(
-    for (i in input$selectedSeries) {
-      complClean[[i]] <- compl[[i]]$data()[, 1]
-    }
-  )
+  observe(for (i in input$selectedSeries) {complClean[[i]] <- compl[[i]]$data()[, 1]})
+  
+  Data   <- eventReactive(input$doCompare, {isolate(reactiveValuesToList(complClean))})
+  StData <- reactive(stack(Data()))
   
   #BARLETT
-  Brltt <- eventReactive(input$doCompare, {bartlett.test(x = isolate(reactiveValuesToList(complClean)))})
+  Brltt <- eventReactive(input$doCompare, {bartlett.test(x = Data())})
   outBarlett <- eventReactive(input$doCompare, {
     if(Brltt()$p.value <= (1 - input$ConfLev)) {
       return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
@@ -71,7 +70,7 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
   
   #LEVENE1
   LVN1 <- eventReactive(input$doCompare, {
-    car::leveneTest(data = stack(isolate(reactiveValuesToList(complClean))), y = values ~ ind, center = 'mean')})
+    car::leveneTest(data = StData(), y = values ~ ind, center = 'mean')})
   outLevene1 <- eventReactive(input$doCompare, {
     if(LVN1()$Pr[1] <= (1 - input$ConfLev)) {
       return(box(title = tags$b('Resultado de la prueba'), width = 6, status = 'danger',
@@ -96,7 +95,7 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
   
   #LEVENE2
   LVN2 <- eventReactive(input$doCompare, {
-    car::leveneTest(data = stack(isolate(reactiveValuesToList(complClean))), y = values ~ ind, center = 'median')})
+    car::leveneTest(data = StData(), y = values ~ ind, center = 'median')})
   outLevene2 <- eventReactive(input$doCompare, {
     if(LVN2()$Pr[1] <= (1 - input$ConfLev)) {
       return(box(title = tags$b('Resultado de la prueba'), width = 6, status = 'danger',
@@ -121,7 +120,7 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
   
   #HARTLEY
   HRTLY <- eventReactive(input$doCompare, {
-    PMCMRplus::hartleyTest(formula = values ~ ind, data = stack(isolate(reactiveValuesToList(complClean))))})
+    PMCMRplus::hartleyTest(formula = values ~ ind, data = StData())})
   outHartley <- eventReactive(input$doCompare, {
     if(HRTLY()$p.value <= (1 - input$ConfLev)) {
       return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
@@ -145,7 +144,7 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
   
   #COCHRAN outlying
   CCHRNout <- eventReactive(input$doCompare, {
-    outliers::cochran.test(data = stack(isolate(reactiveValuesToList(complClean))), object = values ~ ind, inlying = FALSE)})
+    outliers::cochran.test(data = StData(), object = values ~ ind, inlying = FALSE)})
   outCochranOut <- eventReactive(input$doCompare, {
     if(CCHRNout()$p.value <= (1 - input$ConfLev)) {
       return(box(title = tags$b('Resultado de la prueba'), width = 6, status = 'danger',
@@ -171,7 +170,7 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
   
   #COCHRAN inlying
   CCHRNin <- eventReactive(input$doCompare, {
-    outliers::cochran.test(data = stack(isolate(reactiveValuesToList(complClean))), object = values ~ ind, inlying = TRUE)})
+    outliers::cochran.test(data = StData(), object = values ~ ind, inlying = TRUE)})
   outCochranIn <- eventReactive(input$doCompare, {
     if(CCHRNin()$p.value <= (1 - input$ConfLev)) {
       return(box(title = tags$b('Resultado de la prueba'), width = 6, status = 'danger',

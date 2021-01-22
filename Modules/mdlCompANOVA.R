@@ -1,36 +1,41 @@
 comparacionANOVAUI <- function(id) {
   ns <- NS(id)
-  column(12, box(title = tags$b('Análisis de varianza'), width = 12, status = 'primary',
-                fluidRow(column(2, uiOutput(ns('selectSeries')),
-                                sliderInput(ns('ConfLev'), label = 'Nivel de confianza:', 
-                                            min = 0.9, max = 0.999, value = 0.95, step = 0.001),
-                                shiny::actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
-                         column(5, verbatimTextOutput(ns('anova1'))),
-                         column(5, 
-                                tabBox(title = tags$b("Diagramas"), width = 12,
-                                       tabPanel("Cajas y bigotes", 
-                                                dropdownButton(circle = TRUE, status = "danger", icon = icon("gear"), 
-                                                               width = "300px", size = 'sm',
-                                                               tooltip = tooltipOptions(title = "Configuraciones del gráfico"),
-                                                               textInput(ns('xBoxW'), label = 'Etiqueta eje X', value = 'Grupo'),
-                                                               textInput(ns('yBoxW'), label = 'Etiqueta eje Y', value = 'Variable')),
-                                                plotOutput(ns('BoxWPlt')),
-                                                downloadButton(ns('DwnBoxWPlt'), label = 'Descargar gráfico')),
-                                       tabPanel("Gráfico de residuales", 
-                                                dropdownButton(circle = TRUE, status = "danger", icon = icon("gear"), 
-                                                               width = "300px", size = 'sm',
-                                                               tooltip = tooltipOptions(title = "Configuraciones del gráfico"),
-                                                               textInput(ns('xResid'), label = 'Etiqueta eje X', 
-                                                                         value = 'Valor ajustado'),
-                                                               textInput(ns('yResid'), label = 'Etiqueta eje Y', 
-                                                                         value = 'Residuales'),
-                                                               materialSwitch(ns('LegResid'), label = 'Legenda', 
-                                                                              value = TRUE, status = "primary"),
-                                                               textInput(ns('LegTxResid'), label = 'Título de la legenda', 
-                                                                         value = 'Grupos')
-                                                ),
-                                                plotOutput(ns('ResidPlt')),
-                                                downloadButton(ns('DwnResidPlt'), label = 'Descargar gráfico')))))))
+  column(12,
+    box(title = tags$b('Análisis de varianza'), width = 12, status = 'primary',
+        fluidRow(
+          column(3, uiOutput(ns('selectSeries')),
+                 sliderInput(ns('ConfLev'), label = 'Nivel de confianza:', min = 0.9, max = 0.999, value = 0.95, step = 0.001),
+                 shiny::actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE),
+                 tags$hr(), tags$h4(tags$b('Supuestos del análisis:')), 
+                 uiOutput(ns('aovAss1')), uiOutput(ns('aovAss2')), uiOutput(ns('aovAss3'))),
+          column(5, verbatimTextOutput(ns('anova1'))),
+          column(4, 
+                 tabBox(title = tags$b("Diagramas"), width = 12,
+                        tabPanel("Cajas y bigotes", 
+                                 dropdownButton(circle = TRUE, status = "danger", icon = icon("gear"), 
+                                                width = "300px", size = 'sm',
+                                                tooltip = tooltipOptions(title = "Configuraciones del gráfico"),
+                                                textInput(ns('xBoxW'), label = 'Etiqueta eje X', value = 'Grupo'),
+                                                textInput(ns('yBoxW'), label = 'Etiqueta eje Y', value = 'Variable')),
+                                 plotOutput(ns('BoxWPlt')),
+                                 downloadButton(ns('DwnBoxWPlt'), label = 'Descargar gráfico')),
+                        tabPanel("Gráfico de residuales", 
+                                 dropdownButton(circle = TRUE, status = "danger", icon = icon("gear"), 
+                                                width = "300px", size = 'sm',
+                                                tooltip = tooltipOptions(title = "Configuraciones del gráfico"),
+                                                textInput(ns('xResid'), label = 'Etiqueta eje X', 
+                                                          value = 'Valor ajustado'),
+                                                textInput(ns('yResid'), label = 'Etiqueta eje Y', 
+                                                          value = 'Residuales'),
+                                                materialSwitch(ns('LegResid'), label = 'Legenda', 
+                                                               value = TRUE, status = "primary"),
+                                                textInput(ns('LegTxResid'), label = 'Título de la legenda', 
+                                                          value = 'Grupos')
+                                 ),
+                                 plotOutput(ns('ResidPlt')),
+                                 downloadButton(ns('DwnResidPlt'), label = 'Descargar gráfico')))))))
+                 
+    
 }
 
 comparacionANOVAServer <- function(input, output, session, nSeries, compl, formatP, dimensP) {
@@ -46,20 +51,19 @@ comparacionANOVAServer <- function(input, output, session, nSeries, compl, forma
                 multiple = TRUE))
   
   complClean <- reactiveValues()
-  observe(
-    for (i in input$selectedSeries) {
-      complClean[[i]] <- compl[[i]]$data()[, 1]
-    }
-  )
-  data <-  eventReactive(input$doCompare, {stack(isolate(reactiveValuesToList(complClean)))})
-  anovaReac <- reactive(aov(formula = values ~ ind, data = data()))
-  BoxWPlt <- reactive(boxplot(formula = values ~ ind, data = data(), xlab = input$xBoxW, ylab = input$yBoxW))
+  observe(for (i in input$selectedSeries) {complClean[[i]] <- compl[[i]]$data()[, 1]})
+  Data   <- eventReactive(input$doCompare, {isolate(reactiveValuesToList(complClean))})
+  StData <- reactive(stack(Data()))
+  
+  anovaReac <- reactive(aov(formula = values ~ ind, data = StData()))
+  
+  BoxWPlt <- reactive(boxplot(formula = values ~ ind, data = StData(), xlab = input$xBoxW, ylab = input$yBoxW))
   ResidPlt <- reactive({
-    Model <- data.frame(Fitted = fitted(anovaReac()), Residuals = resid(anovaReac()), Treatment = data()$ind)
+    Model <- data.frame(Fitted = fitted(anovaReac()), Residuals = resid(anovaReac()), Treatment = StData()$ind)
     p <- ggplot(Model, aes(Fitted, Residuals, colour = Treatment)) + geom_point() + theme_bw() +
-             labs(y = input$ylabQQ, x = input$xlabQQ) + geom_smooth(method = 'loess', formula = 'y ~ x', col = 'blue') +
-             theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                   axis.text.x = element_text(color = "black"), axis.text.y = element_text(color = "black"))
+      labs(y = input$ylabQQ, x = input$xlabQQ) + geom_smooth(method = 'loess', formula = 'y ~ x', col = 'blue') +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            axis.text.x = element_text(color = "black"), axis.text.y = element_text(color = "black"))
     if(input$LegResid) {
       p <- p + labs(color = input$LegTxResid)
     } else {
@@ -67,11 +71,55 @@ comparacionANOVAServer <- function(input, output, session, nSeries, compl, forma
     }
     return(p)})
   
+  aovAss1 <- eventReactive(input$doCompare, {
+    switchAlert <- FALSE
+    for (i in 1:length(Data())) {
+      if ((outliers::dixon.test(Data()[[i]]))$p.value <= (1 - input$ConfLev) || 
+          (outliers::grubbs.test(Data()[[i]])$p.value <= (1 - input$ConfLev))) {switchAlert <- TRUE; break()}}
+    if (switchAlert) {
+      return(box(title = tags$b('Ausencia de anómalos'), width = NULL, status = 'danger',
+                 h5('Es posible que el supuesto de ausencia de datos anómalos al interior de los grupos no se cumpla.
+                    Revise las pruebas de anómalos en la sección', tags$b('Estadística descriptiva.'))))
+    } else {
+      return(box(title = tags$b('Ausencia de anómalos'), width = NULL, status = 'success',
+                 h5('No se encontró evidencia en contra del supuesto de ausencia de datos anómalos al interior de los grupos.')))}})
+  
+  aovAss2 <- eventReactive(input$doCompare, {
+    switchAlert <- FALSE
+    for (i in 1:length(Data())) {
+      if (shapiro.test(Data()[[i]])$p.value <= (1 - input$ConfLev)) {switchAlert <- TRUE; break()}}
+    if (switchAlert) {
+      return(box(title = tags$b('Normalidad de los datos'), width = NULL, status = 'danger',
+                 h5('Es posible que el supuesto de normalidad no se cumpla para alguno de los grupos. 
+                    Revise las pruebas de normalidad en la sección', tags$b('Estadística descriptiva.'))))
+    } else {
+      return(box(title = tags$b('Normalidad de los datos'), width = NULL, status = 'success',
+                 h5('No se encontró evidencia en contra del supuesto de normalidad al interior de los grupos.')))}})
+  
+  aovAss3 <- eventReactive(input$doCompare, {
+    switchAlert <- FALSE  
+    
+      if ((car::leveneTest(data = StData(), y = values ~ ind))$Pr[1] <= (1 - input$ConfLev) ||
+          (car::leveneTest(data = StData(), y = values ~ ind, center = 'median'))$Pr[1] <= (1 - input$ConfLev) ||
+          (bartlett.test(x = Data()))$p.value <= (1 - input$ConfLev) ||
+          (outliers::cochran.test(data = StData(), object = values ~ ind))$p.value <= (1 - input$ConfLev)) {switchAlert <- TRUE}
+    
+    if (switchAlert) {
+      return(box(title = tags$b('Homocedasticidad entre series'), width = NULL, status = 'danger',
+                 h5('Es posible que el supuesto de varianza homogénea no se cumpla entre las series analizadas.
+                    Revise las pruebas de comparación de múltiples varianzas en la sección', tags$b('Comparación de varianzas.'))))
+    } else {
+      return(box(title = tags$b('Homocedasticidad entre series'), width = NULL, status = 'success',
+                 h5('No se encontró evidencia en contra del supuesto de homogeneidad de varianzas entre los grupos.')))}})
+  
   output$anova1      <- renderPrint(summary(anovaReac()))
   output$BoxWPlt     <- renderPlot(BoxWPlt())
   output$ResidPlt    <- renderPlot(ResidPlt())
   output$DwnBoxWPlt  <- dwldhndlr(name = 'CajasBigotes', formatP = formatP, dimensP = dimensP, plt = BoxWPlt())
   output$DwnResidPlt <- dwldhndlr(name = 'residualesANOVA', formatP = formatP, dimensP = dimensP, plt = ResidPlt())
+  output$aovAss1    <- renderUI(aovAss1())
+  output$aovAss2    <- renderUI(aovAss2())
+  output$aovAss3    <- renderUI(aovAss3())
   
   return(list('aovSum' = anovaReac, 'aovSig' = reactive(input$ConfLev)))
 }
