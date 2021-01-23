@@ -49,16 +49,20 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
   Brltt <- eventReactive(input$doCompare, {bartlett.test(x = Data())})
   outBarlett <- eventReactive(input$doCompare, {
     if(Brltt()$p.value <= (1 - input$ConfLev)) {
-      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
+      return(box(title = tags$b('Resultado de la prueba de Barlett'), width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (NO PASA) xxx.'),
+                 tags$h4('Al menos dos de las varianzas muestrales presentan entre sí una diferencia estadísticamente significativas,
+                          según lo hallado por la prueba de Bartlett, a un nivel de confianza
+                         del ', round(100 * input$ConfLev, 1), '%.'),
                  tags$br(), tableOutput(session$ns("BrltttableResults"))))
     } else {
       return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (PASA) xxx.'), 
+                 tags$h4('Según la prueba de homogeneidad de varianzas de Barlett, no hay evidencia suficiente para afirmar que las
+                         muestras estadísticas sean heterocedásticas, a un nivel de confianza
+                         del ', round(100 * input$ConfLev, 1), '%.'), 
                  tags$br(), tableOutput(session$ns("BrltttableResults"))))
     }
   })
