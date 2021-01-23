@@ -2,7 +2,7 @@ estadisticaDescriptivaUI <- function(id, IntID = 1, value0 = 10) {
   ns <- NS(id)
   #box(width = 12, 
   fluidRow(column(12, 
-                  box(width = 3,  status = 'primary', title = tags$b('Datos para analizar'),
+                  box(width = 3,  status = 'primary', title = tags$b('Datos a analizar'),
                       uiOutput(ns('selectSeries')),
                       selectizeInput(ns('valX'), label = "Seleccione una variable", width = '80%',
                                      choices = list('col.X1' = 1, 'col.X2' = 2, 'col.X3' = 3, 'col.X4' = 4)),
@@ -80,8 +80,7 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
       labs(y = input$ylabQQ, x = input$xlabQQ) +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             axis.text.x = element_text(color = "black"), axis.text.y = element_text(color = "black"))
-    return(p)
-  })
+    return(p)})
   
   SW <- reactive(shapiro.test(dataF()))
   niceShapWilk <- eventReactive(input$descrStat, {
@@ -89,13 +88,17 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
       return(box(title = tags$b('Resultado de la prueba de Shapiro-Wilk'), width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (NO PASA) xxx.', tags$b(pround(SW()$p.value, digits = 4)))))
+                 tags$h4('La evidencia proporcionada sugiere que la muestra estadística 
+                         no proviene de una población con distribución normal, según la prueba de Shapiro-Wilk, 
+                         al nivel de confianza configurado.', tags$br(),
+                         'Valor p de la prueba:', tags$b(pround(SW()$p.value, digits = 4)))))
     } else {
       return(box(title = tags$b('Resultado de la prueba de Shapiro-Wilk'), width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (PASA) xxx.', tags$b(pround(SW()$p.value, digits = 4)))))
-    }})
+                 tags$h4('La prueba de Shapiro-Wilk no encontró evidencia para afirmar que la muestra estadística no proviene
+                         de una población con distribución normal.', tags$br(),
+                         'Valor p de la prueba:', tags$b(pround(SW()$p.value, digits = 4)))))}})
   
   KS <- reactive(ks.test(dataF(), y = 'pnorm'))
   niceKolmoSmir <- eventReactive(input$descrStat, {
@@ -103,60 +106,86 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
       return(box(title = tags$b('Resultado de la prueba de Kolmogorov-Smirnov'), width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (NO PASA) xxx.', tags$b(pround(KS()$p.value, digits = 4)))))
+                 tags$h4('La evidencia proporcionada sugiere que la muestra estadística 
+                         no proviene de una población con distribución normal, según la prueba de Kolmogorov-Smirnov, 
+                         al nivel de confianza configurado.', tags$br(),
+                         'Valor p de la prueba:', tags$b(pround(KS()$p.value, digits = 4)), tags$br(), tags$br()),
+                 tags$h5('Recuerde que los resultados de esta prueba son más confiables para muestras estadísticas 
+                          relativamente grandes')))
     } else {
       return(box(title = tags$b('Resultado de la prueba de Kolmogorov-Smirnov'), width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (PASA) xxx.', tags$b(pround(KS()$p.value, digits = 4)))))
+                 tags$h4('La prueba de Shapiro-Wilk no encontró evidencia para afirmar que la muestra estadística no proviene
+                         de una población con distribución normal.', tags$br(),
+                         'Valor p de la prueba:', tags$b(pround(KS()$p.value, digits = 4)), tags$br(), tags$br()),
+                 tags$h5('Recuerde que los resultados de esta prueba son más confiables para muestras estadísticas 
+                          relativamente grandes')))
     }})
 
   Gr10 <- reactive(outliers::grubbs.test(dataF(), type = 10))
   niceGrubs10 <- eventReactive(input$descrStat, {
     if(Gr10()$p.value <= (1 - input$ConfLev)) {
-      return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para un único dato anómalo'), 
+      return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para un único dato'), 
                  width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (NO PASA) xxx.', tags$b(pround(Gr10()$p.value, digits = 4)))))
+                 tags$h4('Según la prueba de Grubbs para un único dato, el valor', 
+                         tags$b(as.numeric(strsplit(Gr10()$alternative, " ")[[1]][3])),
+                        'es sospechoso de ser un dato anómaloal nivel de confianza seleccionado.', tags$br(),
+                        'Valor p de la prueba:', tags$b(pround(Gr10()$p.value, digits = 4)))))
     } else {
-      return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para un único dato anómalo'), 
+      return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para un único dato'), 
                  width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (PASA) xxx.', tags$b(pround(Gr10()$p.value, digits = 4)))))
+                 tags$h4('La prueba de Grubbs para un único dato no encontró valores sospechosos de
+                         ser anómalosal nivel de confianza seleccionado.', tags$br(),
+                         'Valor p de la prueba:', tags$b(pround(Gr10()$p.value, digits = 4)))))
     }})
 
   Gr11 <- reactive(outliers::grubbs.test(dataF(), type = 11))
   niceGrubs11 <- eventReactive(input$descrStat, {
     if(Gr11()$p.value <= (1 - input$ConfLev)) {
-      return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para un dato anómalo en cada extremo'), 
+      return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para un dato en cada extremo'), 
                  width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (NO PASA) xxx.', tags$b(pround(Gr11()$p.value, digits = 4)))))
+                 tags$h4('Según la prueba de Grubbs para un dato en cada extremo, los valores',
+                         tags$b(as.numeric(strsplit(Gr11()$alternative, " ")[[1]][1])), 'y', 
+                         tags$b(as.numeric(strsplit(Gr11()$alternative, " ")[[1]][3])),
+                         'son sospechosos de ser anómalosal nivel de confianza seleccionado.', tags$br(),
+                         'Valor p de la prueba:', tags$b(pround(Gr11()$p.value, digits = 4)))))
     } else {
-      return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para un dato anómalo en cada extremo'), 
+      return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para un dato en cada extremo'), 
                  width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (PASA) xxx.', tags$b(pround(Gr11()$p.value, digits = 4)))))
+                 tags$h4('La prueba de Grubbs para un dato en cada extremo no encontró valores
+                         sospechosos de ser anómalosal nivel de confianza seleccionado.', tags$br(),
+                         'Valor p de la prueba:', tags$b(pround(Gr11()$p.value, digits = 4)))))
     }})
   
   Gr20 <- reactive(outliers::grubbs.test(dataF(), type = 20))
   niceGrubs20 <- eventReactive(input$descrStat, {
     if(Gr20()$p.value <= (1 - input$ConfLev)) {
-      return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para dos datos anómalos en el mismo extremo'), 
+      return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para dos datos en el mismo extremo'), 
                  width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (NO PASA) xxx.', tags$b(pround(Gr20()$p.value, digits = 4)))))
+                 tags$h4('Según la prueba de Grubbs para dos datos en el mismo extremo, los valores',
+                         tags$b(as.numeric(strsplit(Gr20()$alternative, " ")[[1]][3])), 'y', 
+                         tags$b(as.numeric(strsplit(Gr20()$alternative, " ")[[1]][5])),
+                         'son sospechosos de ser anómalosal nivel de confianza seleccionado.', tags$br(),
+                         'Valor p de la prueba:', tags$b(pround(Gr20()$p.value, digits = 4)))))
     } else {
-      return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para dos datos anómalos en el mismo extremo'), 
+      return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para dos datos en el mismo extremo'), 
                  width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (PASA) xxx.', tags$b(pround(Gr20()$p.value, digits = 4)))))
+                 tags$h4('La prueba de Grubbs para dos datos en el mismo extremo no encontró valores
+                         sospechosos de ser anómalosal nivel de confianza seleccionado.', tags$br(),
+                         'Valor p de la prueba:', tags$b(pround(Gr20()$p.value, digits = 4)))))
     }})
 
   Dx <- reactive(outliers::dixon.test(dataF()))
@@ -166,13 +195,18 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
                  width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (NO PASA) xxx.', tags$b(pround(Dx()$p.value, digits = 4)))))
+                 tags$h4('Según la prueba de Dixon para un único dato, el valor', 
+                         tags$b(as.numeric(strsplit(Dx()$alternative, " ")[[1]][3])),
+                         'es sospechoso de ser un dato anómaloal nivel de confianza seleccionado.', tags$br(),
+                         'Valor p de la prueba:', tags$b(pround(Dx()$p.value, digits = 4)))))
     } else {
       return(box(title = tags$b('Resultado de la prueba de datos anómalos de Dixon'), 
                  width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (PASA) xxx.', tags$b(pround(Dx()$p.value, digits = 4)))))
+                 tags$h4('La prueba Dixon para un único dato no encontró valores
+                         sospechosos de ser anómalosal nivel de confianza seleccionado.', tags$br(),
+                         'Valor p de la prueba:', tags$b(pround(Dx()$p.value, digits = 4)))))
     }})
   
 

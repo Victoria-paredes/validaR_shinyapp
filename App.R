@@ -17,7 +17,8 @@ library(BHH2) # dotPlot(faithful$waiting, pch = 16)
 customFunctions <- paste0('CustomFunctions/', list.files(path = "CustomFunctions")) # functions in the server side
 modules         <- paste0('Modules/', list.files(path = "Modules"))
 layouts         <- paste0('Layouts/', list.files(path = "Layouts")) # functions in the client side
-sapply(c(customFunctions, modules, layouts), source)
+sapply(c(customFunctions, modules, layouts
+         ), source)
 
 ui <- function(request) {
   dashboardPage(header = customHeader, sidebar = customSidebar, body = customBody, 

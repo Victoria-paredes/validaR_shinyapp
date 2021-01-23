@@ -3,30 +3,37 @@
 #lyPruebasComparacion <- box(width = 12,
 #                            lyPruebasComparacionDscrp)
 
-lyCompMediasDscrp <- infoBox(width = 12, "Instrucciones", color = 'navy',
-                             h5("Este módulo permite comparar una media muestral contra un valor de referencia o contra
-                                otra media muestral. Para el caso de dos medias muestrales, los datos de las muestras estadísticas 
-                                pueden ser independientes o puede tratarse de datos emparejados.", tags$br(), tags$br(),
-                                "Los conjuntos de datos a analizar deben ser de naturaleza univariada. 
-                                Si la serie de datos que se escoje contiene varias 
-                                columnas activas, la aplicación solo tiene en cuenta la primera de estas.
-                                En todos los casos se debe escoger una hipótesis alternativa y un nivel de confianza para la prueba.
-                                Por defecto las pruebas son bilaterales y se evaluan a un nivel de confianza del 95%.", 
-                                tags$br(), tags$br(),
-                                tags$ul(
-                                  tags$li('Comparar una media muestral contra un valor de referencia requiere un conjunto de datos y
-                                          un valor de referencia que debe estar en las mismas unidades que los valores del conjunto de 
-                                          datos que  compone la muestra estadística.'),
-                                  tags$li('Para comparar dos muestras estadísticas es necesario escoger los conjuntos de datos que
-                                          pueden ser independientes 
-                                          o pueden estar emparejados, en cuyo caso debe activarse la opción de muestras emparejadas
-                                          antes de correr el análisis.
-                                          Si las muestras estadísticas son independientes, la aplicación automáticamente verifica 
-                                          si puede asumirse homogeneidad de varianzas, para calcular el estadístico', tags$b('t'), 
-                                          'que corresponda según el caso.'),
-                                  #tags$li(''),
-                                  tags$li('Para  comparar las medias de más de dos grupos muestrales por favor diríjase a la 
-                                          sección', tags$b('Análisis de varianza (ANOVA).')))))
+lyCompMediasDscrp <- infoBox(
+  width = 12, "Instrucciones", color = 'navy',
+  h5("Este módulo permite comparar una media muestral contra un valor de referencia o contra
+     otra media muestral. Los conjuntos de datos a analizar deben ser de naturaleza univariada. 
+    Si la serie de datos que se escoje contiene varias columnas activas, la aplicación solo tiene en cuenta la primera de estas.", 
+    tags$br(), tags$br(),
+    tags$ul(
+      tags$li(
+        'Para comparar una media muestral contra un valor de referencia:',
+        tags$ol(
+          tags$li("Los datos deben estar previamente cargados en la sección", icon("hockey-puck"), tags$b("Ingreso de datos."),
+                  "El conjunto debe ser de naturaleza univariada. Si la serie de datos que se 
+                  escoje contiene varias columnas activas, la aplicación solo tiene en cuenta la primera de estas."),
+          tags$li("Se debe ingresar el valor de referencia para la media poblacional y una hipótesis alternativa 
+                  para la comparación."),
+          tags$li("Se debe escoger un nivel de confianza para la inferencia estadística y al presional el botón",
+                  tags$b('Correr análisis'), "aparecerán los resultados de la prueba"))), tags$br(),
+      tags$li('Para comparar una media muestral contra otra media muestral:',
+        tags$ol(
+          tags$li("Los datos deben estar previamente cargados en la sección", icon("hockey-puck"), tags$b("Ingreso de datos."),
+                  "Se necesitan dos series de datos que pueden ser independientes o puede tratarse de datos emparejados.
+                  Para el caso de los datos emparejados las series deben tener el mismo tamaño."),
+          tags$li("Se debe escoger una hipótesis alternativa y un nivel de confianza para la comparación."),
+          tags$li("Si la comparación se hará en datos emparejados debe activarse esta opción."),
+          tags$li("Al presional el botón", tags$b('Correr análisis'), "aparecerán los resultados de la prueba"),
+          tags$li("Si las muestras estadísticas son independientes, la aplicación automáticamente verifica 
+                  si se trata de series homocedásticas o heterocedásticas, para calcular el estadístico", tags$b('t'), 
+                  'que corresponda según el caso.'))), tags$br(),
+      tags$li('Para  comparar las medias de más de dos grupos muestrales por favor diríjase a la sección', 
+              tags$b('Análisis de varianza (ANOVA).')))))
+
 lyCompMedias <- fluidRow(column(12, 
                                 box(title = tags$b('Media muestral contra un valor de referencia (prueba t)'), width = 6, 
                                     status = 'primary', height = 700, comparacionMediasUI_1('mediaVsReferencia')),
@@ -59,7 +66,8 @@ lyCompVarianDscrp <- infoBox(width = 12, "Instrucciones", color = 'navy',
                                             tags$li(tags$b('Prueba de Hartley:'), 'Calcula el estadístico ...'),
                                             tags$li(tags$b('Prueba de Cochran:'), 'Calcula el estadístico ...')
                                           ))),
-                                "la dispersión de una muestra estadística contra un valor de referenciahablar de los tres tipos más importantes"))
+                                "la dispersión de una muestra estadística contra un valor de referenciahablar 
+                                de los tres tipos más importantes"))
 lyCompVarian <- fluidRow(column(12, 
                                 box(title = tags$b('Varianza muestral contra un valor de referencia (prueba \\(\\chi^2\\))'), 
                                     solidHeader = FALSE, width = 6, status = 'primary',
@@ -81,12 +89,13 @@ lyCompVarian <- fluidRow(column(12,
                                             ' [Fox y Weisberg, 2019]'))))
 
 lyCompANOVADscrp <- infoBox(width = 12, "Instrucciones", color = 'navy',
-                         h4("El análisis de varianza (ANOVA) compara las medias muestrales de más de dos conjuntos de datos
-                            para determinar si al menos uno de ellos es significativamente diferente a los demás desde 
-                            un punto de vista estadístico. ", tags$br(),
-                            "Para realizar ANOVA  
+                         h4("El análisis de varianza (ANOVA) compara las medias muestrales de tres o más conjuntos de datos,
+                            para determinar si al menos una de las diferencia entre los grupos es estadísticamente
+                            significativa. ", tags$br(),
+                            "Para realizar ANOVA  en la aplicación inicialmente 
                             La comparación de varioa medias muestrales evalua ..."))
-lyCompANOVA <- fluidRow(comparacionANOVAUI('anovaMdl'),#column(6, box(title = tags$b('Análisis de varianza'), width = 12, status = 'primary',
+lyCompANOVA <- fluidRow(comparacionANOVAUI('anovaMdl'),
+                        #column(6, box(title = tags$b('Análisis de varianza'), width = 12, status = 'primary',
                                       #height = 400, comparacionANOVAUI('anovaMdl'))),
                     column(12, box(title = tags$b('Pruebas de detección de diferencias entre grupos'), width = 12, status = 'primary',
                                    height = 1080,

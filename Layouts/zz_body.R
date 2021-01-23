@@ -17,7 +17,7 @@ customBody <- dashboardBody(
     ##, introductionModuleUI('introduction')),
     tabItem(tabName = "defini", h2('Terminos relevantes en la validación de métodos cuantitativos'),
             definicionesUI(id = 'definiciones')),
-    ##tabItem(tabName = "config", h2('Configuración general de la aplicación'), configGenUI('configDwnFiles')),
+     ##tabItem(tabName = "config", h2('Configuración general de la aplicación'), configGenUI('configDwnFiles')),
     tabItem(tabName = "ingrManDat", h2('Ingreso de datos a la aplicación'), lyIngresoDat),
     tabItem(tabName = "ejemData", h2('Series de datos de ejemplo'), datosEjemploUI('examples')),
     tabItem(tabName = "estDescri", h2("Estadística descriptiva"), lyEstadDescrDscrp, estadisticaDescriptivaUI("EstDesc"), 
