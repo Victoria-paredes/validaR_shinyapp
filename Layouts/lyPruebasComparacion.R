@@ -6,18 +6,17 @@
 lyCompMediasDscrp <- infoBox(
   width = 12, "Instrucciones", color = 'navy',
   h5("Este módulo permite comparar una media muestral contra un valor de referencia o contra
-     otra media muestral. Los conjuntos de datos a analizar deben ser de naturaleza univariada. 
-    Si la serie de datos que se escoje contiene varias columnas activas, la aplicación solo tiene en cuenta la primera de estas.", 
-    tags$br(), tags$br(),
+     otra media muestral.", tags$br(), tags$br(),
     tags$ul(
       tags$li(
         'Para comparar una media muestral contra un valor de referencia:',
         tags$ol(
           tags$li("Los datos deben estar previamente cargados en la sección", icon("hockey-puck"), tags$b("Ingreso de datos."),
-                  "El conjunto debe ser de naturaleza univariada. Si la serie de datos que se 
+                  "Los conjuntos de datos a estudias deben ser de naturaleza univariada. Si la serie de datos que se 
                   escoje contiene varias columnas activas, la aplicación solo tiene en cuenta la primera de estas."),
           tags$li("Se debe ingresar el valor de referencia para la media poblacional y una hipótesis alternativa 
-                  para la comparación."),
+                  para la comparación. El valor de referencia debe encontrarse en las mismas unidades que los datos de la 
+                  muestra estadística a comparar."),
           tags$li("Se debe escoger un nivel de confianza para la inferencia estadística y al presional el botón",
                   tags$b('Correr análisis'), "aparecerán los resultados de la prueba"))), tags$br(),
       tags$li('Para comparar una media muestral contra otra media muestral:',
@@ -27,7 +26,7 @@ lyCompMediasDscrp <- infoBox(
                   Para el caso de los datos emparejados las series deben tener el mismo tamaño."),
           tags$li("Se debe escoger una hipótesis alternativa y un nivel de confianza para la comparación."),
           tags$li("Si la comparación se hará en datos emparejados debe activarse esta opción."),
-          tags$li("Al presional el botón", tags$b('Correr análisis'), "aparecerán los resultados de la prueba"),
+          tags$li("Al presional el botón", tags$b('Correr análisis'), "aparecerán los resultados de la prueba."),
           tags$li("Si las muestras estadísticas son independientes, la aplicación automáticamente verifica 
                   si se trata de series homocedásticas o heterocedásticas, para calcular el estadístico", tags$b('t'), 
                   'que corresponda según el caso.'))), tags$br(),
@@ -41,33 +40,46 @@ lyCompMedias <- fluidRow(column(12,
                                    width = 6, status = 'primary',
                                    height = 700, comparacionMediasUI_2('dosMedias'))), tags$br())
 
-lyCompVarianDscrp <- infoBox(width = 12, "Instrucciones", color = 'navy',
-                             h5("Este módulo permite comparar la dispersión de las muestras estadísticas ingresadas a la aplicación.", 
-                                tags$br(), tags$br(),
-                                "Si la serie de datos que se escoje contiene varias 
-                                columnas activas, la aplicación solo tiene en cuenta la primera de estas.
-                                En todos los casos se debe escoger una hipótesis alternativa 
-                                (excepto en las pruebas de más de dos muestras estadísticas), y un nivel de confianza para la prueba.
-                                Por defecto las pruebas son bilaterales y se evaluan a un nivel de confianza del 95%.",
-                                tags$ul(
-                                  tags$li("La comparación de una varianza muestral contra un valor de referencia permite comparar 
-                                          la dispersión del conjunto de datos contra una varianza de referencia, 
-                                          una desviación estándar de referencia, 
-                                          o una desviación estándar relativa (coeficiente de variación) de referencia,
-                                          haciendo uso de la prueba \\(\\chi^2\\). "),
-                                  tags$li("La prueba F de Fisher permite comparar la homogeneidad de las varianzas de dos muestras 
-                                          estadísticas."),
-                                  tags$li("Para comparar la homogeneidad de varianzas entre más de dos muestras estadísticas
-                                          están disponibles cuatro pruebas de inferencia estadística que funcionan de 
-                                          manera similar:", tags$br(),
-                                          tags$ol(
-                                            tags$li(tags$b('Prueba de Barlett:'), 'Calcula el estadístico ...'),
-                                            tags$li(tags$b('Prueba de Levene:'), 'Calcula el estadístico ...'),
-                                            tags$li(tags$b('Prueba de Hartley:'), 'Calcula el estadístico ...'),
-                                            tags$li(tags$b('Prueba de Cochran:'), 'Calcula el estadístico ...')
-                                          ))),
-                                "la dispersión de una muestra estadística contra un valor de referenciahablar 
-                                de los tres tipos más importantes"))
+lyCompVarianDscrp <- infoBox(
+  width = 12, "Instrucciones", color = 'navy',
+  h5("Este módulo permite comparar la dispersión (varianza) de una muestra estadística contra un valor de 
+    referencia, respecto a otra muestra estadística, o en un conjunto de varias muestras estadísticas.", 
+    tags$br(), tags$br(),
+    tags$ul(
+      tags$li('Para comparar una varianza muestral contra un valor de referencia:',
+              tags$ol(
+                tags$li("Los datos deben estar previamente cargados en la sección", icon("hockey-puck"), tags$b("Ingreso de datos."),
+                        "Los conjuntos de datos a estudias deben ser de naturaleza univariada. Si la serie de datos que se 
+                        escoje contiene varias columnas activas, la aplicación solo tiene en cuenta la primera de estas."),
+                tags$li("Se debe ingresar el valor de referencia y se debe indicar la naturaleza de dicho valor. La aplicación
+                        acepta como referencia un valor de varianza, de desviación estándar, o de desviación estándar relativa."),
+                tags$li("Se debe escoger un nivel de confianza para la inferencia estadística y al presional el botón",
+                        tags$b('Correr análisis'), "aparecerán los resultados de la prueba"))), tags$br(),
+      tags$li('Para comparar las varianzas muestrales de dos conjuntos de datos independientes:',
+              tags$ol(
+                tags$li("Los datos deben estar previamente cargados en la sección", icon("hockey-puck"), 
+                        tags$b("Ingreso de datos.")),
+                tags$li("Se debe escoger una hipótesis alternativa y un nivel de confianza para la comparación."),
+                tags$li("Al presional el botón", tags$b('Correr análisis'), "aparecerán los resultados de la prueba."))), tags$br(),
+      tags$li('Para  comparar las medias de más de dos grupos muestrales El procedimiento a seguis es similar al caso anterior.
+              Están disponibles cuatro pruebas de inferencia estadística que funcionan de manera similar:',
+              tags$ol(
+                tags$li(tags$b('Prueba de Barlett:'), 'Esta prueba hace uso del estadístico \\(K^2\\) de Bartlett que presenta
+                        una distribución aproximada al estadístico \\(\\chi^2\\), para evaluar la hipótesis nula de que
+                        todas las varianzas son iguales, contra la hipótesis alternativa de que al menos una no lo es.'),
+                tags$li(tags$b('Prueba de Levene:'), 'Calcula el estadístico \\(W\\) para evaluar la hipótesis nula de que
+                        todas las varianzas son iguales, contra la hipótesis alternativa de que al menos una no lo es. 
+                        La prueba de Levene tiene una versión más robusta que hace uso de la mediana como medida de tendencia central
+                        en lugar del promedio. Esta variación (prueba de Brown–Forsythe) se considera más robusta y es apropiada
+                        cuando los datos no tienen una distribución normal.'),
+                tags$li(tags$b('Prueba de Hartley:'), 'Esta prueba realiza una comparación de varianzas entre 
+                        las muestras estadísticas con la varianza más grande y la más pequeña, respectivamente. La relación entre
+                        varianzas más grande de entre los conjuntos de datos (\\(F_{max}\\)) sigue una distribución especial
+                        que permite hacer inferencias sobre la homocedasticidad del conjunto de datos.'),
+                tags$li(tags$b('Prueba de Cochran:'), 'Evalúa de manera independiente la varianzas más grande y la varianza más pqueña,
+                        para concluír si alguna de estas puede considerarse como anómala dentro del grupo de varianzas muestrales
+                        que se están comparando.')
+              )))))
 lyCompVarian <- fluidRow(column(12, 
                                 box(title = tags$b('Varianza muestral contra un valor de referencia (prueba \\(\\chi^2\\))'), 
                                     solidHeader = FALSE, width = 6, status = 'primary',

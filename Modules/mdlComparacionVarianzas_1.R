@@ -17,7 +17,7 @@ comparacionVarianUI_1 <- function(id) {
 }
 
 comparacionVarianServer_1 <- function(input, output, session, nSeries, compl) {
-  values <- paste0('Serie', 1:20)
+  values <- paste0('Serie', 1:20) 
   names(values) <- paste('Serie #', 1:20)
   output$selectSeries <- renderUI(selectInput(session$ns("selectedSeries"), label = 'Seleccione un conjunto de datos',
                                               #choices = list('Series 1' = 1, 'Series 2' = 2)))
@@ -36,13 +36,17 @@ comparacionVarianServer_1 <- function(input, output, session, nSeries, compl) {
       return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (NO PASA) xxx.'),
+                 tags$h4('La diferencia entre la varianza muestral y el valor de referencia es estadísticamente significativa
+                         al nivel de confianza del ', round(100 * input$ConfLev, 1), '%.'),
                  tags$br(), tableOutput(session$ns("tableResults"))))
     } else {
       return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (PASA) xxx.'), 
+                 tags$h4('Al nivel de confianza del ', round(100 * input$ConfLev, 1), '%,
+                          no hay evidencia suficiente para afirmar que la diferencia
+                         entre la varianza muestral y el valor de referencia,
+                         se deba a algo más que no sea mero error aleatorio.'), 
                  tags$br(), tableOutput(session$ns("tableResults"))))
     }})
   

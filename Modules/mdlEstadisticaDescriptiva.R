@@ -44,7 +44,8 @@ estadisticaDescriptivaUI <- function(id, IntID = 1, value0 = 10) {
           column(12, box(title = tags$b('Pruebas de normalidad'), width = 6, status = 'primary', #height = '400px',
                         uiOutput(ns('niceShapWilk')), uiOutput(ns('niceKolmoSmir'))),
                  box(title = tags$b('Pruebas de datos anómalos'), width = 6, status = 'primary', # height = '400px',
-                     uiOutput(ns('niceGrubs10')), uiOutput(ns('niceGrubs11')), uiOutput(ns('niceGrubs20')), uiOutput(ns('niceDixon'))))
+                     uiOutput(ns('niceGrubs10')), uiOutput(ns('niceGrubs11')), 
+                     uiOutput(ns('niceGrubs20')), uiOutput(ns('niceDixon'))))
   )#)
 }
 
@@ -90,14 +91,15 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
                  tags$h4('La evidencia proporcionada sugiere que la muestra estadística 
                          no proviene de una población con distribución normal, según la prueba de Shapiro-Wilk, 
-                         al nivel de confianza configurado.', tags$br(),
+                         a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
                          'Valor p de la prueba:', tags$b(pround(SW()$p.value, digits = 4)))))
     } else {
       return(box(title = tags$b('Resultado de la prueba de Shapiro-Wilk'), width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
                  tags$h4('La prueba de Shapiro-Wilk no encontró evidencia para afirmar que la muestra estadística no proviene
-                         de una población con distribución normal.', tags$br(),
+                         de una población con distribución normal, 
+                         a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
                          'Valor p de la prueba:', tags$b(pround(SW()$p.value, digits = 4)))))}})
   
   KS <- reactive(ks.test(dataF(), y = 'pnorm'))
@@ -108,19 +110,20 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
                  tags$h4('La evidencia proporcionada sugiere que la muestra estadística 
                          no proviene de una población con distribución normal, según la prueba de Kolmogorov-Smirnov, 
-                         al nivel de confianza configurado.', tags$br(),
+                         a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
                          'Valor p de la prueba:', tags$b(pround(KS()$p.value, digits = 4)), tags$br(), tags$br()),
                  tags$h5('Recuerde que los resultados de esta prueba son más confiables para muestras estadísticas 
-                          relativamente grandes')))
+                          relativamente grandes (mayores a 30 datos).')))
     } else {
       return(box(title = tags$b('Resultado de la prueba de Kolmogorov-Smirnov'), width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
                  tags$h4('La prueba de Shapiro-Wilk no encontró evidencia para afirmar que la muestra estadística no proviene
-                         de una población con distribución normal.', tags$br(),
+                         de una población con distribución normal, 
+                         a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
                          'Valor p de la prueba:', tags$b(pround(KS()$p.value, digits = 4)), tags$br(), tags$br()),
                  tags$h5('Recuerde que los resultados de esta prueba son más confiables para muestras estadísticas 
-                          relativamente grandes')))
+                          relativamente grandes (mayores a 30 datos).')))
     }})
 
   Gr10 <- reactive(outliers::grubbs.test(dataF(), type = 10))
@@ -132,7 +135,8 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
                  tags$h4('Según la prueba de Grubbs para un único dato, el valor', 
                          tags$b(as.numeric(strsplit(Gr10()$alternative, " ")[[1]][3])),
-                        'es sospechoso de ser un dato anómaloal nivel de confianza seleccionado.', tags$br(),
+                        'es sospechoso de ser un dato anómaloa un nivel de confianza del ', 
+                        round(100 * input$ConfLev, 1), '%.', tags$br(),
                         'Valor p de la prueba:', tags$b(pround(Gr10()$p.value, digits = 4)))))
     } else {
       return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para un único dato'), 
@@ -140,7 +144,7 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
                  tags$h4('La prueba de Grubbs para un único dato no encontró valores sospechosos de
-                         ser anómalosal nivel de confianza seleccionado.', tags$br(),
+                         ser anómalos a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
                          'Valor p de la prueba:', tags$b(pround(Gr10()$p.value, digits = 4)))))
     }})
 
@@ -154,7 +158,8 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
                  tags$h4('Según la prueba de Grubbs para un dato en cada extremo, los valores',
                          tags$b(as.numeric(strsplit(Gr11()$alternative, " ")[[1]][1])), 'y', 
                          tags$b(as.numeric(strsplit(Gr11()$alternative, " ")[[1]][3])),
-                         'son sospechosos de ser anómalosal nivel de confianza seleccionado.', tags$br(),
+                         'son sospechosos de ser anómalosa un nivel de confianza del ', 
+                         round(100 * input$ConfLev, 1), '%.', tags$br(),
                          'Valor p de la prueba:', tags$b(pround(Gr11()$p.value, digits = 4)))))
     } else {
       return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para un dato en cada extremo'), 
@@ -162,7 +167,7 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
                  tags$h4('La prueba de Grubbs para un dato en cada extremo no encontró valores
-                         sospechosos de ser anómalosal nivel de confianza seleccionado.', tags$br(),
+                         sospechosos de ser anómalosa un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
                          'Valor p de la prueba:', tags$b(pround(Gr11()$p.value, digits = 4)))))
     }})
   
@@ -176,7 +181,8 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
                  tags$h4('Según la prueba de Grubbs para dos datos en el mismo extremo, los valores',
                          tags$b(as.numeric(strsplit(Gr20()$alternative, " ")[[1]][3])), 'y', 
                          tags$b(as.numeric(strsplit(Gr20()$alternative, " ")[[1]][5])),
-                         'son sospechosos de ser anómalosal nivel de confianza seleccionado.', tags$br(),
+                         'son sospechosos de ser anómalosa un nivel de confianza del ', 
+                         round(100 * input$ConfLev, 1), '%.', tags$br(),
                          'Valor p de la prueba:', tags$b(pround(Gr20()$p.value, digits = 4)))))
     } else {
       return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para dos datos en el mismo extremo'), 
@@ -184,7 +190,7 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
                  tags$h4('La prueba de Grubbs para dos datos en el mismo extremo no encontró valores
-                         sospechosos de ser anómalosal nivel de confianza seleccionado.', tags$br(),
+                         sospechosos de ser anómalosa un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
                          'Valor p de la prueba:', tags$b(pround(Gr20()$p.value, digits = 4)))))
     }})
 
@@ -197,7 +203,8 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
                  tags$h4('Según la prueba de Dixon para un único dato, el valor', 
                          tags$b(as.numeric(strsplit(Dx()$alternative, " ")[[1]][3])),
-                         'es sospechoso de ser un dato anómaloal nivel de confianza seleccionado.', tags$br(),
+                         'es sospechoso de ser un dato anómaloa un nivel de confianza del ', 
+                         round(100 * input$ConfLev, 1), '%.', tags$br(),
                          'Valor p de la prueba:', tags$b(pround(Dx()$p.value, digits = 4)))))
     } else {
       return(box(title = tags$b('Resultado de la prueba de datos anómalos de Dixon'), 
@@ -205,7 +212,7 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
                  tags$h4('La prueba Dixon para un único dato no encontró valores
-                         sospechosos de ser anómalosal nivel de confianza seleccionado.', tags$br(),
+                         sospechosos de ser anómalosa un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
                          'Valor p de la prueba:', tags$b(pround(Dx()$p.value, digits = 4)))))
     }})
   

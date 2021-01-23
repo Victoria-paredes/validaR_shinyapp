@@ -32,13 +32,17 @@ comparacionVarianServer_2 <- function(input, output, session, nSeries, compl) {
       return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (NO PASA) xxx.'),
+                 tags$h4('La diferencia entre las varianzas muestrales es estadísticamente significativa
+                          al nivel de confianza del ', round(100 * input$ConfLev, 1), '%.'),
                  tags$br(), tableOutput(session$ns("tableResults"))))
     } else {
       return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (PASA) xxx.'), 
+                 tags$h4('Al nivel de confianza del ', round(100 * input$ConfLev, 1), '%,
+                          no hay evidencia suficiente para afirmar que la diferencia
+                         entre las varianzas muestrales
+                         se deba a algo más que no sea mero error aleatorio.'), 
                  tags$br(), tableOutput(session$ns("tableResults"))))
     }})
   
