@@ -84,7 +84,7 @@ server <- function(input, output, session) {
   #onBookmarked(updateQueryString)
 }
 
-shinyApp(ui = ui, server = server, enableBookmarking = "server")
+shinyApp(ui = ui, server = server, enableBookmarking = "url")
 
 #http://www.inm.gov.co/servicio-al-ciudadano/glosario/
 # Más bonito:

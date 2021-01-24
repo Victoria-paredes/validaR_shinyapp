@@ -21,7 +21,7 @@ regresionUI <- function(id) {
                actionButton(ns("calcularReg"), label = "Calcular regresión", styleclass = 'primary'),
                verbatimTextOutput(ns('testtest'))),
             
-            tabBox(title = "Gráficos", width = 5,
+            tabBox(title = tags$b("Gráficos:"), width = 5, side = 'right',
                    tabPanel("Diagrama de  calibración", 
                             dropdownButton(circle = TRUE, status = "danger", icon = icon("gear"), width = "300px", size = 'sm',
                                            tooltip = tooltipOptions(title = "Etiquetas de eje"),

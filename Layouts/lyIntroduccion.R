@@ -4,11 +4,10 @@ introduccionLy <- fluidRow(
         fluidRow(
           column(8,
             h4("Esta aplicación implementa los procedimientos estadísticos que se mencionan en la",
-               tags$b("Guía de Validación de Métodos Cuantitativos del Instituto Nacional de Metrología de Colombia"),
-               "(en proceso de elaboración).
+               tags$b("Guía de Validación de Métodos de Análisis Químico Cuantitativo"), 
+               "del Instituto Nacional de Metrología de Colombia (en proceso de elaboración).
                 La aplicación ", tags$b("validaR"), " provee herramientas generales de estadística descriptiva, 
-                estadística inferencial 
-                (pruebas de comparación), análisis de regresión, cálculo de parámetros de validación, 
+                estadística inferencial (pruebas de comparación), análisis de regresión, cálculo de parámetros de validación, 
                 entre otras funciones, que serán de utilidad para todo aquel que tenga que ver con la validación
                 de métodos analíticos cuantitativos. El propósito de ", tags$b("validaR"), " es apoyar en el tratamiento de
                 datos experimentales de validación con el fin de que las personas puedan enfocarse en la parte importante del proceso: 
@@ -33,10 +32,12 @@ introduccionLy <- fluidRow(
                          icon("cog"), tags$b("Configuración archivos."), 
                          "Algunas opciones de los gráficos pueden personalizarse haciendo seleccionando el botón 
                          circular rojo que se encuentra cerca de cada gráfico."), tags$br(),
-                 tags$li("Para guardar el estado de la aplicación en cualquier momento dado, haga click en el botón", 
-                         icon("link"), tags$b("Guardar..."), "copie y guarde el link que se genera.
-                         Use dicho link para acceder a la aplicación cuando desee continuar.", 
-                         tags$code("(Esta función aún no se encuentra disponible)")), tags$br(),
+                #tags$li("Para guardar el estado de la aplicación en cualquier momento dado, haga click en el botón", 
+                #         icon("link"), tags$b("General vínculo,"), "copie el link que se genera y guardelo en algún lugar 
+                #         (por ejemplo, en su correo electrónico).
+                #         Use dicho link para acceder a la aplicación cuando desee continuar."), 
+                #         #tags$code("(Esta función aún no se encuentra disponible)")), 
+                #         tags$br(),
                  tags$li("Se recomienda el uso de pantallas con resolución igual o superior a 1920x1080 pixeles.
                          Para pantallas con menor resolución puede ser necesario disminuír el tamaño de la página 
                          para visualizar correctamente todo el contenido.", tags$br(), "Como referencia puede usarse 

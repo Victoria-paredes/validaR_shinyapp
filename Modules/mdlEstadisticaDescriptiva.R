@@ -13,7 +13,7 @@ estadisticaDescriptivaUI <- function(id, IntID = 1, value0 = 10) {
                       ),
                   box(title = tags$b("Descriptores estadísticos"), width = 3,  status = 'primary', 
                       tableOutput(ns('descripTab'))),
-                  tabBox(title = tags$b("Diagramas"), width = 6,
+                  tabBox(title = tags$b("Diagramas:"), width = 6, side = 'right',
                          tabPanel("Histograma", 
                                   dropdownButton(circle = TRUE, status = "danger", icon = icon("gear"), width = "300px", size = 'sm',
                                                  tooltip = tooltipOptions(title = "Configuraciones del gráfico"),
@@ -88,7 +88,8 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
     if(SW()$p.value <= (1 - input$ConfLev)) {
       return(box(title = tags$b('Resultado de la prueba de Shapiro-Wilk'), width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
-                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: La muestra no tiene distribución normal.')),
                  tags$h4('La evidencia proporcionada sugiere que la muestra estadística 
                          no proviene de una población con distribución normal, según la prueba de Shapiro-Wilk, 
                          a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
@@ -96,7 +97,8 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
     } else {
       return(box(title = tags$b('Resultado de la prueba de Shapiro-Wilk'), width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
-                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: La muestra tiene distribución normal.')),
                  tags$h4('La prueba de Shapiro-Wilk no encontró evidencia para afirmar que la muestra estadística no proviene
                          de una población con distribución normal, 
                          a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
@@ -104,27 +106,30 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
   
   KS <- reactive(ks.test(dataF(), y = 'pnorm'))
   niceKolmoSmir <- eventReactive(input$descrStat, {
-    if(KS()$p.value <= (1 - input$ConfLev)) {
-      return(box(title = tags$b('Resultado de la prueba de Kolmogorov-Smirnov'), width = 12, status = 'danger',
-                 footer = tags$span(style = "color:red", 
-                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
-                 tags$h4('La evidencia proporcionada sugiere que la muestra estadística 
-                         no proviene de una población con distribución normal, según la prueba de Kolmogorov-Smirnov, 
-                         a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
-                         'Valor p de la prueba:', tags$b(pround(KS()$p.value, digits = 4)), tags$br(), tags$br()),
-                 tags$h5('Recuerde que los resultados de esta prueba son más confiables para muestras estadísticas 
-                          relativamente grandes (mayores a 30 datos).')))
-    } else {
-      return(box(title = tags$b('Resultado de la prueba de Kolmogorov-Smirnov'), width = 12, status = 'success',
-                 footer = tags$span(style = "color:green", 
-                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
-                 tags$h4('La prueba de Shapiro-Wilk no encontró evidencia para afirmar que la muestra estadística no proviene
-                         de una población con distribución normal, 
-                         a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
-                         'Valor p de la prueba:', tags$b(pround(KS()$p.value, digits = 4)), tags$br(), tags$br()),
-                 tags$h5('Recuerde que los resultados de esta prueba son más confiables para muestras estadísticas 
-                          relativamente grandes (mayores a 30 datos).')))
-    }})
+    if (length(dataF()) < 26) {return(NULL)} else {
+      if(KS()$p.value <= (1 - input$ConfLev)) {
+        return(box(title = tags$b('Resultado de la prueba de Kolmogorov-Smirnov'), width = 12, status = 'danger',
+                   footer = tags$span(style = "color:red", 
+                                      'Resultados estadísticamente significativos al nivel de confianza escogido.',
+                                      tags$br(), tags$b('Conclusión: La muestra no tiene distribución normal.')),
+                   tags$h4('La evidencia proporcionada sugiere que la muestra estadística 
+                           no proviene de una población con distribución normal, según la prueba de Kolmogorov-Smirnov, 
+                           a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
+                           'Valor p de la prueba:', tags$b(pround(KS()$p.value, digits = 4)), tags$br(), tags$br()),
+                   tags$h5('Recuerde que los resultados de esta prueba son más confiables para muestras estadísticas 
+                            relativamente grandes (mayores a 30 datos).')))
+      } else {
+        return(box(title = tags$b('Resultado de la prueba de Kolmogorov-Smirnov'), width = 12, status = 'success',
+                   footer = tags$span(style = "color:green", 
+                                      'Resultados estadísticamente no significativos al nivel de confianza escogido.',
+                                      tags$br(), tags$b('Conclusión: La muestra tiene distribución normal.')),
+                   tags$h4('La prueba de Shapiro-Wilk no encontró evidencia para afirmar que la muestra estadística no proviene
+                           de una población con distribución normal, 
+                           a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
+                           'Valor p de la prueba:', tags$b(pround(KS()$p.value, digits = 4)), tags$br(), tags$br()),
+                   tags$h5('Recuerde que los resultados de esta prueba son más confiables para muestras estadísticas 
+                            relativamente grandes (mayores a 30 datos).')))
+      }}})
 
   Gr10 <- reactive(outliers::grubbs.test(dataF(), type = 10))
   niceGrubs10 <- eventReactive(input$descrStat, {
@@ -132,7 +137,8 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
       return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para un único dato'), 
                  width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
-                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: La muestra tiene un posible dato anómalo en un extremo.')),
                  fluidRow(column(4, img(src = "Out10.png", width = 220)),
                           column(8, tags$h4('Según la prueba de Grubbs para un único dato, el valor', 
                          tags$b(as.numeric(strsplit(Gr10()$alternative, " ")[[1]][3])),
@@ -143,7 +149,8 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
       return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para un único dato'), 
                  width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
-                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: No se detectaron datos anómalos.')),
                  fluidRow(column(4, img(src = "Out10.png", width = 220)),
                           column(8, tags$h4('La prueba de Grubbs para un único dato no encontró valores sospechosos de
                          ser anómalos a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
@@ -156,7 +163,8 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
       return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para un dato en cada extremo'), 
                  width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
-                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: La muestra tiene un posible dato anómalo en cada extremo.')),
                  fluidRow(column(4, img(src = "Out11.png", width = 220)),
                           column(8, tags$h4('Según la prueba de Grubbs para un dato en cada extremo, los valores',
                          tags$b(as.numeric(strsplit(Gr11()$alternative, " ")[[1]][1])), 'y', 
@@ -168,7 +176,8 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
       return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para un dato en cada extremo'), 
                  width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
-                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: No se detectaron datos anómalos.')),
                  fluidRow(column(4, img(src = "Out11.png", width = 220)),
                           column(8, tags$h4('La prueba de Grubbs para un dato en cada extremo no encontró valores
                          sospechosos de ser anómalos a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
@@ -181,7 +190,8 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
       return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para dos datos en el mismo extremo'), 
                  width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
-                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: La muestra tiene dos posibles datos anómalos en el mismo extremo.')),
                  fluidRow(column(4, img(src = "Out20.png", width = 220)),
                           column(8, tags$h4('Según la prueba de Grubbs para dos datos en el mismo extremo, los valores',
                          tags$b(as.numeric(strsplit(Gr20()$alternative, " ")[[1]][3])), 'y', 
@@ -193,20 +203,22 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
       return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para dos datos en el mismo extremo'), 
                  width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
-                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: No se detectaron datos anómalos.')),
                  fluidRow(column(4, img(src = "Out20.png", width = 220)),
                           column(8, tags$h4('La prueba de Grubbs para dos datos en el mismo extremo no encontró valores
                          sospechosos de ser anómalos a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
                          'Valor p de la prueba:', tags$b(pround(Gr20()$p.value, digits = 4)))))))
     }})
 
-  Dx <- reactive(outliers::dixon.test(dataF()))
+  Dx <- reactive(outliers::dixon.test(dataF(), type = 10))
   niceDixon <- eventReactive(input$descrStat, {
     if(Dx()$p.value <= (1 - input$ConfLev)) {
       return(box(title = tags$b('Resultado de la prueba de datos anómalos de Dixon'), 
                  width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
-                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: La muestra tiene un posible dato anómalo en un extremo.')),
                  fluidRow(column(4, img(src = "Out01.png", width = 220)),
                           column(8, tags$h4('Según la prueba de Dixon para un único dato, el valor', 
                          tags$b(as.numeric(strsplit(Dx()$alternative, " ")[[1]][3])),
@@ -217,7 +229,8 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
       return(box(title = tags$b('Resultado de la prueba de datos anómalos de Dixon'), 
                  width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
-                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: No se detectaron datos anómalos.')),
                  fluidRow(column(4, img(src = "Out01.png", width = 220)),
                           column(8, tags$h4('La prueba Dixon para un único dato no encontró valores
                          sospechosos de ser anómalos a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),

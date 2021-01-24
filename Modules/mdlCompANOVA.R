@@ -11,7 +11,7 @@ comparacionANOVAUI <- function(id) {
         tags$hr(), 
         fluidRow(
           column(4, 
-                 tabBox(title = tags$b("Diagramas"), width = 12,
+                 tabBox(title = tags$b("Diagramas:"), width = 12, side = 'right',
                         tabPanel("Cajas y bigotes", 
                                  dropdownButton(circle = TRUE, status = "danger", icon = icon("gear"), 
                                                 width = "300px", size = 'sm',

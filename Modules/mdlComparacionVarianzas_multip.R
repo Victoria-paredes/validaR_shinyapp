@@ -6,10 +6,10 @@ comparacionVarianUI_m <- function(id) {
                   sliderInput(ns('ConfLev'), label = 'Nivel de confianza:', 
                               min = 0.9, max = 0.999, value = 0.95, step = 0.001),
                   shiny::actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
-           column(10, tabBox(title = tags$b('Pruebas múltiples'), width = 12, height = 600,
-                             tabPanel(title = tags$b('Levene'), uiOutput(ns('outLevene1')), uiOutput(ns('outLevene2'))),
+           column(10, tabBox(title = tags$b('Pruebas múltiples:'), width = 12, height = 600, side = 'right',
                              tabPanel(title = tags$b('Cochran (varianzas anómalas)'), 
-                                     uiOutput(ns('outCochranOut')), uiOutput(ns('outCochranIn'))),
+                                      uiOutput(ns('outCochranOut')), uiOutput(ns('outCochranIn'))),
+                             tabPanel(title = tags$b('Levene'), uiOutput(ns('outLevene1')), uiOutput(ns('outLevene2'))),
                              tabPanel(title = tags$b('Barlett'), uiOutput(ns('outBarlett'))),
                              tabPanel(title = tags$b('Hartley'), uiOutput(ns('outHartley'))))))
                   #box(title = tags$b('Prueba de Barlett'), status = 'primary', width = 6, height = 600, 

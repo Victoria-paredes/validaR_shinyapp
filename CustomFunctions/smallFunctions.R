@@ -10,3 +10,4 @@ seedNorm <- function (n = 500, mean = 0, sd = 1, seed = 0) {
   set.seed(seed)
   return(rnorm(n = n, mean = mean, sd = sd))
 }
+

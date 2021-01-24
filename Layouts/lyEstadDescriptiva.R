@@ -20,7 +20,8 @@ lyEstadDescrDscrp <- infoBox(
        tags$li("Las", tags$b("pruebas de normalidad"), "complementan el gráfico Q-Q descrito anteriormente. Estas pruebas hacen
                 inferencias estadísticas para concluír, a un determinado nivel de confianza, 
                 si los datos provienen de una población con distribución normal. Las pruebas que se utilizan son las 
-               de Shapiro-Wilk y de Kolmogorov-Smirnof."), tags$br(),
+               de Shapiro-Wilk y de Kolmogorov-Smirnof. La prueba de Kolmogorov-Smirnof es más apropiada para
+               muestras estadísticas relativamente grandes, por lo que solo se muestran los resultados cuando la "), tags$br(),
        tags$li("El recuadro de", tags$b("pruebas de datos anómalos"), "usa los criterios de Grubbs y de Dixon para señalar posibles
                 datos anómalos en la serie escogida. Acá es importante considerar que un dato que es señalado
                 como posible anómalo no debe descartarse sin antes evaluar cuidadosamente
