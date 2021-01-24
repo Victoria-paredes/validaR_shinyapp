@@ -101,15 +101,39 @@ lyCompVarian <- fluidRow(column(12,
                                             ' [Fox y Weisberg, 2019]'))))
 
 lyCompANOVADscrp <- infoBox(width = 12, "Instrucciones", color = 'navy',
-                         h4("El análisis de varianza (ANOVA) compara las medias muestrales de tres o más conjuntos de datos,
-                            para determinar si al menos una de las diferencia entre los grupos es estadísticamente
-                            significativa. ", tags$br(),
-                            "Para realizar ANOVA  en la aplicación inicialmente 
-                            La comparación de varioa medias muestrales evalua ..."))
+                         h5("El análisis de varianza (ANOVA) compara simultáneamente las medias muestrales de conjuntos de datos,
+                            para determinar si al menos una de las diferencias entre los grupos es estadísticamente
+                            significativa. Para llevar a cabo el análisis:", tags$br(), tags$br(), 
+                            tags$ol(
+                              tags$li("Los datos deben estar previamente cargados en la sección", icon("hockey-puck"), 
+                                      tags$b("Ingreso de datos."),
+                                      "Los conjuntos de datos a estudias deben ser de naturaleza univariada. 
+                                      Si la serie de datos que se escoje contiene varias columnas activas, 
+                                      la aplicación solo tiene en cuenta la primera de estas."), tags$br(), 
+                              tags$li('Deben escogerse los grupos a comparar y un nivel de confianza para la inferencia.'), tags$br(), 
+                              tags$li('Al presionar el botón', tags$b('Correr análisis'), "aparecerán distintos resultados:",
+                                      tags$br(),
+                                      tags$ul(
+                                        tags$li('En la sección de', tags$b('Supuestos del análisis'), 'se verifican mendiante pruebas
+                                                de hipótesis si los supuestos del ANOVA se cumplen. La validez de las conclusiones
+                                                que se obtengan con el análisis dependen fuertemente de que dichos supuestos 
+                                                sean razonables para los conjuntos de datos que se estudian:', tags$br(),
+                                                tags$ul(
+                                                  tags$li())))), tags$br(), 
+                              tags$li("Si el análisis de la prueba indica que los resultados son estadísticamente significativos  
+                                      el recuadro de ", tags$b("Pruebas Post Hoc"), "efectua pruebas de detección 
+                                      de diferencias entre grupos para identificar cuales son los grupos que presentan 
+                                      diferencias entre sí. Al presionar el botón", tags$b('Analizar datos de ANOVA'),
+                                      "se obienen los resultados de tres pruebas similares de inferencia estadística:", tags$br(),
+                                      tags$ul(
+                                        tags$li(tags$b('Diferencia significativa mínima de Fisher:', '')),
+                                        tags$li(tags$b('Diferencias significativas de Tukey:', '')),
+                                        tags$li(tags$b('Rángos mpultiples de Duncan:', '')))))))
+
 lyCompANOVA <- fluidRow(comparacionANOVAUI('anovaMdl'),
                         #column(6, box(title = tags$b('Análisis de varianza'), width = 12, status = 'primary',
                                       #height = 400, comparacionANOVAUI('anovaMdl'))),
-                    column(12, box(title = tags$b('Pruebas de detección de diferencias entre grupos'), width = 12, status = 'primary',
+                    column(12, box(title = tags$b('Pruebas Post Hoc'), width = 12, status = 'primary',
                                    height = 1080,
                                    comparacionRanMulUI('ranMulAov')),
                            box(title = NULL, status = 'primary', width = 12, 
