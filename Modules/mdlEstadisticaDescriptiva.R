@@ -133,19 +133,21 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
                  width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
-                 tags$h4('Según la prueba de Grubbs para un único dato, el valor', 
+                 fluidRow(column(4, img(src = "Out10.png", width = 220)),
+                          column(8, tags$h4('Según la prueba de Grubbs para un único dato, el valor', 
                          tags$b(as.numeric(strsplit(Gr10()$alternative, " ")[[1]][3])),
                         'es sospechoso de ser un dato anómaloa un nivel de confianza del ', 
                         round(100 * input$ConfLev, 1), '%.', tags$br(),
-                        'Valor p de la prueba:', tags$b(pround(Gr10()$p.value, digits = 4)))))
+                        'Valor p de la prueba:', tags$b(pround(Gr10()$p.value, digits = 4)))))))
     } else {
       return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para un único dato'), 
                  width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
-                 tags$h4('La prueba de Grubbs para un único dato no encontró valores sospechosos de
+                 fluidRow(column(4, img(src = "Out10.png", width = 220)),
+                          column(8, tags$h4('La prueba de Grubbs para un único dato no encontró valores sospechosos de
                          ser anómalos a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
-                         'Valor p de la prueba:', tags$b(pround(Gr10()$p.value, digits = 4)))))
+                         'Valor p de la prueba:', tags$b(pround(Gr10()$p.value, digits = 4)))))))
     }})
 
   Gr11 <- reactive(outliers::grubbs.test(dataF(), type = 11))
@@ -155,20 +157,22 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
                  width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
-                 tags$h4('Según la prueba de Grubbs para un dato en cada extremo, los valores',
+                 fluidRow(column(4, img(src = "Out11.png", width = 220)),
+                          column(8, tags$h4('Según la prueba de Grubbs para un dato en cada extremo, los valores',
                          tags$b(as.numeric(strsplit(Gr11()$alternative, " ")[[1]][1])), 'y', 
                          tags$b(as.numeric(strsplit(Gr11()$alternative, " ")[[1]][3])),
-                         'son sospechosos de ser anómalosa un nivel de confianza del ', 
+                         'son sospechosos de ser anómalos a un nivel de confianza del ', 
                          round(100 * input$ConfLev, 1), '%.', tags$br(),
-                         'Valor p de la prueba:', tags$b(pround(Gr11()$p.value, digits = 4)))))
+                         'Valor p de la prueba:', tags$b(pround(Gr11()$p.value, digits = 4)))))))
     } else {
       return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para un dato en cada extremo'), 
                  width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
-                 tags$h4('La prueba de Grubbs para un dato en cada extremo no encontró valores
-                         sospechosos de ser anómalosa un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
-                         'Valor p de la prueba:', tags$b(pround(Gr11()$p.value, digits = 4)))))
+                 fluidRow(column(4, img(src = "Out11.png", width = 220)),
+                          column(8, tags$h4('La prueba de Grubbs para un dato en cada extremo no encontró valores
+                         sospechosos de ser anómalos a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
+                         'Valor p de la prueba:', tags$b(pround(Gr11()$p.value, digits = 4)))))))
     }})
   
   Gr20 <- reactive(outliers::grubbs.test(dataF(), type = 20))
@@ -178,20 +182,22 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
                  width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
-                 tags$h4('Según la prueba de Grubbs para dos datos en el mismo extremo, los valores',
+                 fluidRow(column(4, img(src = "Out20.png", width = 220)),
+                          column(8, tags$h4('Según la prueba de Grubbs para dos datos en el mismo extremo, los valores',
                          tags$b(as.numeric(strsplit(Gr20()$alternative, " ")[[1]][3])), 'y', 
                          tags$b(as.numeric(strsplit(Gr20()$alternative, " ")[[1]][5])),
-                         'son sospechosos de ser anómalosa un nivel de confianza del ', 
+                         'son sospechosos de ser anómalos a un nivel de confianza del ', 
                          round(100 * input$ConfLev, 1), '%.', tags$br(),
-                         'Valor p de la prueba:', tags$b(pround(Gr20()$p.value, digits = 4)))))
+                         'Valor p de la prueba:', tags$b(pround(Gr20()$p.value, digits = 4)))))))
     } else {
       return(box(title = tags$b('Resultado de la prueba de datos anómalos de Grubbs para dos datos en el mismo extremo'), 
                  width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
-                 tags$h4('La prueba de Grubbs para dos datos en el mismo extremo no encontró valores
-                         sospechosos de ser anómalosa un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
-                         'Valor p de la prueba:', tags$b(pround(Gr20()$p.value, digits = 4)))))
+                 fluidRow(column(4, img(src = "Out20.png", width = 220)),
+                          column(8, tags$h4('La prueba de Grubbs para dos datos en el mismo extremo no encontró valores
+                         sospechosos de ser anómalos a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
+                         'Valor p de la prueba:', tags$b(pround(Gr20()$p.value, digits = 4)))))))
     }})
 
   Dx <- reactive(outliers::dixon.test(dataF()))
@@ -201,22 +207,23 @@ estadisticaDescriptivaServer <- function(input, output, session, nSeries, compl,
                  width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
-                 tags$h4('Según la prueba de Dixon para un único dato, el valor', 
+                 fluidRow(column(4, img(src = "Out01.png", width = 220)),
+                          column(8, tags$h4('Según la prueba de Dixon para un único dato, el valor', 
                          tags$b(as.numeric(strsplit(Dx()$alternative, " ")[[1]][3])),
                          'es sospechoso de ser un dato anómaloa un nivel de confianza del ', 
                          round(100 * input$ConfLev, 1), '%.', tags$br(),
-                         'Valor p de la prueba:', tags$b(pround(Dx()$p.value, digits = 4)))))
+                         'Valor p de la prueba:', tags$b(pround(Dx()$p.value, digits = 4)))))))
     } else {
       return(box(title = tags$b('Resultado de la prueba de datos anómalos de Dixon'), 
                  width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
-                 tags$h4('La prueba Dixon para un único dato no encontró valores
-                         sospechosos de ser anómalosa un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
-                         'Valor p de la prueba:', tags$b(pround(Dx()$p.value, digits = 4)))))
+                 fluidRow(column(4, img(src = "Out01.png", width = 220)),
+                          column(8, tags$h4('La prueba Dixon para un único dato no encontró valores
+                         sospechosos de ser anómalos a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
+                         'Valor p de la prueba:', tags$b(pround(Dx()$p.value, digits = 4)))))))
     }})
   
-
   output$descripTab     <- renderTable(descripTabRc())
   output$histogramPlt   <- renderPlot(histogramPlt())
   output$stackedDot     <- renderPlot(stackedDot())

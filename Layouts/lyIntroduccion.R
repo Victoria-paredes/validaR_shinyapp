@@ -43,7 +43,7 @@ introduccionLy <- fluidRow(
                          la siguiente línea punteada que debe ocupar únicamente un renglón:", tags$br(),
                          ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
                           . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .")))),
-          column(4, div(img(src = "Guia_p1.png", width = 400), style = "text-align: center;"),
+          column(4, div(img(src = "guia.png", width = 400), style = "text-align: center;"),
                  HTML('&emsp;&emsp;&emsp;&emsp;&emsp;'), 
                  a(href = "guia.pdf", "Descargar la guía de validación...", download = NA, target = "_blank"))))),
     column(12, 
