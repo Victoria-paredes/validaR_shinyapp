@@ -119,7 +119,11 @@ lyCompANOVADscrp <- infoBox(width = 12, "Instrucciones", color = 'navy',
                                                 que se obtengan con el análisis dependen fuertemente de que dichos supuestos 
                                                 sean razonables para los conjuntos de datos que se estudian:', tags$br(),
                                                 tags$ul(
-                                                  tags$li())))), tags$br(), 
+                                                  tags$li('Las muestras estadísticas provienen de poblaciones con
+                                                          distribución normal.'),
+                                                  tags$li('No hay datos anómalos dentro de los grupos.'),
+                                                  tags$li('Las varianzas de las muestras estadísticas son homogéneas. En otras
+                                                          palabras, hay homocedasticidad entre las series.'))))), tags$br(), 
                               tags$li("Si el análisis de la prueba indica que los resultados son estadísticamente significativos  
                                       el recuadro de ", tags$b("Pruebas Post Hoc"), "efectua pruebas de detección 
                                       de diferencias entre grupos para identificar cuales son los grupos que presentan 
@@ -128,7 +132,7 @@ lyCompANOVADscrp <- infoBox(width = 12, "Instrucciones", color = 'navy',
                                       tags$ul(
                                         tags$li(tags$b('Diferencia significativa mínima de Fisher:', '')),
                                         tags$li(tags$b('Diferencias significativas de Tukey:', '')),
-                                        tags$li(tags$b('Rángos mpultiples de Duncan:', '')))))))
+                                        tags$li(tags$b('Rángos múltiples de Duncan:', '')))))))
 
 lyCompANOVA <- fluidRow(comparacionANOVAUI('anovaMdl'),
                         #column(6, box(title = tags$b('Análisis de varianza'), width = 12, status = 'primary',
@@ -142,6 +146,27 @@ lyCompANOVA <- fluidRow(comparacionANOVAUI('anovaMdl'),
                                        ' [Mendiburu, 2020]'))))
 
 lyCompANCOVADscrp <- infoBox(width = 12, "Análisis de covarianza", color = 'navy',
-                            h4("La comparación de ..."))
+                            h5("El análisis de covarianza (ANCOVA) permite identificar diferencias entre dos o más conjuntos de datos
+                                cuando estos presentan al menos una covariable en común, y se desea corregir el efecto de dichas 
+                                covariables. ANCOVA tiene los siguientes supuestos:", tags$br(),
+                               tags$ul(
+                                 tags$li('Hay una relación lineal entre la covariable y la variable respuesta.'), 
+                                 tags$li('Las pendientes de la regresión sin similares.'),
+                                 tags$li("Los residuales de regresión tienen distribución normal."),
+                                 tags$li('Hay homogeneidad de varianzas en los residuales de los grupos'),
+                                 tags$li('Hay ausencia de datos anómalos en los grupos'), tags$br()),
+                                "Para llevar a cabo el ANCOVA:", tags$br(),
+                               tags$ol(
+                                 tags$li('Los datos deben estar previamente cargados en la sección', icon("hockey-puck"), 
+                                      tags$b("Ingreso de datos."), 'Las series a analizar deben ser de naturaleza bivariada, donde
+                                      la variable dependinte es la que se desea comparar y la variable independiente es la 
+                                      covariable cuyo efecto quiere corregirse. Las columnas de las series de datos deben coincidir
+                                      entre sí.'), tags$br(),
+                                 tags$li('Seleccionar que columnas corresponden a la variable respuesta y a la covariable, en las
+                                         tablas de datos que se ingresaron en el punto anterior.'), tags$br(),
+                                 tags$li('Escoger un nivel de confianza para la muestra. Al presionar el botón', 
+                                         tags$b('Analizar datos de ANOVA'), 'se obienen resultados gráficos que muestran la
+                                         relación entre la variable estudiada y la covariable, '))))
+
 lyCompANCOVA <- fluidRow(column(6, box(title = tags$b('Analisis de covarianza '), width = 12, status = 'primary',
                                       height = 500, comparacionANCOVAUI('ancovaMdl'))))
