@@ -130,7 +130,10 @@ lyCompANOVADscrp <- infoBox(width = 12, "Instrucciones", color = 'navy',
                                       diferencias entre sí. Al presionar el botón", tags$b('Analizar datos de ANOVA'),
                                       "se obienen los resultados de tres pruebas similares de inferencia estadística:", tags$br(),
                                       tags$ul(
-                                        tags$li(tags$b('Diferencia significativa mínima de Fisher:', '')),
+                                        tags$li(tags$b('Diferencia mínima significativa de Fisher: Esta prueba es similar a
+                                                       realizar distintas pruebas t de comparación de dos medias muestrales
+                                                       corrigiendo la significancia de cada prueba para evitar la
+                                                       inflación de los errores tipo I.', '')),
                                         tags$li(tags$b('Diferencias significativas de Tukey:', '')),
                                         tags$li(tags$b('Rángos múltiples de Duncan:', '')))))))
 
