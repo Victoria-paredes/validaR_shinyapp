@@ -13,7 +13,7 @@ comparacionRanMulUI <- function(id) {
                       tags$h5('El siguiente gráfico complementa la información de la tabla y es similar al diagrama de cajas y bigotes,
                               incluyendo la información de los grupos de series similares entre sí.'), 
                       plotOutput(ns('LSDFPlot')), downloadButton(ns('DwnLSDFPlot'), label = 'Descargar gráfico')),
-                  box(title = tags$b('Diferencias significativas de Tukey'), width = 4,
+                  box(title = tags$b('Diferencias honestas significativas de Tukey'), width = 4,
                       tags$h5('A continuación se muestran los valores p de la diferencia entre parejas de muestras estadísticas, 
                               según la prueba de diferencias honestas significativas de Tukey. Aquellas diferencias cuyo valor p es menor 
                               a la significancia (1 - nivel de confianza), se consideran estadísticament significativas.'), 
@@ -25,8 +25,10 @@ comparacionRanMulUI <- function(id) {
                               no presentan
                               una diferencia estadísticamente significativa según la prueba HSD de Duncan 
                               Las agrupaciones se codifican de la misma manera que se describió en la prueba LSD de Fisher.'),
-                      tableOutput(ns('DuncanTest'))#, tags$br(), 
-                      #plotOutput(ns('DuncanPlot')), downloadButton(ns('DwnDuncanPlot'), label = 'Descargar gráfico')
+                      tableOutput(ns('DuncanTest')),
+                      tags$h5('El siguiente gráfico complementa la información de la tabla y es similar al diagrama de cajas y bigotes,
+                              incluyendo la información de los grupos de series similares entre sí.'), 
+                      plotOutput(ns('DuncanPlot')), downloadButton(ns('DwnDuncanPlot'), label = 'Descargar gráfico')
                       )))
 }
 
@@ -36,7 +38,7 @@ comparacionRanMulServer <- function(input, output, session, aovModel, formatP, d
     LSDFReac <- reactive(agricolae::LSD.test(y = aovModel$aovSum(), trt = 'ind', alpha = (1 - aovModel$aovSig())))
     LSDFTest <- reactive(data.frame(Serie = rownames(LSDFReac()$groups), Grupos = LSDFReac()$groups$groups))
     output$LSDFTest <- renderTable(LSDFTest())
-    LSDFPlot <- reactive({plot(LSDFReac(), main = '')})
+    LSDFPlot <- reactive({plot(LSDFReac(), main = 'Prueba LSD de Fisher')})
     output$LSDFPlot     <- renderPlot(LSDFPlot())
     
     TukeyReac <- reactive(TukeyHSD(x = aovModel$aovSum(), conf.level = aovModel$aovSig()))
@@ -48,9 +50,12 @@ comparacionRanMulServer <- function(input, output, session, aovModel, formatP, d
     DuncanReac <- reactive(agricolae::duncan.test(y = aovModel$aovSum(), trt = 'ind', alpha = (1 - aovModel$aovSig())))
     DuncanTest <- reactive(data.frame(Serie = rownames(LSDFReac()$groups), Grupos = LSDFReac()$groups$groups))
     output$DuncanTest <- renderTable(DuncanTest())
-    #output$DuncanPlot <- renderPlot(plot(DuncanReac()))
+    DuncanPlot <- reactive(plot(DuncanReac(), main = 'Prueba de rángos múltiples de Duncan'))
+    output$DuncanPlot <- renderPlot(DuncanPlot())
 
     output$DwnLSDFPlot  <- dwldhndlr(name = 'LSD_PostHocANOVA', formatP = formatP, dimensP = dimensP, plt = LSDFPlot())
-    output$DwnTukeyPlot  <- dwldhndlr(name = 'HSDTukey_PostHocANOVA', formatP = formatP, dimensP = dimensP, plt = TukeyPlot())
+    output$DwnTukeyPlot  <- dwldhndlr(name = 'Tukey_PostHocANOVA', formatP = formatP, dimensP = dimensP, plt = TukeyPlot())
+    output$DwnDuncanPlot  <- dwldhndlr(name = 'HSDTukey_PostHocANOVA', formatP = formatP, dimensP = dimensP, plt = TukeyPlot())
+    
   })
 }

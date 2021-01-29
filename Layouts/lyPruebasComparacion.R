@@ -141,7 +141,7 @@ lyCompANOVADscrp <- infoBox(width = 12, "Instrucciones", color = 'navy',
                                                 contiene el valor cero, puede asumirse que la diferencia entre las medias de 
                                                 tales conjuntos no es estadísticamente significativa.'),
                                         tags$li(tags$b('Rángos múltiples de Duncan:'), 
-                                                'Esta prueba es muy similar a la prueba LSD de Fisher en cuanto a su uso e 
+                                                'Esta prueba es muy similar a la prueba LSD de Fisher en cuanto a su uso, resultados e 
                                                 interpretación.'))))))
 
 lyCompANOVA <- fluidRow(comparacionANOVAUI('anovaMdl'),

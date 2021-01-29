@@ -11,9 +11,7 @@ seedNorm <- function (n = 500, mean = 0, sd = 1, seed = 0) {
   return(rnorm(n = n, mean = mean, sd = sd))
 }
 
-CNTR <- function(x) {
-  return(#tags$span(style = "align: center;", x)
-    column(12, align="center", x))}
+CNTR <- function(x) {return(column(12, align="center", x))}
 
 cnclsn <- function(x, y = 'ref'){
   

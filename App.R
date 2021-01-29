@@ -71,7 +71,7 @@ server <- function(input, output, session) {
   #observe({
   #  reactiveValuesToList(input)
   #  session$doBookmark()
-  #})
+  #})|
   #onBookmarked(updateQueryString)
 }
 
