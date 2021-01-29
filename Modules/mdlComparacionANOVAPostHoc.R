@@ -9,14 +9,15 @@ comparacionRanMulUI <- function(id) {
                               Las agrupaciones se codifican con letras
                               de manera tal que si la misma letra aparece frente a dos conjuntos de datos, la diferencia 
                               entre las medias de tales series no se considera estadísticamente significativa'),
-                      tableOutput(ns('LSDFTest')), tags$br(), 
+                      tableOutput(ns('LSDFTest')),
                       tags$h5('El siguiente gráfico complementa la información de la tabla y es similar al diagrama de cajas y bigotes,
                               incluyendo la información de los grupos de series similares entre sí.'), 
                       plotOutput(ns('LSDFPlot')), downloadButton(ns('DwnLSDFPlot'), label = 'Descargar gráfico')),
                   box(title = tags$b('Diferencias significativas de Tukey'), width = 4,
-                      tags$h5('Según la prueba de diferencias honestas significativas de Tukey, 
-                              las siguientes parejas de conjuntos de datos presentan diferencias estadísticamente significativas:'), 
-                      tableOutput(ns('TukeyTest')), tags$br(), 
+                      tags$h5('A continuación se muestran los valores p de la diferencia entre parejas de muestras estadísticas, 
+                              según la prueba de diferencias honestas significativas de Tukey. Aquellas diferencias cuyo valor p es menor 
+                              a la significancia (1 - nivel de confianza), se consideran estadísticament significativas.'), 
+                      tableOutput(ns('TukeyTest')),
                       tags$h5('El siguiente gráfico ilustra los intervalos de confianza para las diferencias entre las parejas.'),
                       plotOutput(ns('TukeyPlot')), downloadButton(ns('DwnTukeyPlot'), label = 'Descargar gráfico')),
                   box(title = tags$b('Rangos múltiples de Duncan'), width = 4,# height = 900, 
@@ -24,7 +25,7 @@ comparacionRanMulUI <- function(id) {
                               no presentan
                               una diferencia estadísticamente significativa según la prueba HSD de Duncan 
                               Las agrupaciones se codifican de la misma manera que se describió en la prueba LSD de Fisher.'),
-                      tags$br(), tableOutput(ns('DuncanTest'))#, tags$br(), 
+                      tableOutput(ns('DuncanTest'))#, tags$br(), 
                       #plotOutput(ns('DuncanPlot')), downloadButton(ns('DwnDuncanPlot'), label = 'Descargar gráfico')
                       )))
 }
@@ -39,10 +40,7 @@ comparacionRanMulServer <- function(input, output, session, aovModel, formatP, d
     output$LSDFPlot     <- renderPlot(LSDFPlot())
     
     TukeyReac <- reactive(TukeyHSD(x = aovModel$aovSum(), conf.level = aovModel$aovSig()))
-    TukeyTest <- reactive({
-      dt <- TukeyReac()$ind <= input$ConfLev
-      return(data.frame('Parejas' = rownames(TukeyReac()$ind)[dt], 'Valor p' = TukeyReac()$ind[dt, 4]))
-    })
+    TukeyTest <- reactive(data.frame('Parejas' = rownames(TukeyReac()$ind), 'Valor p' = TukeyReac()$ind[, 4]))
     output$TukeyTest <- renderTable(TukeyTest())
     TukeyPlot <- reactive(plot(TukeyReac()))
     output$TukeyPlot <- renderPlot(TukeyPlot())

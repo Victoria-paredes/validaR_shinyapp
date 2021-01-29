@@ -8,7 +8,7 @@ comparacionVarianUI_m <- function(id) {
                   shiny::actionButton(ns('doCompare'), label = "Correr análisis", styleclass = 'primary', block = TRUE)),
            column(10, tabBox(title = tags$b('Pruebas múltiples:'), width = 12, height = 600, side = 'right',
                              tabPanel(title = tags$b('Cochran (varianzas anómalas)'), 
-                                      uiOutput(ns('outCochranOut')), uiOutput(ns('outCochranIn'))),
+                                      uiOutput(ns('outCochranOut')) ),#, uiOutput(ns('outCochranIn'))),
                              tabPanel(title = tags$b('Levene'), uiOutput(ns('outLevene1')), uiOutput(ns('outLevene2'))),
                              tabPanel(title = tags$b('Barlett'), uiOutput(ns('outBarlett'))),
                              tabPanel(title = tags$b('Hartley'), uiOutput(ns('outHartley'))))))
@@ -51,7 +51,8 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
     if(Brltt()$p.value <= (1 - input$ConfLev)) {
       return(box(title = tags$b('Resultado de la prueba de Barlett'), width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
-                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: Los grupos son heterocedásticos.')),
                  tags$h4('Al menos dos de las varianzas muestrales presentan entre sí una diferencia estadísticamente significativas,
                           según lo hallado por la prueba de Bartlett, a un nivel de confianza
                          del ', round(100 * input$ConfLev, 1), '%.'),
@@ -59,9 +60,10 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
     } else {
       return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
-                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: Los grupos son homocedásticos.')),
                  tags$h4('Según la prueba de homogeneidad de varianzas de Barlett, no hay evidencia suficiente para afirmar que las
-                         muestras estadísticas sean heterocedásticas, a un nivel de confianza
+                         muestras estadísticas sean heterocedásticas, a un nivel de confianza 
                          del ', round(100 * input$ConfLev, 1), '%.'), 
                  tags$br(), tableOutput(session$ns("BrltttableResults"))))
     }
@@ -77,16 +79,23 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
     car::leveneTest(data = StData(), y = values ~ ind, center = 'mean')})
   outLevene1 <- eventReactive(input$doCompare, {
     if(LVN1()$Pr[1] <= (1 - input$ConfLev)) {
-      return(box(title = tags$b('Resultado de la prueba'), width = 6, status = 'danger',
+      return(box(title = tags$b('Resultado de la prueba usando la media aritmética'), width = 6, status = 'danger',
                  footer = tags$span(style = "color:red", 
-                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (NO PASA) xxx.'),
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: Los grupos son heterocedásticos.')),
+                 tags$h4('Al menos dos de las varianzas muestrales presentan entre sí una diferencia estadísticamente significativa,
+                          según lo hallado por la prueba de Levene, a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%,
+                         usando como medida de tendencia central la media aritmética.'),
                  tags$br(), tableOutput(session$ns("LVN1tableResults"))))
     } else {
-      return(box(title = tags$b('Resultado de la prueba'), width = 6, status = 'success',
+      return(box(title = tags$b('Resultado de la prueba usando la media aritmética'), width = 6, status = 'success',
                  footer = tags$span(style = "color:green", 
-                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (PASA) xxx.'), 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: Los grupos son homocedásticos.')),
+                 tags$h4('Según la prueba de homogeneidad de varianzas de Levene, no hay evidencia suficiente para afirmar que las
+                         muestras estadísticas sean heterocedásticas, a un nivel de confianza 
+                         del ', round(100 * input$ConfLev, 1), '%,
+                         usando como medida de tendencia central la media aritmética.'), 
                  tags$br(), tableOutput(session$ns("LVN1tableResults"))))
     }
   })
@@ -102,16 +111,23 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
     car::leveneTest(data = StData(), y = values ~ ind, center = 'median')})
   outLevene2 <- eventReactive(input$doCompare, {
     if(LVN2()$Pr[1] <= (1 - input$ConfLev)) {
-      return(box(title = tags$b('Resultado de la prueba'), width = 6, status = 'danger',
+      return(box(title = tags$b('Resultado de la prueba usando la mediana'), width = 6, status = 'danger',
                  footer = tags$span(style = "color:red", 
-                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (NO PASA) xxx.'),
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: Los grupos son heterocedásticos.')),
+                 tags$h4('Al menos dos de las varianzas muestrales presentan entre sí una diferencia estadísticamente significativa,
+                          según lo hallado por la prueba de Levene, a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%,
+                         usando como medida de tendencia central la mediana.'),
                  tags$br(), tableOutput(session$ns("LVN2tableResults"))))
     } else {
-      return(box(title = tags$b('Resultado de la prueba'), width = 6, status = 'success',
+      return(box(title = tags$b('Resultado de la prueba usando la mediana'), width = 6, status = 'success',
                  footer = tags$span(style = "color:green", 
-                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (PASA) xxx.'), 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: Los grupos son homocedásticos.')),
+                 tags$h4('Según la prueba de homogeneidad de varianzas de Levene, no hay evidencia suficiente para afirmar que las
+                         muestras estadísticas sean heterocedásticas, a un nivel de confianza 
+                         del ', round(100 * input$ConfLev, 1), '%,
+                         usando como medida de tendencia central la media aritmética.'), 
                  tags$br(), tableOutput(session$ns("LVN2tableResults"))))
     }
   })
@@ -129,14 +145,20 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
     if(HRTLY()$p.value <= (1 - input$ConfLev)) {
       return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
-                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (NO PASA) xxx.'),
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: Los grupos son heterocedásticos.')),
+                 tags$h4('Al menos dos de las varianzas muestrales presentan entre sí una diferencia estadísticamente significativas,
+                          según lo hallado por la prueba de Hartley, a un nivel de confianza
+                         del ', round(100 * input$ConfLev, 1), '%.'),
                  tags$br(), tableOutput(session$ns("HRTLYtableResults"))))
     } else {
       return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
-                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (PASA) xxx.'), 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: Los grupos son homocedásticos.')),
+                 tags$h4('Según la prueba de homogeneidad de varianzas de Hartley, no hay evidencia suficiente para afirmar que las
+                         muestras estadísticas sean heterocedásticas, a un nivel de confianza 
+                         del ', round(100 * input$ConfLev, 1), '%.'), 
                  tags$br(), tableOutput(session$ns("HRTLYtableResults"))))
     }
   })
@@ -151,16 +173,20 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
     outliers::cochran.test(data = StData(), object = values ~ ind, inlying = FALSE)})
   outCochranOut <- eventReactive(input$doCompare, {
     if(CCHRNout()$p.value <= (1 - input$ConfLev)) {
-      return(box(title = tags$b('Resultado de la prueba'), width = 6, status = 'danger',
+      return(box(title = tags$b('Resultado de la prueba para la varianza más grande'), width = 6, status = 'danger',
                  footer = tags$span(style = "color:red", 
-                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (NO PASA) xxx.'),
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: La varianza más grande es anómala.')),
+                 #tags$h4('...Cochran, a un nivel de confianza
+                 #       del ', round(100 * input$ConfLev, 1), '%.'),
                  tags$br(), tableOutput(session$ns("CCHRNouttableResults"))))
     } else {
-      return(box(title = tags$b('Resultado de la prueba'), width = 6, status = 'success',
+      return(box(title = tags$b('Resultado de la prueba para la varianza más grande'), width = 6, status = 'success',
                  footer = tags$span(style = "color:green", 
-                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (PASA) xxx.'), 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: La varianza más grande no es anómala.')),
+                 #tags$h4('Según la prueba de varianzas anómalas de Cochran, a un nivel de confianza 
+                 #       del ', round(100 * input$ConfLev, 1), '%.'), 
                  tags$br(), tableOutput(session$ns("CCHRNouttableResults"))))
     }
   })

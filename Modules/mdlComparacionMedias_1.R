@@ -29,14 +29,16 @@ comparacionMediasServer_1 <- function(input, output, session, nSeries, compl) {
     if(T1()$p.value <= (1 - input$ConfLev)) {
       return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
                  footer = tags$span(style = "color:red", 
-                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
+                                    'Resultados estadísticamente significativos al nivel de confianza escogido.', tags$br(), 
+                                    tags$b('Conclusión: La media muestral del conjunto ', cnclsn(input$hypAlter))),
                  tags$h4('La diferencia entre la media de la muestra estadística y el valor de referencia
                           es estadísticamente significativa al nivel de confianza del ', round(100 * input$ConfLev, 1), '%.'),
                  tags$br(), tableOutput(session$ns("tableResults"))))
     } else {
       return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
-                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.', tags$br(), 
+                                    tags$b('Conclusión: La media muestral del conjunto no ', cnclsn(input$hypAlter))),
                  tags$h4('Al nivel de confianza del ', round(100 * input$ConfLev, 1), '%,
                          no hay evidencia suficiente para afirmar que la diferencia
                          entre la media muestral y el valor de referencia,

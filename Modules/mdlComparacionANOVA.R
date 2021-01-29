@@ -59,16 +59,23 @@ comparacionANOVAServer <- function(input, output, session, nSeries, compl, forma
   
   anova1 <- eventReactive(input$doCompare, {
     if(summary(anovaReac())[[1]][["Pr(>F)"]][[1]]  <= (1 - input$ConfLev)) {
-      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'danger',
-                 footer = tags$span(style = "color:red", 
-                                    'Resultados estadísticamente significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (NO PASA) xxx.'),
+      return(box(title = tags$b('Resultado del análisis de varianza'), width = 12, status = 'danger',
+                 footer = tags$span(style = "color:red", 'Resultados estadísticamente significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: La media muestral de al menos uno de los conjuntos de 
+                                                      datos es diferente a las demás.')),
+                 tags$h4('La variación entre los grupos es mayor a la variación dentro de los grupos, 
+                         a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
+                         'A continuación se muestra la tabla del análisis de varianza.'),
                  tags$br(), tableOutput(session$ns("anovaTable"))))
     } else {
-      return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
+      return(box(title = tags$b('Resultado del análisis de varianza'), width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
-                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
-                 tags$h4('La muestra estadística (PASA) xxx.'), 
+                                    'Resultados estadísticamente no significativos al nivel de confianza escogido.',
+                                    tags$br(), tags$b('Conclusión: Las medias muestrales de los conjuntos de datos no son diferentes
+                                                      entre sí.')),
+                 tags$h4('La variación entre grupos no es más grande que la variación dentro de los grupos, 
+                         a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
+                         'A continuación se muestra la tabla del análisis de varianza.'), 
                  tags$br(), tableOutput(session$ns("anovaTable"))))
     }
   })

@@ -58,6 +58,7 @@ server <- function(input, output, session) {
   callModule(comparacionVarianServer_m, 'mulVarian', nSeries = nSeries, compl = datSrsCmplt)
   aovMdl <- callModule(comparacionANOVAServer, 'anovaMdl', nSeries = nSeries, compl = datSrsCmplt, formatP = formatP, dimensP = dimensP)
   callModule(comparacionRanMulServer, 'ranMulAov', aovModel = aovMdl, formatP = formatP, dimensP = dimensP)
+  # https://www.tenderisthebyte.com/blog/2019/04/25/rotating-axis-labels-in-r/
   callModule(comparacionANCOVAServer, 'ancovaMdl', nSeries = nSeries, compl = datSrsCmplt, formatP = formatP, dimensP = dimensP)
   ### HAY PRUEBA ESTADÏSTICA PARA PROPORCION DE MUESTRAS?
   

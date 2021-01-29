@@ -15,7 +15,7 @@ customSidebar <- dashboardSidebar(tags$style(".left-side, .main-sidebar {padding
                                                                             "PNG (mapa de bits 300 ppi)" = ".png")),
                                                 sliderInput("plotsW", label = "Anchura del gráfico (mm)", 
                                                             min = 40, max = 300, value = 80),
-                                                sliderInput("plotsH", label = "altura del gráfico (mm)", 
+                                                sliderInput("plotsH", label = "Altura del gráfico (mm)", 
                                                             min = 40, max = 300, value = 60)), tabName = "config"),
                        tags$hr(),
                        #tags$b('Guardar estado de la aplicación:'),#tags$br(), '(En proceso de implementación)'),
