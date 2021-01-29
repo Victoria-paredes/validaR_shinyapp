@@ -130,12 +130,19 @@ lyCompANOVADscrp <- infoBox(width = 12, "Instrucciones", color = 'navy',
                                       diferencias entre sí. Al presionar el botón", tags$b('Analizar datos de ANOVA'),
                                       "se obienen los resultados de tres pruebas similares de inferencia estadística:", tags$br(),
                                       tags$ul(
-                                        tags$li(tags$b('Diferencia mínima significativa de Fisher: Esta prueba es similar a
-                                                       realizar distintas pruebas t de comparación de dos medias muestrales
-                                                       corrigiendo la significancia de cada prueba para evitar la
-                                                       inflación de los errores tipo I.', '')),
-                                        tags$li(tags$b('Diferencias significativas de Tukey:', '')),
-                                        tags$li(tags$b('Rángos múltiples de Duncan:', '')))))))
+                                        tags$li(tags$b('Diferencia mínima significativa (LSD) de Fisher:'), 
+                                                'Esta prueba es similar a realizar distintas pruebas t de comparación ENTRE dos medias 
+                                                muestrales pero corrigiendo la significancia de cada prueba para evitar la
+                                                inflación de los errores tipo I. La corrección aplicada por la aplicación
+                                                es la corrección de Bonferroni.'),
+                                        tags$li(tags$b('Diferencias honestas significativas (HSD) de Tukey:'), 
+                                                'Esta prueba genera intervalos de confianza para la diferencia entre las 
+                                                posibles parejas de conjuntos que pueden formarse. Si el intervalo de confianza
+                                                contiene el valor cero, puede asumirse que la diferencia entre las medias de 
+                                                tales conjuntos no es estadísticamente significativa.'),
+                                        tags$li(tags$b('Rángos múltiples de Duncan:'), 
+                                                'Esta prueba es muy similar a la prueba LSD de Fisher en cuanto a su uso e 
+                                                interpretación.'))))))
 
 lyCompANOVA <- fluidRow(comparacionANOVAUI('anovaMdl'),
                         #column(6, box(title = tags$b('Análisis de varianza'), width = 12, status = 'primary',

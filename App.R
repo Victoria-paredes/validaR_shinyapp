@@ -30,15 +30,16 @@ server <- function(input, output, session) {
   formatP  <- reactive(input$Format)
   dimensP  <- reactive(c(input$plotsW, input$plotsH) / 25.4 * 1.6)
   nRows <- reactive(input$nRows)
+  nSeries <- reactive(input$numDatSeriesManual)
   
   callModule(definicionesServer, 'definiciones')
   
   # Modulos de ingreso de datos
-  datSeriesCompleteDat <- reactiveValues()
+  datSrsCmplt <- reactiveValues()
   for (i in 1:20) {
     eval(parse(text = paste0('datSeries', i, ' <- callModule(ingresarDatosServer, "serieMan', i, '", nRows = nRows)')))
     #eval(parse(text = paste0('observe(datSeriesNames$Ser', i, ' <- datSeries', i, '$name)')))
-    eval(parse(text = paste0('datSeriesCompleteDat$Serie', i, ' <- datSeries', i)))
+    eval(parse(text = paste0('datSrsCmplt$Serie', i, ' <- datSeries', i)))
     #reactive(eval(parse(text = paste0('datSeriesCompVar.x1$Serie', i, ' <- datSeries', i, '$data()[, 1]'))))
   }
   
@@ -49,30 +50,19 @@ server <- function(input, output, session) {
   # callModule(importarDatosServer, 'serieImp1')
   
   #Estadística descriptiva e inferencial
-  callModule(estadisticaDescriptivaServer, 'EstDesc', nSeries = reactive(input$numDatSeriesManual),
-             compl = datSeriesCompleteDat, formatP = formatP, dimensP = dimensP)
-  callModule(comparacionMediasServer_1, 'mediaVsReferencia', 
-             nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
-  callModule(comparacionMediasServer_2, 'dosMedias', 
-             nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
-  callModule(comparacionVarianServer_1, 'varianVsReferencia', 
-             nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
-  callModule(comparacionVarianServer_2, 'dosVarian', 
-             nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat) 
-  callModule(comparacionVarianServer_m, 'mulVarian', 
-             nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
-  aovModel <- callModule(comparacionANOVAServer, 'anovaMdl', 
-                         nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat, 
-                         formatP = formatP, dimensP = dimensP)
-  callModule(comparacionRanMulServer, 'ranMulAov', aovModel = aovModel)
-  callModule(comparacionANCOVAServer, 'ancovaMdl', 
-             nSeries = reactive(input$numDatSeriesManual), compl = datSeriesCompleteDat)
-  
-  ### HAY PRUEBA ESTADÏSTICA PARA PROPORCIÖN DE MUESTRAS?
+  callModule(estadisticaDescriptivaServer, 'EstDesc', nSeries = nSeries, compl = datSrsCmplt, formatP = formatP, dimensP = dimensP)
+  callModule(comparacionMediasServer_1, 'mediaVsReferencia', nSeries = nSeries, compl = datSrsCmplt)
+  callModule(comparacionMediasServer_2, 'dosMedias', nSeries = nSeries, compl = datSrsCmplt)
+  callModule(comparacionVarianServer_1, 'varianVsReferencia', nSeries = nSeries, compl = datSrsCmplt)
+  callModule(comparacionVarianServer_2, 'dosVarian', nSeries = nSeries, compl = datSrsCmplt) 
+  callModule(comparacionVarianServer_m, 'mulVarian', nSeries = nSeries, compl = datSrsCmplt)
+  aovMdl <- callModule(comparacionANOVAServer, 'anovaMdl', nSeries = nSeries, compl = datSrsCmplt, formatP = formatP, dimensP = dimensP)
+  callModule(comparacionRanMulServer, 'ranMulAov', aovModel = aovMdl, formatP = formatP, dimensP = dimensP)
+  callModule(comparacionANCOVAServer, 'ancovaMdl', nSeries = nSeries, compl = datSrsCmplt, formatP = formatP, dimensP = dimensP)
+  ### HAY PRUEBA ESTADÏSTICA PARA PROPORCION DE MUESTRAS?
   
   # Regresiones
-  callModule(regresionServer, 'regModel1', nSeries = reactive(input$numDatSeriesManual), 
-             compl = datSeriesCompleteDat, configDwn = configGen) 
+  callModule(regresionServer, 'regModel1', nSeries = nSeries, compl = datSrsCmplt, formatP = formatP, dimensP = dimensP) 
   
   #Parámetros de validación
   callModule(precisionHorRatServer, 'HorRat1')

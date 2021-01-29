@@ -86,7 +86,7 @@ comparacionANOVAServer <- function(input, output, session, nSeries, compl, forma
   ResidPlt <- reactive({
     Model <- data.frame(Fitted = fitted(anovaReac()), Residuals = resid(anovaReac()), Treatment = StData()$ind)
     p <- ggplot(Model, aes(Fitted, Residuals, colour = Treatment)) + geom_point() + theme_bw() +
-      labs(y = input$ylabQQ, x = input$xlabQQ) + geom_smooth(method = 'loess', formula = 'y ~ x', col = 'blue', se = FALSE) +
+      labs(y = input$ylabQQ, x = input$xlabQQ) + #geom_smooth(method = 'loess', formula = 'y ~ x', col = 'blue', se = FALSE) +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             axis.text.x = element_text(color = "black"), axis.text.y = element_text(color = "black"))
     if(input$LegResid) {

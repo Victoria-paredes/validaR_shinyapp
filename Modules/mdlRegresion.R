@@ -45,7 +45,7 @@ regresionUI <- function(id) {
      )
 }
 
-regresionServer <- function(input, output, session, nSeries, compl, configDwn) {
+regresionServer <- function(input, output, session, nSeries, compl, formatP, dimensP) {
   values <- paste0('Serie', 1:20)
   names(values) <- paste('Serie #', 1:20)
   output$selectSeries <- renderUI(selectInput(session$ns("selectedSeries"), label = 'Seleccione un conjunto de datos',

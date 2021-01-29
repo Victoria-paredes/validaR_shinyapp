@@ -11,3 +11,4 @@ seedNorm <- function (n = 500, mean = 0, sd = 1, seed = 0) {
   return(rnorm(n = n, mean = mean, sd = sd))
 }
 
+CNTR <- function(x) {return(div(x, style = "text-align: center;"))}

@@ -13,13 +13,13 @@ datosEjemploUI <- function(id) {
                                              por espectrometría de emisión atómica de llama.',
                                   tags$br(),'Esta serie de datos puede usarse para ejemplificar el uso de las regresiones 
                                   lineales por mínimos cuadrados ordinarios y por mínimos cuadrados ortogonales:')),
-                          tableOutput(ns('OLSTab'))#, tags$h6('Los datos fueron obtenidos de .')
+                          div(tableOutput(ns('OLSTab')), style = "text-align: center;")#, tags$h6('Los datos fueron obtenidos de .')
                       ),
                       box(title = 'Curva de calibración ponderada', status = 'warning', width = 3, height = 800,
                           tags$html(tags$h5('La siguiente tabla contiene datos de ... ',
                                             tags$br(),'Esta serie de datos puede usarse para ejemplificar el uso de la regresión
                                   lineal por mínimos cuadrados ponderados:')),
-                          tableOutput(ns('WLSTab'))#, tags$h6('Los datos fueron obtenidos de .')
+                          CNTR(tableOutput(ns('WLSTab')))#, tags$h6('Los datos fueron obtenidos de .')
                       ),
                       box(title = 'Comparación entre dos métodos (Con incertidumbres)', status = 'warning', width = 3, height = 800,
                           tags$html(tags$h5('La siguiente tabla contiene los resultados (en ', HTML('&mu;g L'), tags$sup(-1), 
@@ -29,14 +29,14 @@ datosEjemploUI <- function(id) {
                                   tienen error conocido para ambas variables porque son resultados de mediciones. 
                                   Este conjunto de datos puede usarse para ejemplificar el uso de la regresión por mínimos
                                   cuadrados generalizados.:')),
-                          tableOutput(ns('arsenateFrac'))#, tags$h6('Los datos fueron obtenidos de .')
+                          CNTR(tableOutput(ns('arsenateFrac')))#, tags$h6('Los datos fueron obtenidos de .')
                       ),
                       box(title = 'Regresión no paramétrica (Passing-Bablock)', status = 'warning', width = 3, height = 800,
                           tags$h5('La siguiente tabla contiene una fracción de los resultados de un ensayo clínico en el que 
                                   se determinó la concentración de ferritina en la sangre de distintos pacientes usando reactivos 
                                   de dos lotes distintos [Therneau, 2018].', tags$b(), 'En la serie de datos hay anómalos 
                                   por lo que el conjunto puede usarse para ejemplificar las regresiones lineales no paramétricas:'),
-                          tableOutput(ns('NonParRegTab'))#, tags$h6('Los datos fueron obtenidos de .')
+                          CNTR(tableOutput(ns('NonParRegTab')))#, tags$h6('Los datos fueron obtenidos de .')
                       )),
              
              tabPanel(title = tags$b('Comparación de medias y varianzas muestrales'),
@@ -46,7 +46,7 @@ datosEjemploUI <- function(id) {
                       box(title = 'Comparación contra valor de referencia', status = 'warning', width = 2, height = 500,
                           tags$h5('La siguiente tabla contiene resultados individuales (en mg/kg) de la determinación
                                   de un elemento tóxico en un producto alimenticio:'),
-                          tableOutput(ns('media1Tab')),
+                          CNTR(tableOutput(ns('media1Tab'))),
                           tags$h5('El valor de referencia para la media es de 500 mg/kg y corresponde al valor máximo permitido 
                                   por la regulación para el elemento en cuestión, en la matriz considerada.', tags$br(), 
                                   'Para comparar la varianza de la muestra ')),
@@ -54,22 +54,22 @@ datosEjemploUI <- function(id) {
                       box(title = 'Comparación de muestras independientes', status = 'primary', width = 3, height = 500,
                           tags$h5('Las siguientes tablas contienen los resultados reportados por dos analistas diferentes para 
                                   la determinación de nitrógeno amoniacal (en porcentaje másico) una misma muestra:'),
-                          fluidRow(column(6, tableOutput(ns('medias2Tab1'))), column(6, tableOutput(ns('medias2Tab2')))),
+                          fluidRow(column(6, CNTR(tableOutput(ns('medias2Tab1')))), column(6, CNTR(tableOutput(ns('medias2Tab2'))))),
                           tags$h5('Las dos series de datos pueden ser comparadas para evaluar si sus medias muestrales
                                   presentan diferencias estadísticamente significativas, o si los conjuntos de datos
                                   presentan homocedasticidad (homogeneidad de varianzas muestrales).')),
                       
                       box(title = 'Varias medias muestrales (ANOVA)', status = 'primary', width = 7, height = 500,
                           tags$h5('Las siguientes tablas contienen : (PENDIENTE)'),
-                          fluidRow(column(2, tableOutput(ns('mediasMulTab1'))), 
-                                   column(2, tableOutput(ns('mediasMulTab2'))), 
-                                   column(2, tableOutput(ns('mediasMulTab3'))), 
-                                   column(2, tableOutput(ns('mediasMulTab4'))), 
-                                   column(2, tableOutput(ns('mediasMulTab5'))), 
-                                   column(2, tableOutput(ns('mediasMulTab6')))))),
+                          fluidRow(column(2, CNTR(tableOutput(ns('mediasMulTab1')))), 
+                                   column(2, CNTR(tableOutput(ns('mediasMulTab2')))), 
+                                   column(2, CNTR(tableOutput(ns('mediasMulTab3')))), 
+                                   column(2, CNTR(tableOutput(ns('mediasMulTab4')))), 
+                                   column(2, CNTR(tableOutput(ns('mediasMulTab5')))), 
+                                   column(2, CNTR(tableOutput(ns('mediasMulTab6'))))))),
              
              tabPanel(title = tags$b('Análisis de covarianza (ANCOVA)'),
-                      tableOutput(ns('ancovaTab')))
+                      CNTR(tableOutput(ns('ancovaTab'))))
              ),
       tabBox(width = 12, title = tags$b('Parámetros de validación (pendiente pendiente)'), side = 'left', height = 500, 
              tabPanel(title = 'Selectividad',

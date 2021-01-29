@@ -9,7 +9,7 @@ comparacionANCOVAUI <- function(id) {
            column(8, verbatimTextOutput(ns('ancova1'))))
 }
 
-comparacionANCOVAServer <- function(input, output, session, nSeries, compl) {
+comparacionANCOVAServer <- function(input, output, session, nSeries, compl, formatP, dimensP) {
   values <- paste0('Serie', 1:20)
   names(values) <- paste('Serie #', 1:20)
   

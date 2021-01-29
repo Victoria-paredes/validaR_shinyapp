@@ -8,7 +8,7 @@ customSidebar <- dashboardSidebar(tags$style(".left-side, .main-sidebar {padding
                      width = 300, withMathJax(),
                      sidebarMenu(id = "tabs",
                        menuItem("Introducción", tabName = "introd", icon = icon("info-circle")),
-                       menuItem("Definiciones", tabName = "defini", icon = icon("book")),
+                       menuItem("Glosario de términos", tabName = "defini", icon = icon("book")),
                        convertMenuItem(menuItem("Configuración archivos", tabName = "config", icon = icon("cog"),
                                                 radioButtons("Format", label = "Formato de los archivos",
                                                              choices = list("PDF (gráfico de vectores)" = ".pdf", 
