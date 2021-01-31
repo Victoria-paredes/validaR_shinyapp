@@ -66,7 +66,7 @@ comparacionANOVAServer <- function(input, output, session, nSeries, compl, forma
                  tags$h4('La variación entre los grupos es mayor a la variación dentro de los grupos, 
                          a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
                          'A continuación se muestra la tabla del análisis de varianza.'),
-                 tags$br(), tableOutput(session$ns("anovaTable"))))
+                 tags$br(), CNTR(tableOutput(session$ns("anovaTable")))))
     } else {
       return(box(title = tags$b('Resultado del análisis de varianza'), width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
@@ -76,7 +76,7 @@ comparacionANOVAServer <- function(input, output, session, nSeries, compl, forma
                  tags$h4('La variación entre grupos no es más grande que la variación dentro de los grupos, 
                          a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%.', tags$br(),
                          'A continuación se muestra la tabla del análisis de varianza.'), 
-                 tags$br(), tableOutput(session$ns("anovaTable"))))
+                 tags$br(), CNTR(tableOutput(session$ns("anovaTable")))))
     }
   })
   
