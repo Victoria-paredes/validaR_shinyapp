@@ -13,7 +13,7 @@ datosEjemploUI <- function(id) {
                                              por espectrometría de emisión atómica de llama.',
                                   tags$br(),'Esta serie de datos puede usarse para ejemplificar el uso de las regresiones 
                                   lineales por mínimos cuadrados ordinarios y por mínimos cuadrados ortogonales:')),
-                          div(tableOutput(ns('OLSTab')), style = "text-align: center;")#, tags$h6('Los datos fueron obtenidos de .')
+                          CNTR(tableOutput(ns('OLSTab')))#, tags$h6('Los datos fueron obtenidos de .')
                       ),
                       box(title = 'Curva de calibración ponderada', status = 'warning', width = 3, height = 800,
                           tags$html(tags$h5('La siguiente tabla contiene datos de ... ',
@@ -73,15 +73,15 @@ datosEjemploUI <- function(id) {
              ),
       tabBox(width = 12, title = tags$b('Parámetros de validación (pendiente pendiente)'), side = 'left', height = 500, 
              tabPanel(title = 'Selectividad',
-                      tableOutput(ns('selTab'))),
+                      CNTR(tableOutput(ns('selTab')))),
              tabPanel(title = 'Exactitud', 'Ss',
-                      tableOutput(ns('exacTab'))),
+                      CNTR(tableOutput(ns('exacTab')))),
              tabPanel(title = 'Linealidad', 'Ss',
-                      tableOutput(ns('lineTab'))),
+                      CNTR(tableOutput(ns('lineTab')))),
              tabPanel(title = 'Límite de detección', 'Ss',
-                      tableOutput(ns('lodTab'))),
+                      CNTR(tableOutput(ns('lodTab')))),
              tabPanel(title = 'Robustex', 'Ss',
-                      tableOutput(ns('robusTab')))
+                      CNTR(tableOutput(ns('robusTab'))))
       )
     ))
 }
