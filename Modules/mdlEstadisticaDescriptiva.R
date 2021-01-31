@@ -12,7 +12,7 @@ estadisticaDescriptivaUI <- function(id, IntID = 1, value0 = 10) {
                       #tableOutput(ns('dataseries'))
                       ),
                   box(title = tags$b("Descriptores estadísticos"), width = 3,  status = 'primary', 
-                      tableOutput(ns('descripTab'))),
+                      CNTR(tableOutput(ns('descripTab')))),
                   tabBox(title = tags$b("Diagramas:"), width = 6, side = 'right',
                          tabPanel("Histograma", 
                                   dropdownButton(circle = TRUE, status = "danger", icon = icon("gear"), width = "300px", size = 'sm',
