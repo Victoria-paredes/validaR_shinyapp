@@ -33,7 +33,7 @@ comparacionMediasServer_1 <- function(input, output, session, nSeries, compl) {
                                     tags$b('Conclusión: La media muestral del conjunto ', cnclsn(input$hypAlter))),
                  tags$h4('La diferencia entre la media de la muestra estadística y el valor de referencia
                           es estadísticamente significativa al nivel de confianza del ', round(100 * input$ConfLev, 1), '%.'),
-                 tags$br(), tableOutput(session$ns("tableResults"))))
+                 tags$br(), CNTR(tableOutput(session$ns("tableResults")))))
     } else {
       return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
@@ -43,7 +43,7 @@ comparacionMediasServer_1 <- function(input, output, session, nSeries, compl) {
                          no hay evidencia suficiente para afirmar que la diferencia
                          entre la media muestral y el valor de referencia,
                          se deba a algo más que no sea mero error aleatorio.'), 
-                 tags$br(), tableOutput(session$ns("tableResults"))))
+                 tags$br(), CNTR(tableOutput(session$ns("tableResults")))))
     }
   })
   
