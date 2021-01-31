@@ -56,7 +56,7 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
                  tags$h4('Al menos dos de las varianzas muestrales presentan entre sí una diferencia estadísticamente significativas,
                           según lo hallado por la prueba de Bartlett, a un nivel de confianza
                          del ', round(100 * input$ConfLev, 1), '%.'),
-                 tags$br(), tableOutput(session$ns("BrltttableResults"))))
+                 tags$br(), CNTR(tableOutput(session$ns("BrltttableResults")))))
     } else {
       return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
@@ -65,7 +65,7 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
                  tags$h4('Según la prueba de homogeneidad de varianzas de Barlett, no hay evidencia suficiente para afirmar que las
                          muestras estadísticas sean heterocedásticas, a un nivel de confianza 
                          del ', round(100 * input$ConfLev, 1), '%.'), 
-                 tags$br(), tableOutput(session$ns("BrltttableResults"))))
+                 tags$br(), CNTR(tableOutput(session$ns("BrltttableResults")))))
     }
   })
   BrltttableResults <- reactive(
@@ -86,7 +86,7 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
                  tags$h4('Al menos dos de las varianzas muestrales presentan entre sí una diferencia estadísticamente significativa,
                           según lo hallado por la prueba de Levene, a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%,
                          usando como medida de tendencia central la media aritmética.'),
-                 tags$br(), tableOutput(session$ns("LVN1tableResults"))))
+                 tags$br(), CNTR(tableOutput(session$ns("LVN1tableResults")))))
     } else {
       return(box(title = tags$b('Resultado de la prueba usando la media aritmética'), width = 6, status = 'success',
                  footer = tags$span(style = "color:green", 
@@ -96,7 +96,7 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
                          muestras estadísticas sean heterocedásticas, a un nivel de confianza 
                          del ', round(100 * input$ConfLev, 1), '%,
                          usando como medida de tendencia central la media aritmética.'), 
-                 tags$br(), tableOutput(session$ns("LVN1tableResults"))))
+                 tags$br(), CNTR(tableOutput(session$ns("LVN1tableResults")))))
     }
   })
   LVN1tableResults <- reactive(
@@ -118,7 +118,7 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
                  tags$h4('Al menos dos de las varianzas muestrales presentan entre sí una diferencia estadísticamente significativa,
                           según lo hallado por la prueba de Levene, a un nivel de confianza del ', round(100 * input$ConfLev, 1), '%,
                          usando como medida de tendencia central la mediana.'),
-                 tags$br(), tableOutput(session$ns("LVN2tableResults"))))
+                 tags$br(), CNTR(tableOutput(session$ns("LVN2tableResults")))))
     } else {
       return(box(title = tags$b('Resultado de la prueba usando la mediana'), width = 6, status = 'success',
                  footer = tags$span(style = "color:green", 
@@ -128,7 +128,7 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
                          muestras estadísticas sean heterocedásticas, a un nivel de confianza 
                          del ', round(100 * input$ConfLev, 1), '%,
                          usando como medida de tendencia central la media aritmética.'), 
-                 tags$br(), tableOutput(session$ns("LVN2tableResults"))))
+                 tags$br(), CNTR(tableOutput(session$ns("LVN2tableResults")))))
     }
   })
   LVN2tableResults <- reactive(
@@ -150,7 +150,7 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
                  tags$h4('Al menos dos de las varianzas muestrales presentan entre sí una diferencia estadísticamente significativas,
                           según lo hallado por la prueba de Hartley, a un nivel de confianza
                          del ', round(100 * input$ConfLev, 1), '%.'),
-                 tags$br(), tableOutput(session$ns("HRTLYtableResults"))))
+                 tags$br(), CNTR(tableOutput(session$ns("HRTLYtableResults")))))
     } else {
       return(box(title = tags$b('Resultado de la prueba'), width = 12, status = 'success',
                  footer = tags$span(style = "color:green", 
@@ -159,7 +159,7 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
                  tags$h4('Según la prueba de homogeneidad de varianzas de Hartley, no hay evidencia suficiente para afirmar que las
                          muestras estadísticas sean heterocedásticas, a un nivel de confianza 
                          del ', round(100 * input$ConfLev, 1), '%.'), 
-                 tags$br(), tableOutput(session$ns("HRTLYtableResults"))))
+                 tags$br(), CNTR(tableOutput(session$ns("HRTLYtableResults")))))
     }
   })
   HRTLYtableResults <- reactive(
@@ -179,7 +179,7 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
                                     tags$br(), tags$b('Conclusión: La varianza más grande es anómala.')),
                  #tags$h4('...Cochran, a un nivel de confianza
                  #       del ', round(100 * input$ConfLev, 1), '%.'),
-                 tags$br(), tableOutput(session$ns("CCHRNouttableResults"))))
+                 tags$br(), CNTR(tableOutput(session$ns("CCHRNouttableResults")))))
     } else {
       return(box(title = tags$b('Resultado de la prueba para la varianza más grande'), width = 6, status = 'success',
                  footer = tags$span(style = "color:green", 
@@ -187,7 +187,7 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
                                     tags$br(), tags$b('Conclusión: La varianza más grande no es anómala.')),
                  #tags$h4('Según la prueba de varianzas anómalas de Cochran, a un nivel de confianza 
                  #       del ', round(100 * input$ConfLev, 1), '%.'), 
-                 tags$br(), tableOutput(session$ns("CCHRNouttableResults"))))
+                 tags$br(), CNTR(tableOutput(session$ns("CCHRNouttableResults")))))
     }
   })
   CCHRNouttableResults <- reactive(
@@ -207,13 +207,13 @@ comparacionVarianServer_m <- function(input, output, session, nSeries, compl) {
                  footer = tags$span(style = "color:red", 
                                     'Resultados estadísticamente significativos al nivel de confianza escogido.'),
                  tags$h4('La muestra estadística (NO PASA) xxx.'),
-                 tags$br(), tableOutput(session$ns("CCHRNintableResults"))))
+                 tags$br(), CNTR(tableOutput(session$ns("CCHRNintableResults")))))
     } else {
       return(box(title = tags$b('Resultado de la prueba'), width = 6, status = 'success',
                  footer = tags$span(style = "color:green", 
                                     'Resultados estadísticamente no significativos al nivel de confianza escogido.'),
                  tags$h4('La muestra estadística (PASA) xxx.'), 
-                 tags$br(), tableOutput(session$ns("CCHRNintableResults"))))
+                 tags$br(), CNTR(tableOutput(session$ns("CCHRNintableResults")))))
     }
   })
   CCHRNintableResults <- reactive(
