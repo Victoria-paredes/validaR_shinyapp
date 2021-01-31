@@ -9,7 +9,7 @@ comparacionRanMulUI <- function(id) {
                               Las agrupaciones se codifican con letras
                               de manera tal que si la misma letra aparece frente a dos conjuntos de datos, la diferencia 
                               entre las medias de tales series no se considera estadísticamente significativa'),
-                      tableOutput(ns('LSDFTest')),
+                      CNTR(tableOutput(ns('LSDFTest'))),
                       tags$h5('El siguiente gráfico complementa la información de la tabla y es similar al diagrama de cajas y bigotes,
                               incluyendo la información de los grupos de series similares entre sí.'), 
                       plotOutput(ns('LSDFPlot')), downloadButton(ns('DwnLSDFPlot'), label = 'Descargar gráfico')),
@@ -17,7 +17,7 @@ comparacionRanMulUI <- function(id) {
                       tags$h5('A continuación se muestran los valores p de la diferencia entre parejas de muestras estadísticas, 
                               según la prueba de diferencias honestas significativas de Tukey. Aquellas diferencias cuyo valor p es menor 
                               a la significancia (1 - nivel de confianza), se consideran estadísticament significativas.'), 
-                      tableOutput(ns('TukeyTest')),
+                      CNTR(tableOutput(ns('TukeyTest'))),
                       tags$h5('El siguiente gráfico ilustra los intervalos de confianza para las diferencias entre las parejas.'),
                       plotOutput(ns('TukeyPlot')), downloadButton(ns('DwnTukeyPlot'), label = 'Descargar gráfico')),
                   box(title = tags$b('Rangos múltiples de Duncan'), width = 4,# height = 900, 
@@ -25,7 +25,7 @@ comparacionRanMulUI <- function(id) {
                               no presentan
                               una diferencia estadísticamente significativa según la prueba HSD de Duncan 
                               Las agrupaciones se codifican de la misma manera que se describió en la prueba LSD de Fisher.'),
-                      tableOutput(ns('DuncanTest')),
+                      CNTR(tableOutput(ns('DuncanTest'))),
                       tags$h5('El siguiente gráfico complementa la información de la tabla y es similar al diagrama de cajas y bigotes,
                               incluyendo la información de los grupos de series similares entre sí.'), 
                       plotOutput(ns('DuncanPlot')), downloadButton(ns('DwnDuncanPlot'), label = 'Descargar gráfico')
